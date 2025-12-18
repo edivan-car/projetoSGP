@@ -1,12 +1,14 @@
 package br.com.sgp;
 
-import br.com.sgp.view.MainFrame;
+import javax.swing.SwingUtilities;
+
+import br.com.sgp.auth.LoginFrame;
 
 public class Main {
 
 	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(() -> {
-            new MainFrame().setVisible(true);
+		SwingUtilities.invokeLater(() -> {
+            new LoginFrame().setVisible(true);
 		});
 	}
 }
