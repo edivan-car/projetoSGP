@@ -5,7 +5,10 @@ import java.sql.DriverManager;
 
 public class AccessConnection {
 
-	private static final String DB_PATH = "F:/trabalho/SG_Producao/back_up/12122025/prg_producao.accdb";
+	//private static final String DB_PATH = "F:/trabalho/SG_Producao/back_up/12122025/prg_producao.accdb";
+	private static final String DB_PATH =
+		    System.getProperty("user.dir") + "/prg_producao.accdb";
+
 
 	private static final String URL = "jdbc:ucanaccess://" + DB_PATH;
 

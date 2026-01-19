@@ -8,13 +8,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import br.com.sgp.util.AccessConnection;
-import br.com.sgp.util.DBConnectionTest;
+import br.com.sgp.view.MainFrame;
 
 public class LoginFrame extends JFrame {
 
@@ -143,27 +145,48 @@ public class LoginFrame extends JFrame {
 	private void addLoginButton() {
 
 		JButton btnLogin = new JButton("Entrar");
-		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		btnLogin.setBounds(190, 366, 100, 40);
-		lblBackground.add(btnLogin);
+	    btnLogin.setFont(new Font("Tahoma", Font.BOLD, 12));
+	    btnLogin.setBounds(190, 366, 100, 40);
+	    lblBackground.add(btnLogin);
 
-		btnLogin.addActionListener(e -> {
+	    btnLogin.addActionListener(e -> {
 
-			String user = txtUser.getText();
-			char[] pass = txtPass.getPassword();
+	        // 1️ - Verifica conexão com o banco
+	        if (!AccessConnection.testConnection()) {
+	            JOptionPane.showMessageDialog(
+	                this,
+	                "Não foi possível conectar ao banco de dados.",
+	                "Erro",
+	                JOptionPane.ERROR_MESSAGE
+	            );
+	            return;
+	        }
 
-			LoginController controller = new LoginController();
-			boolean ok = controller.autenticar(user, pass);
+	        // 2️ - Recupera dados
+	        String user = txtUser.getText();
+	        char[] pass = txtPass.getPassword();
 
-			if (ok) {
-				System.out.println("Login OK");
-				dispose(); // fecha login
-			} else {
-				System.out.println("Login inválido");
-			}
+	        // 3️ - Validação simples (mock por enquanto)
+	        if ("admin".equals(user) && String.valueOf(pass).equals("123")) {
 
-			Arrays.fill(pass, '\0');
-		});
+	            // 4️ - Abre tela principal
+	            SwingUtilities.invokeLater(() -> {
+	                new MainFrame().setVisible(true);
+	            });
+
+	            // 5️ - Fecha login
+	            dispose();
+
+	        } else {
+	            JOptionPane.showMessageDialog(
+	                this,
+	                "Usuário ou senha inválidos.",
+	                "Login inválido",
+	                JOptionPane.WARNING_MESSAGE
+	            );
+	        }
+
+	        Arrays.fill(pass, '\0');
+	    });
 	}
 }
