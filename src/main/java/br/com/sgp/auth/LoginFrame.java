@@ -2,6 +2,7 @@ package br.com.sgp.auth;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -10,21 +11,64 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
+
+import br.com.sgp.util.AccessConnection;
+import br.com.sgp.util.DBConnectionTest;
 
 public class LoginFrame extends JFrame {
 
 	private JLabel lblBackground;
+	private JTextField txtUser;
+	private JPasswordField txtPass;
+	private JLabel lblConnectDB;
+	private JLabel lblStatus;
 
 	public LoginFrame() {
-		configurarJanela();
-		configurarBackground();
-		adicionarIconeUsuario();
-		adicionarCampoUsuario();
-		adicionarCampoSenha();
-		adicionarBotaoLogin();
+		setupFrame();
+		setupBackground();
+		addUserIcon();
+		addUserField();
+		addPasswordField();
+		addLoginButton();
+		addConnectDB();
+
+		testDatabaseConnection();
 	}
 
-	private void configurarJanela() {
+	private void testDatabaseConnection() {
+
+		new SwingWorker<Boolean, Void>() {
+
+			@Override
+			protected Boolean doInBackground() {
+				return AccessConnection.testConnection();
+			}
+
+			@Override
+			protected void done() {
+				try {
+					boolean connected = get();
+
+					if (connected) {
+						lblConnectDB.setIcon(new ImageIcon(getClass().getResource("/images/icons/dbOn-40x40.png")));
+						lblStatus.setText("Conectado");
+						lblStatus.setForeground(Color.BLUE);
+					} else {
+						lblConnectDB.setIcon(new ImageIcon(getClass().getResource("/images/icons/dbOff-40x40.png")));
+						lblStatus.setText("Erro de conexão");
+						lblStatus.setForeground(Color.RED);
+					}
+
+				} catch (Exception e) {
+					lblStatus.setText("Erro de conexão");
+					lblStatus.setForeground(Color.RED);
+				}
+			}
+		}.execute();
+	}
+
+	private void setupFrame() {
 		setTitle("SGP - Login");
 		setSize(480, 520);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +76,7 @@ public class LoginFrame extends JFrame {
 		setResizable(false);
 	}
 
-	private void configurarBackground() {
+	private void setupBackground() {
 		lblBackground = new JLabel(new ImageIcon(getClass().getResource("/images/background/backLogin_480x520.jpg")));
 
 		// configurar JLabel como background
@@ -42,7 +86,7 @@ public class LoginFrame extends JFrame {
 		lblBackground.setLayout(null);
 	}
 
-	private void adicionarIconeUsuario() {
+	private void addUserIcon() {
 		JLabel lblUsuarioIcone = new JLabel(new ImageIcon(getClass().getResource("/images/icons/users_156x156.png")));
 
 		// Centralizar manualmente
@@ -51,7 +95,7 @@ public class LoginFrame extends JFrame {
 		lblBackground.add(lblUsuarioIcone);
 	}
 
-	private void adicionarCampoUsuario() {
+	private void addUserField() {
 
 		JLabel lblUsuario = new JLabel("Usuário");
 		lblUsuario.setForeground(Color.WHITE);
@@ -60,14 +104,14 @@ public class LoginFrame extends JFrame {
 		lblUsuario.setBounds(140, 226, 200, 20);
 		lblBackground.add(lblUsuario);
 
-		JTextField txtUsuario = new JTextField();
-		txtUsuario.setFont(new Font("Tahoma", Font.BOLD, 12));
-		txtUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-		txtUsuario.setBounds(140, 256, 200, 20);
-		lblBackground.add(txtUsuario);
+		txtUser = new JTextField();
+		txtUser.setFont(new Font("Tahoma", Font.BOLD, 12));
+		txtUser.setHorizontalAlignment(SwingConstants.CENTER);
+		txtUser.setBounds(140, 256, 200, 20);
+		lblBackground.add(txtUser);
 	}
 
-	private void adicionarCampoSenha() {
+	private void addPasswordField() {
 
 		JLabel lblSenha = new JLabel("Senha");
 		lblSenha.setForeground(Color.WHITE);
@@ -76,14 +120,27 @@ public class LoginFrame extends JFrame {
 		lblSenha.setBounds(140, 296, 200, 20);
 		lblBackground.add(lblSenha);
 
-		JPasswordField txtSenha = new JPasswordField();
-		txtSenha.setFont(new Font("Tahoma", Font.BOLD, 12));
-		txtSenha.setHorizontalAlignment(SwingConstants.CENTER);
-		txtSenha.setBounds(140, 326, 200, 20);
-		lblBackground.add(txtSenha);
+		txtPass = new JPasswordField();
+		txtPass.setFont(new Font("Tahoma", Font.BOLD, 12));
+		txtPass.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPass.setBounds(140, 326, 200, 20);
+		lblBackground.add(txtPass);
 	}
 
-	private void adicionarBotaoLogin() {
+	private void addConnectDB() {
+		lblConnectDB = new JLabel(new ImageIcon(getClass().getResource("/images/icons/dbOff-40x40.png")));
+		lblConnectDB.setBounds(410, 410, 40, 40);
+		lblBackground.add(lblConnectDB);
+
+		lblStatus = new JLabel("Verificando...");
+		lblStatus.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblStatus.setForeground(Color.GRAY);
+		lblStatus.setBounds(350, 450, 120, 20);
+		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBackground.add(lblStatus);
+	}
+
+	private void addLoginButton() {
 
 		JButton btnLogin = new JButton("Entrar");
 		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -92,7 +149,21 @@ public class LoginFrame extends JFrame {
 		lblBackground.add(btnLogin);
 
 		btnLogin.addActionListener(e -> {
-			System.out.println("Botão Login clicado");
+
+			String user = txtUser.getText();
+			char[] pass = txtPass.getPassword();
+
+			LoginController controller = new LoginController();
+			boolean ok = controller.autenticar(user, pass);
+
+			if (ok) {
+				System.out.println("Login OK");
+				dispose(); // fecha login
+			} else {
+				System.out.println("Login inválido");
+			}
+
+			Arrays.fill(pass, '\0');
 		});
 	}
 }
