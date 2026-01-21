@@ -5,7 +5,7 @@ import java.awt.Color;
 import br.com.sgp.dao.UserDAO;
 import br.com.sgp.model.User;
 import br.com.sgp.util.AccessConnection;
-import br.com.sgp.view.MainFrame;
+import br.com.sgp.view.MainView;
 
 public class LoginController {
 
@@ -49,6 +49,9 @@ public class LoginController {
 
 		// Login OK
 		view.dispose();
-		new MainFrame().setVisible(true);
+		new MainView(
+				loggedUser.getNome(), 
+				loggedUser.getPerfil() // depois trocar por setorreal
+		).setVisible(true);
 	}
 }

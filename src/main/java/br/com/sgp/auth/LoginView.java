@@ -43,19 +43,19 @@ public class LoginView extends JFrame {
     }
 
     private void addUserIcon() {
-        JLabel lblUsuarioIcone = new JLabel(
+        JLabel lblUserIcon = new JLabel(
                 new ImageIcon(getClass().getResource("/images/icons/users_156x156.png")));
-        lblUsuarioIcone.setBounds(162, 40, 156, 156);
-        lblBackground.add(lblUsuarioIcone);
+        lblUserIcon.setBounds(162, 40, 156, 156);
+        lblBackground.add(lblUserIcon);
     }
 
     private void addUserField() {
-        JLabel lblUsuario = new JLabel("Usuário");
-        lblUsuario.setForeground(Color.WHITE);
-        lblUsuario.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-        lblUsuario.setBounds(140, 226, 200, 20);
-        lblBackground.add(lblUsuario);
+        JLabel lblUser = new JLabel("Usuário");
+        lblUser.setForeground(Color.WHITE);
+        lblUser.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblUser.setHorizontalAlignment(SwingConstants.CENTER);
+        lblUser.setBounds(140, 226, 200, 20);
+        lblBackground.add(lblUser);
 
         txtUser = new JTextField();
         txtUser.setHorizontalAlignment(SwingConstants.CENTER);
@@ -64,12 +64,12 @@ public class LoginView extends JFrame {
     }
 
     private void addPasswordField() {
-        JLabel lblSenha = new JLabel("Senha");
-        lblSenha.setForeground(Color.WHITE);
-        lblSenha.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblSenha.setHorizontalAlignment(SwingConstants.CENTER);
-        lblSenha.setBounds(140, 296, 200, 20);
-        lblBackground.add(lblSenha);
+        JLabel lblPass = new JLabel("Senha");
+        lblPass.setForeground(Color.WHITE);
+        lblPass.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblPass.setHorizontalAlignment(SwingConstants.CENTER);
+        lblPass.setBounds(140, 296, 200, 20);
+        lblBackground.add(lblPass);
 
         txtPass = new JPasswordField();
         txtPass.setHorizontalAlignment(SwingConstants.CENTER);
