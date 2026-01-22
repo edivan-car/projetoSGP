@@ -1,12 +1,15 @@
 package br.com.sgp.view;
 
-import br.com.sgp.dao.UserDAO;
-import br.com.sgp.model.User;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.List;
 
 public class UserView extends JInternalFrame {
 
@@ -23,7 +26,6 @@ public class UserView extends JInternalFrame {
         add(createTablePanel(), BorderLayout.CENTER);
         add(createButtonPanel(), BorderLayout.SOUTH);
 
-        loadUsers();
     }
 
     private JScrollPane createTablePanel() {
@@ -52,7 +54,6 @@ public class UserView extends JInternalFrame {
         JButton btnRefresh = new JButton("Atualizar");
         JButton btnClose = new JButton("Fechar");
 
-        btnRefresh.addActionListener(e -> loadUsers());
         btnClose.addActionListener(e -> dispose());
 
         panel.add(btnNew);
@@ -62,21 +63,12 @@ public class UserView extends JInternalFrame {
 
         return panel;
     }
+    
+    public JTable getTable() {
+        return table;
+    }
 
-    private void loadUsers() {
-
-        model.setRowCount(0);
-
-        UserDAO dao = new UserDAO();
-        List<User> users = dao.findAll();
-
-        for (User u : users) {
-            model.addRow(new Object[]{
-                u.getId(),
-                u.getUsername(),
-                u.getName(),
-                u.getProfile()
-            });
-        }
+    public DefaultTableModel getModel() {
+        return model;
     }
 }

@@ -3,9 +3,16 @@ package br.com.sgp.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
-import br.com.sgp.model.User;
+import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
 
 public class MainView extends JFrame {
@@ -39,7 +46,24 @@ public class MainView extends JFrame {
         JMenu menuSector = new JMenu("Setor / Área");
         JMenu menuReports = new JMenu("Relatórios");
         JMenu menuHelp = new JMenu("Ajuda");
+        
+        // =====================
+        // MENU SETOR / ÁREA
+        // =====================
+        JMenuItem itemUsers = new JMenuItem("Usuários");
 
+        itemUsers.addActionListener(e -> {
+            UserView view = new UserView();
+            new UserController(view);
+            desktopPane.add(view);
+            view.setVisible(true);
+        });
+
+        menuSector.add(itemUsers);
+
+        // =====================
+        // MENU AJUDA
+        // =====================
         JMenuItem itemAbout = new JMenuItem("Sobre");
         itemAbout.addActionListener(e ->
                 new AboutDialog(this).setVisible(true)
@@ -47,6 +71,9 @@ public class MainView extends JFrame {
 
         menuHelp.add(itemAbout);
 
+        // =====================
+        // ADD MENUS NA BARRA
+        // =====================
         menuBar.add(menuStart);
         menuBar.add(menuSector);
         menuBar.add(menuReports);
@@ -66,13 +93,10 @@ public class MainView extends JFrame {
 
         JPanel statusBar = new JPanel(new BorderLayout());
 
-        User user = UserSession.getInstance().getUser();
+        UserSession session = UserSession.getInstance();
 
-        String userName = user != null ? user.getName() : "Desconhecido";
-        String sector = user != null ? user.getSector() : "-";
-
-        lblUser = new JLabel("Usuário: " + userName);
-        lblSector = new JLabel("Setor: " + sector);
+        lblUser = new JLabel("Usuário: " + session.getName());
+        lblSector = new JLabel("Setor: " + session.getSector());
         lblDateTime = new JLabel();
 
         JPanel left = new JPanel();
