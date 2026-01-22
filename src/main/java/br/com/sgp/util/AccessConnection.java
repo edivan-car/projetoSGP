@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public final class AccessConnection {
 
-    private static final String DB_FILE = "prg_producao.accdb";
+    private static final String DB_FILE = "db_production.accdb";
     private static final String DB_PATH = "F:/trabalho/SGP-SistemaGestãoProdução/DB" + "/" + DB_FILE;
     //private static final String DB_PATH = System.getProperty("user.dir") + "/" + DB_FILE;
 

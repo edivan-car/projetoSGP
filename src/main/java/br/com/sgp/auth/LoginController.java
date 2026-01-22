@@ -4,54 +4,55 @@ import java.awt.Color;
 
 import br.com.sgp.dao.UserDAO;
 import br.com.sgp.model.User;
+import br.com.sgp.session.UserSession;
 import br.com.sgp.util.AccessConnection;
 import br.com.sgp.view.MainView;
 
 public class LoginController {
 
-	private LoginView view;
-	private UserDAO userDAO = new UserDAO();
+    private LoginView view;
+    private UserDAO userDAO = new UserDAO();
 
-	public LoginController(LoginView view) {
-		this.view = view;
-		initController();
-		checkDatabase();
-	}
+    public LoginController(LoginView view) {
+        this.view = view;
+        initController();
+        checkDatabase();
+    }
 
-	private void initController() {
-		view.getBtnLogin().addActionListener(e -> login());
-	}
+    private void initController() {
+        view.getBtnLogin().addActionListener(e -> login());
+    }
 
-	private void checkDatabase() {
-		if (AccessConnection.testConnection()) {
-			view.setStatus("Conectado", Color.BLUE, "/images/icons/dbOn-40x40.png");
-		} else {
-			view.setStatus("Erro de conexão", Color.RED, "/images/icons/dbOff-40x40.png");
-		}
-	}
+    private void checkDatabase() {
+        if (AccessConnection.testConnection()) {
+            view.setStatus("Conectado", Color.BLUE, "/images/icons/dbOn-40x40.png");
+        } else {
+            view.setStatus("Erro de conexão", Color.RED, "/images/icons/dbOff-40x40.png");
+        }
+    }
 
-	private void login() {
+    private void login() {
 
-		String user = view.getUser();
-		String pass = String.valueOf(view.getPassword());
+        String user = view.getUser();
+        String pass = String.valueOf(view.getPassword());
 
-		if (user.isEmpty() || pass.isEmpty()) {
-			view.setStatusUser("Informe usuário e senha", Color.RED);
-			return;
-		}
+        if (user.isEmpty() || pass.isEmpty()) {
+            view.setStatusUser("Informe usuário e senha", Color.RED);
+            return;
+        }
 
-		User loggedUser = userDAO.login(user, pass);
+        User loggedUser = userDAO.login(user, pass);
 
-		if (loggedUser == null) {
-			view.setStatusUser("Usuário ou senha inválidos", Color.RED);
-			return;
-		}
+        if (loggedUser == null) {
+            view.setStatusUser("Usuário ou senha inválidos", Color.RED);
+            return;
+        }
 
-		// Login OK
-		view.dispose();
-		new MainView(
-				loggedUser.getNome(), 
-				loggedUser.getPerfil() // depois trocar por setorreal
-		).setVisible(true);
-	}
+        // 🔐 cria sessão
+        UserSession.getInstance().login(loggedUser);
+
+        // Login OK
+        view.dispose();
+        new MainView().setVisible(true);
+    }
 }

@@ -5,6 +5,9 @@ import java.awt.Dimension;
 
 import javax.swing.*;
 
+import br.com.sgp.model.User;
+import br.com.sgp.session.UserSession;
+
 public class MainView extends JFrame {
 
     private JDesktopPane desktopPane;
@@ -12,19 +15,19 @@ public class MainView extends JFrame {
     private JLabel lblSector;
     private JLabel lblDateTime;
 
-    public MainView(String user, String sector) {
+    public MainView() {
         setTitle("SGP - Sistema de Gestão da Produção");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // 🔹 Tamanho base padronizado
         setSize(1200, 800);
         setMinimumSize(new Dimension(1024, 700));
-        setLocationRelativeTo(null); // centraliza
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         setJMenuBar(createMenuBar());
         add(createDesktopPane(), BorderLayout.CENTER);
-        add(createStatusBar(user, sector), BorderLayout.SOUTH);
+        add(createStatusBar(), BorderLayout.SOUTH);
     }
 
     // ================= MENU =================
@@ -37,16 +40,10 @@ public class MainView extends JFrame {
         JMenu menuReports = new JMenu("Relatórios");
         JMenu menuHelp = new JMenu("Ajuda");
 
-        menuBar.add(menuStart);
-        menuBar.add(menuSector);
-        menuBar.add(menuReports);
-        menuBar.add(menuHelp);
-
         JMenuItem itemAbout = new JMenuItem("Sobre");
-
-        itemAbout.addActionListener(e -> {
-            new AboutDialog(this).setVisible(true);
-        });
+        itemAbout.addActionListener(e ->
+                new AboutDialog(this).setVisible(true)
+        );
 
         menuHelp.add(itemAbout);
 
@@ -54,7 +51,7 @@ public class MainView extends JFrame {
         menuBar.add(menuSector);
         menuBar.add(menuReports);
         menuBar.add(menuHelp);
-        
+
         return menuBar;
     }
 
@@ -65,11 +62,16 @@ public class MainView extends JFrame {
     }
 
     // ================= STATUS BAR =================
-    private JPanel createStatusBar(String user, String sector) {
+    private JPanel createStatusBar() {
 
         JPanel statusBar = new JPanel(new BorderLayout());
 
-        lblUser = new JLabel("Usuário: " + user);
+        User user = UserSession.getInstance().getUser();
+
+        String userName = user != null ? user.getName() : "Desconhecido";
+        String sector = user != null ? user.getSector() : "-";
+
+        lblUser = new JLabel("Usuário: " + userName);
         lblSector = new JLabel("Setor: " + sector);
         lblDateTime = new JLabel();
 
@@ -93,10 +95,10 @@ public class MainView extends JFrame {
     private void startClock() {
         Timer timer = new Timer(1000, e -> {
             lblDateTime.setText(
-                java.time.LocalDateTime.now()
-                    .format(java.time.format.DateTimeFormatter.ofPattern(
-                        "dd/MM/yyyy HH:mm:ss"
-                    ))
+                    java.time.LocalDateTime.now()
+                            .format(java.time.format.DateTimeFormatter.ofPattern(
+                                    "dd/MM/yyyy HH:mm:ss"
+                            ))
             );
         });
         timer.start();

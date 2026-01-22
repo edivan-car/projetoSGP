@@ -3,35 +3,78 @@ package br.com.sgp.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.sgp.model.User;
 import br.com.sgp.util.AccessConnection;
 
 public class UserDAO {
 
-	private static final String SQL_LOGIN = 
-			"SELECT id, username, nome, perfil " +
-			"FROM tb_usuarios " + 
-			"WHERE username = ? AND senha = ? AND ativo = TRUE";
+    private static final String SQL_LOGIN =
+            "SELECT id, username, name, profile, sector " +
+            "FROM tb_users " +
+            "WHERE username = ? AND password = ? AND active = TRUE";
 
-	public User login(String username, String senha) {
+    // ======================
+    // LOGIN
+    // ======================
+    public User login(String username, String password) {
 
-		try (Connection conn = AccessConnection.getConnection();
-				PreparedStatement ps = conn.prepareStatement(SQL_LOGIN)) {
-			ps.setString(1, username);
-			ps.setString(2, senha);
+        try (Connection conn = AccessConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(SQL_LOGIN)) {
 
-			ResultSet rs = ps.executeQuery();
+            ps.setString(1, username);
+            ps.setString(2, password);
 
-			if (rs.next()) {
-				return new User(rs.getInt("id"), rs.getString("username"), rs.getString("nome"),
-						rs.getString("perfil"));
-			}
+            ResultSet rs = ps.executeQuery();
 
-		} catch (Exception e) {
-			System.err.println("Erro login: " + e.getMessage());
-		}
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("name"),
+                        rs.getString("profile"),
+                        rs.getString("sector")
+                );
+            }
 
-		return null;
-	}
+        } catch (Exception e) {
+            System.err.println("Erro login: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    // ======================
+    // LISTAR USUÁRIOS
+    // ======================
+    public List<User> findAll() {
+
+        List<User> users = new ArrayList<>();
+
+        String sql = "SELECT id, username, name, profile, sector FROM tb_users";
+
+        try (Connection conn = AccessConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(
+                        new User(
+                                rs.getInt("id"),
+                                rs.getString("username"),
+                                rs.getString("name"),
+                                rs.getString("profile"),
+                                rs.getString("sector")
+                        )
+                );
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao listar usuários: " + e.getMessage());
+        }
+
+        return users;
+    }
 }

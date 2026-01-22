@@ -4,29 +4,21 @@ public class User {
 
     private int id;
     private String username;
-    private String nome;
-    private String perfil;
+    private String name;
+    private String profile;
+    private String sector;
 
-    public User(int id, String username, String nome, String perfil) {
+    public User(int id, String username, String name, String profile, String sector) {
         this.id = id;
         this.username = username;
-        this.nome = nome;
-        this.perfil = perfil;
+        this.name = name;
+        this.profile = profile;
+        this.sector = sector;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getPerfil() {
-        return perfil;
-    }
+    public int getId() { return id; }
+    public String getUsername() { return username; }
+    public String getName() { return name; }
+    public String getProfile() { return profile; }
+    public String getSector() { return sector; }
 }
