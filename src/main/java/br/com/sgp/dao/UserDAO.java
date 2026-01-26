@@ -47,13 +47,14 @@ public class UserDAO {
     }
 
     // ======================
-    // LISTAR USUÁRIOS
+    // LISTAR USUÁRIOS (APENAS ATIVOS)
     // ======================
     public List<User> findAll() {
 
         List<User> users = new ArrayList<>();
 
-        String sql = "SELECT id, username, name, profile, sector FROM tb_users";
+        String sql = "SELECT id, username, name, profile, sector " +
+                     "FROM tb_users WHERE active = TRUE";
 
         try (Connection conn = AccessConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -76,5 +77,66 @@ public class UserDAO {
         }
 
         return users;
+    }
+
+    // ======================
+    // INSERIR USUÁRIO
+    // ======================
+    public boolean insert(User user) {
+
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Senha é obrigatória para novo usuário");
+        }
+
+        String sql =
+                "INSERT INTO tb_users (username, password, name, profile, sector, active) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = AccessConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getName());
+            ps.setString(4, user.getProfile());
+            ps.setString(5, user.getSector());
+            ps.setBoolean(6, user.isActive());
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao inserir usuário: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // ======================
+    // ATUALIZAR USUÁRIO (SEM SENHA)
+    // ======================
+    public boolean update(User user) {
+
+        String sql =
+                "UPDATE tb_users SET " +
+                "username = ?, name = ?, profile = ?, sector = ?, active = ? " +
+                "WHERE id = ?";
+
+        try (Connection conn = AccessConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getProfile());
+            ps.setString(4, user.getSector());
+            ps.setBoolean(5, user.isActive());
+            ps.setInt(6, user.getId());
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar usuário: " + e.getMessage());
+            return false;
+        }
     }
 }
