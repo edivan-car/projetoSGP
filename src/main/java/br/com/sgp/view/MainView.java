@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -17,119 +18,147 @@ import br.com.sgp.session.UserSession;
 
 public class MainView extends JFrame {
 
-    private JDesktopPane desktopPane;
-    private JLabel lblUser;
-    private JLabel lblSector;
-    private JLabel lblDateTime;
+	private JDesktopPane desktopPane;
+	private JLabel lblUser;
+	private JLabel lblSector;
+	private JLabel lblDateTime;
 
-    public MainView() {
-        setTitle("SGP - Sistema de Gestão da Produção");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public MainView() {
+		setTitle("SGP - Sistema de Gestão da Produção");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // 🔹 Tamanho base padronizado
-        setSize(1200, 800);
-        setMinimumSize(new Dimension(1024, 700));
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+		// 🔹 Tamanho base padronizado
+		setSize(1200, 800);
+		setMinimumSize(new Dimension(1024, 700));
+		setLocationRelativeTo(null);
+		setLayout(new BorderLayout());
 
-        setJMenuBar(createMenuBar());
-        add(createDesktopPane(), BorderLayout.CENTER);
-        add(createStatusBar(), BorderLayout.SOUTH);
-    }
+		setJMenuBar(createMenuBar());
+		add(createDesktopPane(), BorderLayout.CENTER);
+		add(createStatusBar(), BorderLayout.SOUTH);
+	}
 
-    // ================= MENU =================
-    private JMenuBar createMenuBar() {
+	// ================= MENU =================
+	private JMenuBar createMenuBar() {
 
-        JMenuBar menuBar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
 
-        JMenu menuStart = new JMenu("Início");
-        JMenu menuSector = new JMenu("Setor / Área");
-        JMenu menuReports = new JMenu("Relatórios");
-        JMenu menuHelp = new JMenu("Ajuda");
-        
-        // =====================
-        // MENU SETOR / ÁREA
-        // =====================
-        JMenuItem itemUsers = new JMenuItem("Usuários");
+		JMenu menuStart = new JMenu("Início");
 
-        itemUsers.addActionListener(e -> {
-            UserView view = new UserView();
-            new UserController(view);
-            desktopPane.add(view);
-            view.setVisible(true);
-        });
+		JMenu menuSector = new JMenu("Setor / Área");
+		JMenuItem itemUsers = new JMenuItem("Usuários");
 
-        menuSector.add(itemUsers);
+		// ===== Fabricação de Peças
+		JMenu menuFabricacaoPecas = new JMenu("Fabricação de Peças");
+		JMenuItem itemCorteTermico = new JMenuItem("Corte Térmico");
+		JMenuItem itemCorteDobra = new JMenuItem("Corte e Dobra");
 
-        // =====================
-        // MENU AJUDA
-        // =====================
-        JMenuItem itemAbout = new JMenuItem("Sobre");
-        itemAbout.addActionListener(e ->
-                new AboutDialog(this).setVisible(true)
-        );
+		// ===== Fabricação de Vigas
+		JMenu menuFabricacaoVigas = new JMenu("Fabricação de Vigas");
+		JMenuItem itemMontagemVigas = new JMenuItem("Montagem de Vigas");
+		JMenuItem itemSoldaVigas = new JMenuItem("Solda de Vigas");
+		JMenuItem itemSoldaPescoco = new JMenuItem("Solda Pescoço");
 
-        menuHelp.add(itemAbout);
+		JMenu menuReports = new JMenu("Relatórios");
 
-        // =====================
-        // ADD MENUS NA BARRA
-        // =====================
-        menuBar.add(menuStart);
-        menuBar.add(menuSector);
-        menuBar.add(menuReports);
-        menuBar.add(menuHelp);
+		JMenu menuHelp = new JMenu("Ajuda");
 
-        return menuBar;
-    }
+		// =====================
+		// MENU SETOR / ÁREA
+		// =====================
+		itemUsers.addActionListener(e -> {
+			UserView view = new UserView();
+			new UserController(view);
+			desktopPane.add(view);
+			view.setVisible(true);
+		});
 
-    // ================= ÁREA CENTRAL =================
-    private JDesktopPane createDesktopPane() {
-        desktopPane = new JDesktopPane();
-        return desktopPane;
-    }
+		// Por enquanto apenas placeholders
+		itemCorteTermico.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte Térmico"));
+		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
 
-    // ================= STATUS BAR =================
-    private JPanel createStatusBar() {
+		itemMontagemVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Montagem de Vigas"));
+		itemSoldaVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Solda de Vigas"));
+		itemSoldaPescoco.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Solda Pescoço"));
 
-        JPanel statusBar = new JPanel(new BorderLayout());
+	    // =====================
+	    // MONTAGEM DO MENU SETOR / ÁREA
+	    // =====================
+		menuSector.add(itemUsers);
+		menuSector.addSeparator();
+		
+		menuSector.add(menuFabricacaoPecas);
+	    menuFabricacaoPecas.add(itemCorteTermico);
+	    menuFabricacaoPecas.add(itemCorteDobra);
 
-        UserSession session = UserSession.getInstance();
+	    menuSector.add(menuFabricacaoVigas);
+		menuFabricacaoVigas.add(itemMontagemVigas);
+		menuFabricacaoVigas.add(itemSoldaVigas);
+		menuFabricacaoVigas.add(itemSoldaPescoco);
 
-        lblUser = new JLabel("Usuário: " + session.getName());
-        lblSector = new JLabel("Setor: " + session.getSector());
-        lblDateTime = new JLabel();
+		// =====================
+		// MENU AJUDA
+		// =====================
+		JMenuItem itemAbout = new JMenuItem("Sobre");
+		itemAbout.addActionListener(e -> new AboutDialog(this).setVisible(true));
 
-        JPanel left = new JPanel();
-        left.add(lblUser);
-        left.add(new JLabel("|"));
-        left.add(lblSector);
+		menuHelp.add(itemAbout);
 
-        JPanel right = new JPanel();
-        right.add(lblDateTime);
+		// =====================
+		// ADD MENUS NA BARRA
+		// =====================
+		menuBar.add(menuStart);
+		menuBar.add(menuSector);
+		menuBar.add(menuReports);
+		menuBar.add(menuHelp);
 
-        statusBar.add(left, BorderLayout.WEST);
-        statusBar.add(right, BorderLayout.EAST);
+		return menuBar;
+	}
 
-        startClock();
+	// ================= ÁREA CENTRAL =================
+	private JDesktopPane createDesktopPane() {
+		desktopPane = new JDesktopPane();
+		return desktopPane;
+	}
 
-        return statusBar;
-    }
+	// ================= STATUS BAR =================
+	private JPanel createStatusBar() {
 
-    // ================= RELÓGIO =================
-    private void startClock() {
-        Timer timer = new Timer(1000, e -> {
-            lblDateTime.setText(
-                    java.time.LocalDateTime.now()
-                            .format(java.time.format.DateTimeFormatter.ofPattern(
-                                    "dd/MM/yyyy HH:mm:ss"
-                            ))
-            );
-        });
-        timer.start();
-    }
+		JPanel statusBar = new JPanel(new BorderLayout());
 
-    // ================= GETTERS =================
-    public JDesktopPane getDesktopPane() {
-        return desktopPane;
-    }
+		UserSession session = UserSession.getInstance();
+
+		lblUser = new JLabel("Usuário: " + session.getName());
+		lblSector = new JLabel("Setor: " + session.getSector());
+		lblDateTime = new JLabel();
+
+		JPanel left = new JPanel();
+		left.add(lblUser);
+		left.add(new JLabel("|"));
+		left.add(lblSector);
+
+		JPanel right = new JPanel();
+		right.add(lblDateTime);
+
+		statusBar.add(left, BorderLayout.WEST);
+		statusBar.add(right, BorderLayout.EAST);
+
+		startClock();
+
+		return statusBar;
+	}
+
+	// ================= RELÓGIO =================
+	private void startClock() {
+		Timer timer = new Timer(1000, e -> {
+			lblDateTime.setText(java.time.LocalDateTime.now()
+					.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+		});
+		timer.start();
+	}
+
+	// ================= GETTERS =================
+	public JDesktopPane getDesktopPane() {
+		return desktopPane;
+	}
 }
