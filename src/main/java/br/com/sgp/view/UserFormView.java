@@ -6,8 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class UserFormView extends JDialog {
-
-    private JTextField txtUsername;
+	private static final long serialVersionUID = 1L;
+	
+	private JTextField txtUsername;
     private JTextField txtName;
     private JPasswordField txtPassword;
     private JComboBox<String> cbProfile;

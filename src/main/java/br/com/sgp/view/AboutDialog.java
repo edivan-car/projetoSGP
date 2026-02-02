@@ -7,8 +7,9 @@ import java.time.Year;
 import javax.swing.*;
 
 public class AboutDialog extends JDialog {
+	private static final long serialVersionUID = 1L;
 
-    public AboutDialog(JFrame parent) {
+	public AboutDialog(JFrame parent) {
         super(parent, "Sobre", true);
 
         setSize(420, 420);

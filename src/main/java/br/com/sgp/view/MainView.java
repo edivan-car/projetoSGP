@@ -13,11 +13,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import br.com.sgp.controller.SectorBaseController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
 
 public class MainView extends JFrame {
-
+	private static final long serialVersionUID = 1L;
+	
 	private JDesktopPane desktopPane;
 	private JLabel lblUser;
 	private JLabel lblSector;
@@ -63,18 +65,14 @@ public class MainView extends JFrame {
 
 		JMenu menuHelp = new JMenu("Ajuda");
 
-		// =====================
-		// MENU SETOR / ÁREA
-		// =====================
-		itemUsers.addActionListener(e -> {
-			UserView view = new UserView();
-			new UserController(view);
-			desktopPane.add(view);
-			view.setVisible(true);
+		// Por enquanto apenas placeholders
+		itemCorteTermico.addActionListener(e -> {
+		    SectorBaseView view = new SectorBaseView("Corte Térmico");
+		    new SectorBaseController(view);
+		    desktopPane.add(view);
+		    view.setVisible(true);
 		});
 
-		// Por enquanto apenas placeholders
-		itemCorteTermico.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte Térmico"));
 		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
 
 		itemMontagemVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Montagem de Vigas"));
@@ -95,7 +93,17 @@ public class MainView extends JFrame {
 		menuFabricacaoVigas.add(itemMontagemVigas);
 		menuFabricacaoVigas.add(itemSoldaVigas);
 		menuFabricacaoVigas.add(itemSoldaPescoco);
-
+		
+		// =====================
+		// MENU SETOR / ÁREA
+		// =====================
+		itemUsers.addActionListener(e -> {
+			UserView view = new UserView();
+			new UserController(view);
+			desktopPane.add(view);
+			view.setVisible(true);
+		});
+		
 		// =====================
 		// MENU AJUDA
 		// =====================
@@ -103,7 +111,7 @@ public class MainView extends JFrame {
 		itemAbout.addActionListener(e -> new AboutDialog(this).setVisible(true));
 
 		menuHelp.add(itemAbout);
-
+		
 		// =====================
 		// ADD MENUS NA BARRA
 		// =====================

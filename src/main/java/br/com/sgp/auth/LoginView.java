@@ -6,8 +6,9 @@ import java.awt.Font;
 import javax.swing.*;
 
 public class LoginView extends JFrame {
-
-    private JLabel lblBackground;
+	private static final long serialVersionUID = 1L;
+	
+	private JLabel lblBackground;
     private JTextField txtUser;
     private JPasswordField txtPass;
     private JButton btnLogin;
@@ -57,7 +58,7 @@ public class LoginView extends JFrame {
         lblUser.setBounds(140, 226, 200, 20);
         lblBackground.add(lblUser);
 
-        txtUser = new JTextField();
+        txtUser = new JTextField("admin");
         txtUser.setHorizontalAlignment(SwingConstants.CENTER);
         txtUser.setBounds(140, 256, 200, 20);
         lblBackground.add(txtUser);
@@ -71,7 +72,7 @@ public class LoginView extends JFrame {
         lblPass.setBounds(140, 296, 200, 20);
         lblBackground.add(lblPass);
 
-        txtPass = new JPasswordField();
+        txtPass = new JPasswordField("admin@2486");
         txtPass.setHorizontalAlignment(SwingConstants.CENTER);
         txtPass.setBounds(140, 326, 200, 20);
         lblBackground.add(txtPass);
