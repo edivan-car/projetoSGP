@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.sgp.model.User;
-import br.com.sgp.util.AccessConnection;
+import br.com.sgp.util.ConnectionFactory;
 
 public class UserDAO {
 
@@ -21,7 +21,7 @@ public class UserDAO {
     // ======================
     public User login(String username, String password) {
 
-        try (Connection conn = AccessConnection.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(SQL_LOGIN)) {
 
             ps.setString(1, username);
@@ -56,7 +56,7 @@ public class UserDAO {
         String sql = "SELECT id, username, name, profile, sector " +
                      "FROM tb_users WHERE active = TRUE";
 
-        try (Connection conn = AccessConnection.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -92,7 +92,7 @@ public class UserDAO {
                 "INSERT INTO tb_users (username, password, name, profile, sector, active) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = AccessConnection.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getUsername());
@@ -121,7 +121,7 @@ public class UserDAO {
                 "username = ?, name = ?, profile = ?, sector = ?, active = ? " +
                 "WHERE id = ?";
 
-        try (Connection conn = AccessConnection.getConnection();
+        try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getUsername());

@@ -13,160 +13,175 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import br.com.sgp.controller.SectorBaseController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
+import br.com.sgp.view.sector.SectorBaseView;
+import br.com.sgp.view.sector.forms.ThermalCuttingForm;
 
 public class MainView extends JFrame {
-	private static final long serialVersionUID = 1L;
-	
-	private JDesktopPane desktopPane;
-	private JLabel lblUser;
-	private JLabel lblSector;
-	private JLabel lblDateTime;
 
-	public MainView() {
-		setTitle("SGP - Sistema de Gestão da Produção");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private static final long serialVersionUID = 1L;
 
-		// 🔹 Tamanho base padronizado
-		setSize(1200, 800);
-		setMinimumSize(new Dimension(1024, 700));
-		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
+    private JDesktopPane desktopPane;
+    private JLabel lblUser;
+    private JLabel lblSector;
+    private JLabel lblDateTime;
 
-		setJMenuBar(createMenuBar());
-		add(createDesktopPane(), BorderLayout.CENTER);
-		add(createStatusBar(), BorderLayout.SOUTH);
-	}
+    public MainView() {
+        setTitle("SGP - Sistema de Gestão da Produção");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	// ================= MENU =================
-	private JMenuBar createMenuBar() {
+        setSize(1200, 800);
+        setMinimumSize(new Dimension(1024, 700));
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
-		JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(createMenuBar());
+        add(createDesktopPane(), BorderLayout.CENTER);
+        add(createStatusBar(), BorderLayout.SOUTH);
+    }
 
-		JMenu menuStart = new JMenu("Início");
+    // ================= MENU =================
+    private JMenuBar createMenuBar() {
 
-		JMenu menuSector = new JMenu("Setor / Área");
-		JMenuItem itemUsers = new JMenuItem("Usuários");
+        JMenuBar menuBar = new JMenuBar();
 
-		// ===== Fabricação de Peças
-		JMenu menuFabricacaoPecas = new JMenu("Fabricação de Peças");
-		JMenuItem itemCorteTermico = new JMenuItem("Corte Térmico");
-		JMenuItem itemCorteDobra = new JMenuItem("Corte e Dobra");
+        JMenu menuStart = new JMenu("Início");
 
-		// ===== Fabricação de Vigas
-		JMenu menuFabricacaoVigas = new JMenu("Fabricação de Vigas");
-		JMenuItem itemMontagemVigas = new JMenuItem("Montagem de Vigas");
-		JMenuItem itemSoldaVigas = new JMenuItem("Solda de Vigas");
-		JMenuItem itemSoldaPescoco = new JMenuItem("Solda Pescoço");
+        JMenu menuSector = new JMenu("Setor / Área");
+        JMenuItem itemUsers = new JMenuItem("Usuários");
 
-		JMenu menuReports = new JMenu("Relatórios");
+        // ===== Fabricação de Peças
+        JMenu menuFabricacaoPecas = new JMenu("Fabricação de Peças");
+        JMenuItem itemCorteTermico = new JMenuItem("Corte Térmico");
+        JMenuItem itemCorteDobra = new JMenuItem("Corte e Dobra");
 
-		JMenu menuHelp = new JMenu("Ajuda");
+        // ===== Fabricação de Vigas
+        JMenu menuFabricacaoVigas = new JMenu("Fabricação de Vigas");
+        JMenuItem itemMontagemVigas = new JMenuItem("Montagem de Vigas");
+        JMenuItem itemSoldaVigas = new JMenuItem("Solda de Vigas");
+        JMenuItem itemSoldaPescoco = new JMenuItem("Solda Pescoço");
 
-		// Por enquanto apenas placeholders
-		itemCorteTermico.addActionListener(e -> {
-		    SectorBaseView view = new SectorBaseView("Corte Térmico");
-		    new SectorBaseController(view);
-		    desktopPane.add(view);
-		    view.setVisible(true);
-		});
+        JMenu menuReports = new JMenu("Relatórios");
+        JMenu menuHelp = new JMenu("Ajuda");
 
-		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
+        // =====================
+        // AÇÕES
+        // =====================
 
-		itemMontagemVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Montagem de Vigas"));
-		itemSoldaVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Solda de Vigas"));
-		itemSoldaPescoco.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Solda Pescoço"));
+        itemUsers.addActionListener(e -> {
+            UserView view = new UserView();
+            new UserController(view);
+            desktopPane.add(view);
+            view.setVisible(true);
+        });
 
-	    // =====================
-	    // MONTAGEM DO MENU SETOR / ÁREA
-	    // =====================
-		menuSector.add(itemUsers);
-		menuSector.addSeparator();
-		
-		menuSector.add(menuFabricacaoPecas);
-	    menuFabricacaoPecas.add(itemCorteTermico);
-	    menuFabricacaoPecas.add(itemCorteDobra);
+        itemCorteTermico.addActionListener(e -> {
 
-	    menuSector.add(menuFabricacaoVigas);
-		menuFabricacaoVigas.add(itemMontagemVigas);
-		menuFabricacaoVigas.add(itemSoldaVigas);
-		menuFabricacaoVigas.add(itemSoldaPescoco);
-		
-		// =====================
-		// MENU SETOR / ÁREA
-		// =====================
-		itemUsers.addActionListener(e -> {
-			UserView view = new UserView();
-			new UserController(view);
-			desktopPane.add(view);
-			view.setVisible(true);
-		});
-		
-		// =====================
-		// MENU AJUDA
-		// =====================
-		JMenuItem itemAbout = new JMenuItem("Sobre");
-		itemAbout.addActionListener(e -> new AboutDialog(this).setVisible(true));
+            SectorBaseView view = new SectorBaseView("Corte Térmico");
 
-		menuHelp.add(itemAbout);
-		
-		// =====================
-		// ADD MENUS NA BARRA
-		// =====================
-		menuBar.add(menuStart);
-		menuBar.add(menuSector);
-		menuBar.add(menuReports);
-		menuBar.add(menuHelp);
+            // Injeta o formulário específico
+            view.setForm(new ThermalCuttingForm());
+            
+            desktopPane.add(view);
+            view.setVisible(true);
+            
+            try {
+				view.setSelected(true);
+			} catch (java.beans.PropertyVetoException ex) {
+				ex.printStackTrace();
+			}
+        });
 
-		return menuBar;
-	}
+        itemCorteDobra.addActionListener(
+                e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra")
+        );
 
-	// ================= ÁREA CENTRAL =================
-	private JDesktopPane createDesktopPane() {
-		desktopPane = new JDesktopPane();
-		return desktopPane;
-	}
+        itemMontagemVigas.addActionListener(
+                e -> JOptionPane.showMessageDialog(this, "Módulo Montagem de Vigas")
+        );
 
-	// ================= STATUS BAR =================
-	private JPanel createStatusBar() {
+        itemSoldaVigas.addActionListener(
+                e -> JOptionPane.showMessageDialog(this, "Módulo Solda de Vigas")
+        );
 
-		JPanel statusBar = new JPanel(new BorderLayout());
+        itemSoldaPescoco.addActionListener(
+                e -> JOptionPane.showMessageDialog(this, "Módulo Solda Pescoço")
+        );
 
-		UserSession session = UserSession.getInstance();
+        // =====================
+        // MONTAGEM DO MENU
+        // =====================
+        menuSector.add(itemUsers);
+        menuSector.addSeparator();
 
-		lblUser = new JLabel("Usuário: " + session.getName());
-		lblSector = new JLabel("Setor: " + session.getSector());
-		lblDateTime = new JLabel();
+        menuSector.add(menuFabricacaoPecas);
+        menuFabricacaoPecas.add(itemCorteTermico);
+        menuFabricacaoPecas.add(itemCorteDobra);
 
-		JPanel left = new JPanel();
-		left.add(lblUser);
-		left.add(new JLabel("|"));
-		left.add(lblSector);
+        menuSector.add(menuFabricacaoVigas);
+        menuFabricacaoVigas.add(itemMontagemVigas);
+        menuFabricacaoVigas.add(itemSoldaVigas);
+        menuFabricacaoVigas.add(itemSoldaPescoco);
 
-		JPanel right = new JPanel();
-		right.add(lblDateTime);
+        JMenuItem itemAbout = new JMenuItem("Sobre");
+        itemAbout.addActionListener(e -> new AboutDialog(this).setVisible(true));
+        menuHelp.add(itemAbout);
 
-		statusBar.add(left, BorderLayout.WEST);
-		statusBar.add(right, BorderLayout.EAST);
+        menuBar.add(menuStart);
+        menuBar.add(menuSector);
+        menuBar.add(menuReports);
+        menuBar.add(menuHelp);
 
-		startClock();
+        return menuBar;
+    }
 
-		return statusBar;
-	}
+    // ================= ÁREA CENTRAL =================
+    private JDesktopPane createDesktopPane() {
+        desktopPane = new JDesktopPane();
+        return desktopPane;
+    }
 
-	// ================= RELÓGIO =================
-	private void startClock() {
-		Timer timer = new Timer(1000, e -> {
-			lblDateTime.setText(java.time.LocalDateTime.now()
-					.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-		});
-		timer.start();
-	}
+    // ================= STATUS BAR =================
+    private JPanel createStatusBar() {
 
-	// ================= GETTERS =================
-	public JDesktopPane getDesktopPane() {
-		return desktopPane;
-	}
+        JPanel statusBar = new JPanel(new BorderLayout());
+
+        UserSession session = UserSession.getInstance();
+
+        lblUser = new JLabel("Usuário: " + session.getName());
+        lblSector = new JLabel("Setor: " + session.getSector());
+        lblDateTime = new JLabel();
+
+        JPanel left = new JPanel();
+        left.add(lblUser);
+        left.add(new JLabel("|"));
+        left.add(lblSector);
+
+        JPanel right = new JPanel();
+        right.add(lblDateTime);
+
+        statusBar.add(left, BorderLayout.WEST);
+        statusBar.add(right, BorderLayout.EAST);
+
+        startClock();
+
+        return statusBar;
+    }
+
+    // ================= RELÓGIO =================
+    private void startClock() {
+        Timer timer = new Timer(1000, e -> {
+            lblDateTime.setText(
+                java.time.LocalDateTime.now()
+                    .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+            );
+        });
+        timer.start();
+    }
+
+    // ================= GETTER =================
+    public JDesktopPane getDesktopPane() {
+        return desktopPane;
+    }
 }

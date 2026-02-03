@@ -2,7 +2,7 @@ package br.com.sgp.controller;
 
 import br.com.sgp.dao.OrderDAO;
 import br.com.sgp.model.Order;
-import br.com.sgp.view.SectorBaseView;
+import br.com.sgp.view.sector.SectorBaseView;
 
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ public class SectorBaseController {
 
     private void initController() {
 
-        view.getBtnClear().addActionListener(e -> view.clearFields());
+        //view.getBtnClear().addActionListener(e -> view.clearFields());
 
         // Botões Cadastro / Editar entram depois
     }
@@ -39,7 +39,6 @@ public class SectorBaseController {
 
         for (Order o : orders) {
             model.addRow(new Object[]{
-                    o.getId(),
                     o.getPedido(),
                     o.getProjeto(),
                     o.getLinhaMontagem(),

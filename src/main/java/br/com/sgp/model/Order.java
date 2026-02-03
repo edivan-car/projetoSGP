@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Order {
 
-    private int id;
     private String pedido;
     private String projeto;
     private String linhaMontagem;
@@ -15,9 +14,9 @@ public class Order {
     private String turnoMontagem;
     private Date dataSoldaPescoco;
     private String turnoSoldaPescoco;
+    private String observacao;
 
-    public Order(int id,
-                 String pedido,
+    public Order(String pedido,
                  String projeto,
                  String linhaMontagem,
                  String programacaoMes,
@@ -26,9 +25,9 @@ public class Order {
                  Date dataMontagem,
                  String turnoMontagem,
                  Date dataSoldaPescoco,
-                 String turnoSoldaPescoco) {
+                 String turnoSoldaPescoco,
+                 String observacao) {
 
-        this.id = id;
         this.pedido = pedido;
         this.projeto = projeto;
         this.linhaMontagem = linhaMontagem;
@@ -39,9 +38,9 @@ public class Order {
         this.turnoMontagem = turnoMontagem;
         this.dataSoldaPescoco = dataSoldaPescoco;
         this.turnoSoldaPescoco = turnoSoldaPescoco;
+        this.observacao = observacao;
     }
 
-    public int getId() { return id; }
     public String getPedido() { return pedido; }
     public String getProjeto() { return projeto; }
     public String getLinhaMontagem() { return linhaMontagem; }
@@ -52,4 +51,5 @@ public class Order {
     public String getTurnoMontagem() { return turnoMontagem; }
     public Date getDataSoldaPescoco() { return dataSoldaPescoco; }
     public String getTurnoSoldaPescoco() { return turnoSoldaPescoco; }
+    public String getObservacao() {return observacao;}
 }

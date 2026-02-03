@@ -3,7 +3,7 @@ package br.com.sgp.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public final class AccessConnection {
+public final class ConnectionFactory {
 
     private static final String DB_FILE = "db_production.accdb";
     private static final String DB_PATH = "F:/trabalho/SGP-SistemaGestãoProdução/DB" + "/" + DB_FILE;
@@ -12,7 +12,7 @@ public final class AccessConnection {
     private static final String URL =
             "jdbc:ucanaccess://" + DB_PATH;
 
-    private AccessConnection() {
+    private ConnectionFactory() {
         // evita instância
     }
 

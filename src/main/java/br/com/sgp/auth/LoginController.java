@@ -5,7 +5,7 @@ import java.awt.Color;
 import br.com.sgp.dao.UserDAO;
 import br.com.sgp.model.User;
 import br.com.sgp.session.UserSession;
-import br.com.sgp.util.AccessConnection;
+import br.com.sgp.util.ConnectionFactory;
 import br.com.sgp.view.MainView;
 
 public class LoginController {
@@ -24,7 +24,7 @@ public class LoginController {
     }
 
     private void checkDatabase() {
-        if (AccessConnection.testConnection()) {
+        if (ConnectionFactory.testConnection()) {
             view.setStatus("Conectado", Color.BLUE, "/images/icons/dbOn-40x40.png");
         } else {
             view.setStatus("Erro de conexão", Color.RED, "/images/icons/dbOff-40x40.png");
