@@ -1,134 +1,104 @@
 package br.com.sgp.view.sector.forms;
 
+import br.com.sgp.view.util.GridBagHelper;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ThermalCuttingForm extends JPanel {
-    private static final long serialVersionUID = 1L;
 
-    // ======================
-    // Campos
-    // ======================
-    private JTextField txtLinhaMontagem;
-    private JTextField txtDataPlano;
-    private JTextField txtDuplicata;
-    private JTextField txtDataRecebimento;
-    private JTextField txtProgCorte;
-    private JTextArea txtObservation;
-    private JCheckBox chkDuplicada;
+	private static final long serialVersionUID = 1L;
 
-    // ======================
-    // Construtor
-    // ======================
-    public ThermalCuttingForm() {
-        setLayout(new GridBagLayout());
-        initComponents();
-    }
+	private JTextField txtLinhaMontagem;
+	private JTextField txtDataPlano;
+	private JTextField txtDuplicata;
+	private JTextField txtDataRecebimento;
+	private JTextField txtProgCorte;
+	private JTextArea txtObservation;
+	private JCheckBox chkDuplicada;
 
-    // ======================
-    // Helpers de Layout
-    // ======================
-    private void addLabel(String text, GridBagConstraints gbc, int x, int y) {
-        gbc.gridx = x;
-        gbc.gridy = y;
-        gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(new JLabel(text), gbc);
-    }
+	public ThermalCuttingForm() {
+		setLayout(new GridBagLayout());
+		setPreferredSize(new Dimension(760, 210));
+		setMinimumSize(new Dimension(760, 210));
+		setMaximumSize(new Dimension(760, 210));
 
-    private void addField(
-            JComponent component,
-            GridBagConstraints gbc,
-            int x,
-            int y,
-            double weightX
-    ) {
-        gbc.gridx = x;
-        gbc.gridy = y;
-        gbc.weightx = weightX;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(component, gbc);
-    }
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)),
+				BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-    // ======================
-    // Inicialização
-    // ======================
-    private void initComponents() {
+		initComponents();
+	}
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+	private void initComponents() {
 
-        int y = 0;
+		GridBagHelper g = new GridBagHelper();
+	    int y = 0;
 
-        // ======================
-        // Linha Montagem
-        // ======================
-        addLabel("Linha Mont.:", gbc, 0, y);
+	    // Linha Montagem
+	    add(new JLabel("Linha Mont.:"), g.c(0, y));
 
-        txtLinhaMontagem = new JTextField();
-        addField(txtLinhaMontagem, gbc, 1, y, 1.0);
+	    txtLinhaMontagem = new JTextField();
+	    GridBagConstraints gbcLinha = g.c(1, y);
+	    g.span(gbcLinha, 3);
+	    g.weight(gbcLinha, 1, 0);
+	    g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
+	    add(txtLinhaMontagem, gbcLinha);
 
-        // ======================
-        // Data / Plano + Duplicata
-        // ======================
-        y++;
+	    // Data / Plano + Duplicata
+	    y++;
+	    add(new JLabel("Data / Plano:"), g.c(0, y));
 
-        addLabel("Data / Plano:", gbc, 0, y);
-        txtDataPlano = new JTextField();
-        addField(txtDataPlano, gbc, 1, y, 0.5);
+	    txtDataPlano = new JTextField();
+	    GridBagConstraints gbcDataPlano = g.c(1, y);
+	    g.weight(gbcDataPlano, 0.5, 0);
+	    g.fill(gbcDataPlano, GridBagConstraints.HORIZONTAL);
+	    add(txtDataPlano, gbcDataPlano);
 
-        addLabel("Duplicata:", gbc, 2, y);
-        txtDuplicata = new JTextField();
-        addField(txtDuplicata, gbc, 3, y, 0.5);
+	    add(new JLabel("Duplicata:"), g.c(2, y));
 
-        // ======================
-        // Data / Recebimento + Prog. Corte
-        // ======================
-        y++;
+	    txtDuplicata = new JTextField();
+	    GridBagConstraints gbcDuplicata = g.c(3, y);
+	    g.weight(gbcDuplicata, 0.5, 0);
+	    g.fill(gbcDuplicata, GridBagConstraints.HORIZONTAL);
+	    add(txtDuplicata, gbcDuplicata);
 
-        addLabel("Data / Receb.:", gbc, 0, y);
-        txtDataRecebimento = new JTextField();
-        addField(txtDataRecebimento, gbc, 1, y, 0.5);
+	    // Data Receb. + Prog. Corte
+	    y++;
+	    add(new JLabel("Data / Receb.:"), g.c(0, y));
 
-        addLabel("Prog. Corte:", gbc, 2, y);
-        txtProgCorte = new JTextField();
-        addField(txtProgCorte, gbc, 3, y, 0.5);
+	    txtDataRecebimento = new JTextField();
+	    GridBagConstraints gbcDataRec = g.c(1, y);
+	    g.weight(gbcDataRec, 0.5, 0);
+	    g.fill(gbcDataRec, GridBagConstraints.HORIZONTAL);
+	    add(txtDataRecebimento, gbcDataRec);
 
-        // ======================
-        // Observações
-        // ======================
-        y++;
+	    add(new JLabel("Prog. Corte:"), g.c(2, y));
 
-        addLabel("Observação:", gbc, 0, y);
+	    txtProgCorte = new JTextField();
+	    GridBagConstraints gbcProgCorte = g.c(3, y);
+	    g.weight(gbcProgCorte, 0.5, 0);
+	    g.fill(gbcProgCorte, GridBagConstraints.HORIZONTAL);
+	    add(txtProgCorte, gbcProgCorte);
 
-        txtObservation = new JTextArea(3, 20);
-        txtObservation.setLineWrap(true);
-        txtObservation.setWrapStyleWord(true);
+	    // Observações
+	    y++;
+	    add(new JLabel("Observação:"), g.c(0, y));
 
-        JScrollPane scrollObs = new JScrollPane(txtObservation);
+	    txtObservation = new JTextArea(3, 20);
+	    txtObservation.setLineWrap(true);
+	    txtObservation.setWrapStyleWord(true);
 
-        gbc.gridx = 1;
-        gbc.gridy = y;
-        gbc.gridwidth = 3;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(scrollObs, gbc);
+	    JScrollPane scrollObs = new JScrollPane(txtObservation);
 
-        // reset
-        gbc.gridwidth = 1;
-        gbc.weighty = 0;
+	    GridBagConstraints gbcObs = g.c(1, y);
+	    g.span(gbcObs, 3);
+	    g.weight(gbcObs, 1, 1);
+	    g.fill(gbcObs, GridBagConstraints.BOTH);
+	    add(scrollObs, gbcObs);
 
-        // ======================
-        // Checkbox
-        // ======================
-        y++;
-
-        chkDuplicada = new JCheckBox("Duplicada");
-        gbc.gridx = 0;
-        gbc.gridy = y;
-        gbc.fill = GridBagConstraints.NONE;
-        add(chkDuplicada, gbc);
-    }
+	    // Checkbox
+	    y++;
+	    chkDuplicada = new JCheckBox("Duplicada");
+	    add(chkDuplicada, g.c(0, y));
+	}
 }
