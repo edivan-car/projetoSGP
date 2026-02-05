@@ -1,9 +1,22 @@
 package br.com.sgp.view.sector;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
+
+import br.com.sgp.view.sector.table.OrderTableModel;
 
 public class SectorBaseView extends JInternalFrame {
 
@@ -15,7 +28,7 @@ public class SectorBaseView extends JInternalFrame {
 
     // Tabela
     private JTable table;
-    private DefaultTableModel tableModel;
+    private JPanel currentForm;
 
     // Container do formulário (dinâmico)
     private JPanel formContainer;
@@ -76,34 +89,11 @@ public class SectorBaseView extends JInternalFrame {
     // =========================
     private JScrollPane createTablePanel() {
 
-        tableModel = new DefaultTableModel(
-                new Object[]{
-                        "Pedido",
-                        "Projeto",
-                        "Linha Montagem",
-                        "Prog/Mês",
-                        "Corte",
-                        "Turno",
-                        "Montagem",
-                        "Turno",
-                        "Solda Pesc.",
-                        "Turno",
-                        "Observações"
-                }, 0
-        ) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        table = new JTable(tableModel);
+        table = new JTable();
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(22);
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
-
-        configureColumnWidths();
 
         JScrollPane scroll = new JScrollPane(table);
         scroll.setBorder(BorderFactory.createTitledBorder("Registros"));
@@ -111,9 +101,13 @@ public class SectorBaseView extends JInternalFrame {
         return scroll;
     }
 
-    private void configureColumnWidths() {
+    public void configureColumnWidths() {
 
         TableColumnModel columnModel = table.getColumnModel();
+
+        if (columnModel.getColumnCount() < 11) {
+            return;
+        }
 
         columnModel.getColumn(0).setPreferredWidth(60);
         columnModel.getColumn(1).setPreferredWidth(120);
@@ -131,6 +125,7 @@ public class SectorBaseView extends JInternalFrame {
 
         columnModel.getColumn(10).setPreferredWidth(200);
     }
+
 
     // =========================
     // CONTAINER DO FORMULÁRIO
@@ -151,8 +146,15 @@ public class SectorBaseView extends JInternalFrame {
     // =========================
     // FORMULÁRIO DINÂMICO
     // =========================
+    
+    public JPanel getCurrentForm() {
+        return currentForm;
+    }
+    
     public void setForm(JPanel form) {
-        
+
+        this.currentForm = form;
+
         formContainer.removeAll();
 
         JPanel centerWrapper = new JPanel(new GridBagLayout());
@@ -171,6 +173,7 @@ public class SectorBaseView extends JInternalFrame {
         formContainer.revalidate();
         formContainer.repaint();
     }
+
 
     // =========================
     // BOTÕES
@@ -197,10 +200,13 @@ public class SectorBaseView extends JInternalFrame {
         return table;
     }
 
-    public DefaultTableModel getTableModel() {
-        return tableModel;
+    public void setTableModel(OrderTableModel model) {
+    	System.out.println(">> setTableModel chamado");
+    	
+        table.setModel(model);
+        configureColumnWidths();
     }
-
+    
     public JButton getBtnCreate() {
         return btnCreate;
     }

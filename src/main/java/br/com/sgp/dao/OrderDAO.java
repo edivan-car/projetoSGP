@@ -14,44 +14,55 @@ public class OrderDAO {
     private static final int DEFAULT_LIMIT = 100;
 
     public List<Order> findRecent() {
+    	
+    	System.out.println(">> OrderDAO.findRecent()");
 
         List<Order> list = new ArrayList<>();
 
         String sql =
         	    "SELECT TOP " + DEFAULT_LIMIT + " " +
-        	    "pedido, projeto, linha_montagem, programacao_mes, " +
-        	    "data_corte, turno_corte, " +
-        	    "data_montagem, turno_montagem, " +
-        	    "data_solda_pescoco, turno_solda_pescoco, Observacoes " +
-        	    "FROM tb_order " +
-        	    "WHERE active = TRUE " +
-        	    "ORDER BY pedido DESC";
+        	    "[PEDIDO], [PROJETO], [Linha], [Programação], " +
+        	    "[Data_Corte], [Turno], " +
+        	    "[Data_Mont], [Turno_Mont], " +
+        	    "[Data_SoldaPesc], [Turno_SoldaPesc], [Observacoes] " +
+        	    "FROM tb_orders " +
+        	    "ORDER BY [PEDIDO] DESC";
 
+        System.out.println(">> SQL final:\n" + sql);
+
+        
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+        	
+        	System.out.println(">> SQL executado");
 
+        	int count = 0;
             while (rs.next()) {
                 list.add(new Order(
-                    rs.getString("pedido"),
-                    rs.getString("projeto"),
-                    rs.getString("linha_montagem"),
-                    rs.getString("programacao_mes"),
-                    rs.getDate("data_corte"),
-                    rs.getString("turno_corte"),
-                    rs.getDate("data_montagem"),
-                    rs.getString("turno_montagem"),
-                    rs.getDate("data_solda_pescoco"),
-                    rs.getString("turno_solda_pescoco"),
+                    rs.getString("PEDIDO"),
+                    rs.getString("PROJETO"),
+                    rs.getString("Linha"),
+                    rs.getString("Programação"),
+                    rs.getDate("Data_Corte"),
+                    rs.getString("Turno"),
+                    rs.getDate("Data_Mont"),
+                    rs.getString("Turno_Mont"),
+                    rs.getDate("Data_SoldaPesc"),
+                    rs.getString("Turno_SoldaPesc"),
                     rs.getString("Observacoes")
                 ));
+                count++;
+                System.out.println(">> Pedido carregado: " + rs.getString("PEDIDO"));
             }
+            System.out.println(">> Total de registros: " + count);
+            
+            System.out.println(">> registros carregados do banco: " + list.size());
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao carregar pedidos", e);
+            throw new RuntimeException("Erro ao carregar pedidos recentes", e);
         }
 
         return list;
     }
-    
 }

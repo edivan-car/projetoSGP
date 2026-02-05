@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import br.com.sgp.controller.SectorBaseController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
 import br.com.sgp.view.sector.SectorBaseView;
@@ -79,10 +80,12 @@ public class MainView extends JFrame {
         itemCorteTermico.addActionListener(e -> {
 
             SectorBaseView view = new SectorBaseView("Corte Térmico");
-
-            // Injeta o formulário específico
+            
             view.setForm(new ThermalCuttingForm());
             
+            // 🔥 CONTROLLER É QUEM MANDA
+            new SectorBaseController(view);
+
             desktopPane.add(view);
             view.setVisible(true);
             

@@ -101,4 +101,13 @@ public class ThermalCuttingForm extends JPanel {
 	    chkDuplicada = new JCheckBox("Duplicada");
 	    add(chkDuplicada, g.c(0, y));
 	}
+	
+	public void setLinhaMontagem(String value) {
+	    txtLinhaMontagem.setText(value);
+	}
+
+	public void setProgCorte(String value) {
+	    txtProgCorte.setText(value);
+	}
+
 }

@@ -1,56 +1,81 @@
 package br.com.sgp.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.sgp.dao.OrderDAO;
 import br.com.sgp.model.Order;
 import br.com.sgp.view.sector.SectorBaseView;
-
-import javax.swing.table.DefaultTableModel;
-import java.text.SimpleDateFormat;
-import java.util.List;
+import br.com.sgp.view.sector.table.OrderTableModel;
 
 public class SectorBaseController {
 
-    private SectorBaseView view;
-    private OrderDAO dao;
+    private final SectorBaseView view;
+    private final OrderDAO dao;
+    private final OrderTableModel tableModel;
+    
+    private Order selectedOrder;
 
     private final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
     public SectorBaseController(SectorBaseView view) {
-        this.view = view;
+    	
+    	// DEBUG
+    	System.out.println(">> SectorBaseController criado");
+    	
+    	this.view = view;
         this.dao = new OrderDAO();
 
-        initController();
+        this.tableModel = new OrderTableModel();
+        view.setTableModel(tableModel);
+
         loadTable();
+        initController();
     }
-
+    
     private void initController() {
+    	view.getTable().getSelectionModel()
+        .addListSelectionListener(e -> {
 
-        //view.getBtnClear().addActionListener(e -> view.clearFields());
+            if (e.getValueIsAdjusting()) return;
 
-        // Botões Cadastro / Editar entram depois
+            int row = view.getTable().getSelectedRow();
+            selectedOrder = (row == -1)
+                    ? null
+                    : tableModel.getOrderAt(row);
+        });
     }
 
     private void loadTable() {
-
-        DefaultTableModel model = view.getTableModel();
-        model.setRowCount(0);
+    	
+    	//DEBUG
+    	System.out.println(">> loadTable() chamado");
 
         List<Order> orders = dao.findRecent();
+        System.out.println(">> pedidos retornados: " + orders.size());
+        
+        List<Object[]> rows = new ArrayList<>();
 
         for (Order o : orders) {
-            model.addRow(new Object[]{
-                    o.getPedido(),
-                    o.getProjeto(),
-                    o.getLinhaMontagem(),
-                    o.getProgramacaoMes(),
-                    format(o.getDataCorte()),
-                    o.getTurnoCorte(),
-                    format(o.getDataMontagem()),
-                    o.getTurnoMontagem(),
-                    format(o.getDataSoldaPescoco()),
-                    o.getTurnoSoldaPescoco()
+            rows.add(new Object[] {
+                o.getPedido(),
+                o.getProjeto(),
+                o.getLinhaMontagem(),
+                o.getProgramacaoMes(),
+                format(o.getDataCorte()),
+                o.getTurnoCorte(),
+                format(o.getDataMontagem()),
+                o.getTurnoMontagem(),
+                format(o.getDataSoldaPescoco()),
+                o.getTurnoSoldaPescoco(),
+                o.getObservacao()
             });
         }
+        
+        System.out.println(">> linhas preparadas para a tabela: " + rows.size());
+
+        tableModel.setOrders(orders);
     }
 
     private String format(java.util.Date date) {
