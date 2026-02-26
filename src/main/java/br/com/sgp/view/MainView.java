@@ -13,11 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import br.com.sgp.controller.SectorBaseController;
+import br.com.sgp.controller.DefaultSectorController;
+import br.com.sgp.controller.ThermalCuttingController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
-import br.com.sgp.view.sector.SectorBaseView;
-import br.com.sgp.view.sector.forms.ThermalCuttingForm;
+import br.com.sgp.view.sector.DefaultSectorView;
+import br.com.sgp.view.sector.form.ThermalCuttingForm;
 
 public class MainView extends JFrame {
 
@@ -79,12 +80,16 @@ public class MainView extends JFrame {
 
         itemCorteTermico.addActionListener(e -> {
 
-            SectorBaseView view = new SectorBaseView("Corte Térmico");
+            DefaultSectorView view = new DefaultSectorView("Corte Térmico");
             
-            view.setForm(new ThermalCuttingForm());
+            ThermalCuttingForm form = new ThermalCuttingForm();
+            view.setForm(form);
             
-            // 🔥 CONTROLLER É QUEM MANDA
-            new SectorBaseController(view);
+            // Controller genérico do setor (tabela, seleção, etc.)
+            new DefaultSectorController(view);
+            
+            // ✅ Controller específico do Corte Térmico
+            new ThermalCuttingController(form);
 
             desktopPane.add(view);
             view.setVisible(true);
