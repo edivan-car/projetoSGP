@@ -5,6 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -82,6 +83,10 @@ public class MainView extends JFrame {
 
             DefaultSectorView view = new DefaultSectorView("Corte Térmico");
             
+            desktopPane.add(view);
+            view.setVisible(true);
+            centralizar(view);
+            
             ThermalCuttingForm form = new ThermalCuttingForm();
             view.setForm(form);
             
@@ -91,9 +96,6 @@ public class MainView extends JFrame {
             // ✅ Controller específico do Corte Térmico
             new ThermalCuttingController(form);
 
-            desktopPane.add(view);
-            view.setVisible(true);
-            
             try {
 				view.setSelected(true);
 			} catch (java.beans.PropertyVetoException ex) {
@@ -191,5 +193,11 @@ public class MainView extends JFrame {
     // ================= GETTER =================
     public JDesktopPane getDesktopPane() {
         return desktopPane;
+    }
+    
+    private void centralizar(JInternalFrame frame) {
+        int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
+        int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
+        frame.setLocation(x, y);
     }
 }

@@ -1,11 +1,11 @@
 package br.com.sgp.view.sector;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import br.com.sgp.model.Order;
 import br.com.sgp.view.util.GridBagHelper;
 
 public class DefaultSectorView extends JInternalFrame {
@@ -54,6 +55,8 @@ public class DefaultSectorView extends JInternalFrame {
 	    add(createButtonPanel(), BorderLayout.SOUTH);
 
 	    setSize(900, 600);
+	    setResizable(false);
+	    setMaximizable(false);
 
 	    initComponents();
 	}
@@ -68,10 +71,13 @@ public class DefaultSectorView extends JInternalFrame {
 		// PROJETO ================================
 		searchContainer.add(new JLabel("Projeto:"), g.c(0, y));
 
-		txtSearchProject = new JTextField();
+		txtSearchProject = new JTextField(20);
+		txtSearchProject.setPreferredSize(new Dimension(200, 22));
+		txtSearchProject.setMinimumSize(new Dimension(200, 22));
+		txtSearchProject.setMaximumSize(new Dimension(200, 22));
 		GridBagConstraints gbcLinha = g.c(1, y);
 		g.span(gbcLinha, 3);
-		g.weight(gbcLinha, 1, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchProject, gbcLinha);
 		
@@ -79,18 +85,21 @@ public class DefaultSectorView extends JInternalFrame {
 		y++;
 		searchContainer.add(new JLabel("Linha de Montagem:"), g.c(0, y));
 
-		txtSearchAssemblyLine = new JTextField();
+		txtSearchAssemblyLine = new JTextField(20);
+		txtSearchAssemblyLine.setPreferredSize(new Dimension(60, 22));
+		txtSearchAssemblyLine.setMinimumSize(new Dimension(60, 22));
+		txtSearchAssemblyLine.setMaximumSize(new Dimension(60, 22));
 		gbcLinha = g.c(1, y);
-		g.weight(gbcLinha, 1, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchAssemblyLine, gbcLinha);
 		
 		// PROGRAMAÇÃO DO MÊS =====================
 		searchContainer.add(new JLabel("Programação:"), g.c(2, y));
 
-		txtSearchMonthlySchedule = new JTextField();
+		txtSearchMonthlySchedule = new JTextField(20);
 		gbcLinha = g.c(3, y);
-		g.weight(gbcLinha, 1, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchMonthlySchedule, gbcLinha);
 		
@@ -104,21 +113,21 @@ public class DefaultSectorView extends JInternalFrame {
 		y++;
 		searchContainer.add(new JLabel("Data de Processo:"), g.c(0, y));
 
-		txtSearchDateThermalCutting = new JTextField();
+		txtSearchDateThermalCutting = new JTextField(20);
 		gbcLinha = g.c(1, y);
-		g.weight(gbcLinha, 0.5, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchDateThermalCutting, gbcLinha);
 		
-		txtSearchDateBeamAssembly = new JTextField();
+		txtSearchDateBeamAssembly = new JTextField(20);
 		gbcLinha = g.c(2, y);
-		g.weight(gbcLinha, 0.5, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchDateBeamAssembly, gbcLinha);
 		
-		txtSearchDateNeckWelding = new JTextField();
+		txtSearchDateNeckWelding = new JTextField(20);
 		gbcLinha = g.c(3, y);
-		g.weight(gbcLinha, 0.5, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchDateNeckWelding, gbcLinha);
 		
@@ -126,21 +135,21 @@ public class DefaultSectorView extends JInternalFrame {
 		y++;
 		searchContainer.add(new JLabel("Turno de Processo:"), g.c(0, y));
 		
-		txtSearchThermalCuttingShift = new JTextField();
-		GridBagConstraints gbcDuplicata = g.c(1, y);
-		g.weight(gbcDuplicata, 0.5, 0);
-		g.fill(gbcDuplicata, GridBagConstraints.HORIZONTAL);
-		searchContainer.add(txtSearchThermalCuttingShift, gbcDuplicata);
+		txtSearchThermalCuttingShift = new JTextField(20);
+		gbcLinha = g.c(1, y);
+		g.weight(gbcLinha, 0, 0);
+		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
+		searchContainer.add(txtSearchThermalCuttingShift, gbcLinha);
 
-		txtSearchBeamAssemblyShift = new JTextField();
+		txtSearchBeamAssemblyShift = new JTextField(20);
 		gbcLinha = g.c(2, y);
-		g.weight(gbcLinha, 0.5, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchBeamAssemblyShift, gbcLinha);
 		
-		txtSearchNeckWeldingShift = new JTextField();
+		txtSearchNeckWeldingShift = new JTextField(20);
 		gbcLinha = g.c(3, y);
-		g.weight(gbcLinha, 0.5, 0);
+		g.weight(gbcLinha, 0, 0);
 		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
 		searchContainer.add(txtSearchNeckWeldingShift, gbcLinha);
 		
@@ -274,6 +283,57 @@ public class DefaultSectorView extends JInternalFrame {
 		panel.add(btnClear);
 
 		return panel;
+	}
+	
+	public void addSearchListener(ActionListener listener) {
+	    btnSearch.addActionListener(listener);
+	}
+	
+	public String getPedido() {
+	    return txtSearch.getText().trim().toUpperCase();
+	}
+	
+	public void setOrder(Order order) {
+	    txtSearchProject.setText(order.getProjeto());
+	    txtSearchAssemblyLine.setText(order.getLinhaMontagem());
+	    txtSearchMonthlySchedule.setText(order.getProgramacaoMes());
+
+	    txtSearchDateThermalCutting.setText(
+	        order.getDataCorte() != null ? order.getDataCorte().toString() : ""
+	    );
+
+	    txtSearchThermalCuttingShift.setText(order.getTurnoCorte());
+
+	    txtSearchDateBeamAssembly.setText(
+	        order.getDataMontagem() != null ? order.getDataMontagem().toString() : ""
+	    );
+
+	    txtSearchBeamAssemblyShift.setText(order.getTurnoMontagem());
+
+	    txtSearchDateNeckWelding.setText(
+	        order.getDataSoldaPescoco() != null ? order.getDataSoldaPescoco().toString() : ""
+	    );
+
+	    txtSearchNeckWeldingShift.setText(order.getTurnoSoldaPescoco());
+
+	    txtSearchObservation.setText(order.getObservacao());
+	}
+	
+	public void showMessage(String message) {
+	    javax.swing.JOptionPane.showMessageDialog(this, message);
+	}
+	
+	public void clearFields() {
+	    txtSearchProject.setText("");
+	    txtSearchAssemblyLine.setText("");
+	    txtSearchMonthlySchedule.setText("");
+	    txtSearchDateThermalCutting.setText("");
+	    txtSearchThermalCuttingShift.setText("");
+	    txtSearchDateBeamAssembly.setText("");
+	    txtSearchBeamAssemblyShift.setText("");
+	    txtSearchDateNeckWelding.setText("");
+	    txtSearchNeckWeldingShift.setText("");
+	    txtSearchObservation.setText("");
 	}
 
 }
