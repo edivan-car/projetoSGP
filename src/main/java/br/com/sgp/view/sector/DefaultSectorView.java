@@ -42,7 +42,7 @@ public class DefaultSectorView extends JInternalFrame {
 	private JPanel searchContainer;
 	private JPanel formContainer;
 
-	private JPanel currentForm;
+	private SectorForm currentForm;
 
 	private JButton btnCreate;
 	private JButton btnEdit;
@@ -247,13 +247,17 @@ public class DefaultSectorView extends JInternalFrame {
 	// FORMULÁRIO DINÂMICO
 	// =========================
 
-	public JPanel getCurrentForm() {
+	public SectorForm getCurrentForm() {
 		return currentForm;
 	}
 
 	public void setForm(JPanel form) {
+		
+		if (!(form instanceof SectorForm)) {
+	        throw new IllegalArgumentException("Form must implement SectorForm");
+	    }
 
-		this.currentForm = form;
+		this.currentForm = (SectorForm) form;
 
 		formContainer.removeAll();
 
@@ -339,7 +343,12 @@ public class DefaultSectorView extends JInternalFrame {
 	    javax.swing.JOptionPane.showMessageDialog(this, message);
 	}
 	
+	public void addClearListener(ActionListener listener) {
+	    btnClear.addActionListener(listener);
+	}
+	
 	public void clearFields() {
+		txtSearch.setText("");
 	    txtSearchProject.setText("");
 	    txtSearchAssemblyLine.setText("");
 	    txtSearchMonthlySchedule.setText("");
@@ -350,6 +359,12 @@ public class DefaultSectorView extends JInternalFrame {
 	    txtSearchDateNeckWelding.setText("");
 	    txtSearchNeckWeldingShift.setText("");
 	    txtSearchObservation.setText("");
+	    
+	    if (currentForm != null) {
+	    	currentForm.clearForm();
+	    }
+	    
+	    txtSearch.requestFocusInWindow();
 	}
 
 }

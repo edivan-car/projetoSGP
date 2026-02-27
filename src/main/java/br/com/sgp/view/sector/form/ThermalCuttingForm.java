@@ -16,9 +16,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import br.com.sgp.view.sector.SectorForm;
 import br.com.sgp.view.util.GridBagHelper;
 
-public class ThermalCuttingForm extends JPanel {
+public class ThermalCuttingForm extends JPanel implements SectorForm{
 
 	private static final long serialVersionUID = 1L;
 
@@ -181,6 +182,17 @@ public class ThermalCuttingForm extends JPanel {
 
 	public JButton getBtnInfo() {
 		return btnInfo;
+	}
+
+	@Override
+	public void clearForm() {
+		txtLinhaMontagem.setText("");
+		txtDataPlano.setText("");
+		txtDuplicada.setText("");
+		txtDataRecebimento.setText("");
+		txtProgCorte.setText("");
+		txtObservation.setText("");
+		chkDuplicada.setSelected(false);;
 	}
 
 }

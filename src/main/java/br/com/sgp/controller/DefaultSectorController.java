@@ -23,7 +23,7 @@ public class DefaultSectorController {
 		}
 		return sdf.format(date);
 	}
-
+	
 	public DefaultSectorController(DefaultSectorView view) {
 
 		this.view = view;
@@ -36,6 +36,7 @@ public class DefaultSectorController {
 
 	private void initController() {
 		view.addSearchListener(e -> search());
+		view.addClearListener(e -> view.clearFields());
 	}
 
 	private void search() {
@@ -106,6 +107,8 @@ public class DefaultSectorController {
 //			break;
 //		}
 		}
+		
+		
 
 //    private String format(java.util.Date date) {
 //        return date == null ? "" : sdf.format(date);
