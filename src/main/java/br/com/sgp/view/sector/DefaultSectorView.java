@@ -21,8 +21,11 @@ import br.com.sgp.view.util.GridBagHelper;
 
 public class DefaultSectorView extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
+	
+	private final java.text.SimpleDateFormat df =
+	        new java.text.SimpleDateFormat("dd/MM/yyyy");
 
-	private JLabel lblPedido;
+	private JLabel lblOrder;
 	private JTextField txtSearch;
 	private JButton btnSearch;
 	private JTextField txtSearchProject;
@@ -44,10 +47,14 @@ public class DefaultSectorView extends JInternalFrame {
 	private JButton btnCreate;
 	private JButton btnEdit;
 	private JButton btnClear;
+	
+	private String sectorName;
 
-	public DefaultSectorView(String title) {
+	public DefaultSectorView(String title, String sectorName) {
 		super(title, false, true, false, false); // super(title, resizable, closable, maximizable, iconifiable);
 
+		this.sectorName = sectorName;
+		
 	    setLayout(new BorderLayout());
 
 	    add(createSearchPanel(), BorderLayout.NORTH);
@@ -180,11 +187,11 @@ public class DefaultSectorView extends JInternalFrame {
 		JPanel panel = new JPanel(new BorderLayout(5, 5));
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
-		lblPedido = new JLabel("Pedido:");
+		lblOrder = new JLabel("Pedido:");
 		txtSearch = new JTextField();
 		btnSearch = new JButton("🔍");
 
-		panel.add(lblPedido, BorderLayout.WEST);
+		panel.add(lblOrder, BorderLayout.WEST);
 		panel.add(txtSearch, BorderLayout.CENTER);
 		panel.add(btnSearch, BorderLayout.EAST);
 
@@ -285,12 +292,21 @@ public class DefaultSectorView extends JInternalFrame {
 		return panel;
 	}
 	
-	public void addSearchListener(ActionListener listener) {
-	    btnSearch.addActionListener(listener);
+	public String getSectorName() {
+	    return sectorName;
 	}
 	
-	public String getPedido() {
+	public void addSearchListener(ActionListener listener) {
+	    btnSearch.addActionListener(listener);
+	    txtSearch.addActionListener(listener);
+	}
+	
+	public String getOrderNumber() {
 	    return txtSearch.getText().trim().toUpperCase();
+	}
+	
+	private String formatDate(java.util.Date date) {
+	    return date == null ? "" : df.format(date);
 	}
 	
 	public void setOrder(Order order) {
@@ -299,24 +315,24 @@ public class DefaultSectorView extends JInternalFrame {
 	    txtSearchMonthlySchedule.setText(order.getProgramacaoMes());
 
 	    txtSearchDateThermalCutting.setText(
-	        order.getDataCorte() != null ? order.getDataCorte().toString() : ""
+	    		formatDate(order.getDataCorte())
 	    );
 
-	    txtSearchThermalCuttingShift.setText(order.getTurnoCorte());
+	    txtSearchThermalCuttingShift.setText(order.getTurnoCorte()!= null ? order.getTurnoCorte() : "");
 
 	    txtSearchDateBeamAssembly.setText(
-	        order.getDataMontagem() != null ? order.getDataMontagem().toString() : ""
+	    		formatDate(order.getDataMontagem())
 	    );
 
-	    txtSearchBeamAssemblyShift.setText(order.getTurnoMontagem());
+	    txtSearchBeamAssemblyShift.setText(order.getTurnoMontagem()!= null ? order.getTurnoMontagem() : "");
 
 	    txtSearchDateNeckWelding.setText(
-	        order.getDataSoldaPescoco() != null ? order.getDataSoldaPescoco().toString() : ""
+	    		formatDate(order.getDataSoldaPescoco())
 	    );
 
-	    txtSearchNeckWeldingShift.setText(order.getTurnoSoldaPescoco());
+	    txtSearchNeckWeldingShift.setText(order.getTurnoSoldaPescoco()!= null ? order.getTurnoSoldaPescoco() : "");
 
-	    txtSearchObservation.setText(order.getObservacao());
+	    txtSearchObservation.setText(order.getObservacao()!= null ? order.getObservacao() : "");
 	}
 	
 	public void showMessage(String message) {

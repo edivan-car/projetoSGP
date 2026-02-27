@@ -11,22 +11,22 @@ import java.util.List;
 
 public class OrderDAO {
 
-    public Order findByPedido(String pedido) {
+    public Order findByOrder(String orderNumber) {
 
-        System.out.println(">> OrderDAO.findByPedido(" + pedido + ")");
+        System.out.println(">> OrderDAO.findByPedido(" + orderNumber + ")");
 
         String sql =
-            "SELECT [PEDIDO], [PROJETO], [Linha], [Programação], " +
-            "[Data_Corte], [Turno], " +
+            "SELECT [PEDIDO], [PROJETO], [Linha], [Programação], [Data_Plano], " +
+            "[Data_Entrega], [Data_Corte], [Turno], " +
             "[Data_Mont], [Turno_Mont], " +
-            "[Data_SoldaPesc], [Turno_SoldaPesc], [Observacoes] " +
+            "[Data_SoldaPesc], [Turno_SoldaPesc], [Prog_Corte], [Duplicada], [Observacoes] " +
             "FROM tb_orders " +
             "WHERE [PEDIDO] = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, pedido);
+            ps.setString(1, orderNumber);
 
             try (ResultSet rs = ps.executeQuery()) {
 
@@ -36,12 +36,16 @@ public class OrderDAO {
                         rs.getString("PROJETO"),
                         rs.getString("Linha"),
                         rs.getString("Programação"),
+                        rs.getDate("Data_Plano"),
+                        rs.getDate("Data_Entrega"),
                         rs.getDate("Data_Corte"),
                         rs.getString("Turno"),
                         rs.getDate("Data_Mont"),
                         rs.getString("Turno_Mont"),
                         rs.getDate("Data_SoldaPesc"),
                         rs.getString("Turno_SoldaPesc"),
+                        rs.getString("Prog_Corte"),
+                        rs.getString("Duplicada"),
                         rs.getString("Observacoes")
                     );
                 }

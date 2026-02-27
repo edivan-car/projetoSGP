@@ -24,7 +24,7 @@ public class ThermalCuttingForm extends JPanel {
 
 	private JTextField txtLinhaMontagem;
 	private JTextField txtDataPlano;
-	private JTextField txtDuplicata;
+	private JTextField txtDuplicada;
 	private JTextField txtDataRecebimento;
 	private JTextField txtProgCorte;
 	private JTextArea txtObservation;
@@ -70,11 +70,11 @@ public class ThermalCuttingForm extends JPanel {
 
 		add(new JLabel("Duplicada:"), g.c(2, y));
 
-		txtDuplicata = new JTextField();
+		txtDuplicada = new JTextField();
 		GridBagConstraints gbcDuplicata = g.c(3, y);
 		g.weight(gbcDuplicata, 0.5, 0);
 		g.fill(gbcDuplicata, GridBagConstraints.HORIZONTAL);
-		add(txtDuplicata, gbcDuplicata);
+		add(txtDuplicada, gbcDuplicata);
 
 		// Data Receb. + Prog. Corte
 		y++;
@@ -126,6 +126,34 @@ public class ThermalCuttingForm extends JPanel {
 	}
 
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+	public JTextField getTxtLinhaMontagem() {
+		return txtLinhaMontagem;
+	}
+
+	public JTextField getTxtDataPlano() {
+		return txtDataPlano;
+	}
+
+	public JTextField getTxtDuplicada() {
+		return txtDuplicada;
+	}
+
+	public JTextField getTxtDataRecebimento() {
+		return txtDataRecebimento;
+	}
+
+	public JTextField getTxtProgCorte() {
+		return txtProgCorte;
+	}
+
+	public JTextArea getTxtObservation() {
+		return txtObservation;
+	}
+
+	public JCheckBox getChkDuplicada() {
+		return chkDuplicada;
+	}
 
 	public void setLinhaMontagem(String value) {
 		txtLinhaMontagem.setText(value);

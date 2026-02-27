@@ -81,7 +81,7 @@ public class MainView extends JFrame {
 
         itemCorteTermico.addActionListener(e -> {
 
-            DefaultSectorView view = new DefaultSectorView("Corte Térmico");
+            DefaultSectorView view = new DefaultSectorView("Corte Térmico", "THERMAL_CUTTING");
             
             desktopPane.add(view);
             view.setVisible(true);
