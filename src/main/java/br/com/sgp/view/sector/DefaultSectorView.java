@@ -252,30 +252,20 @@ public class DefaultSectorView extends JInternalFrame {
 	}
 
 	public void setForm(JPanel form) {
-		
-		if (!(form instanceof SectorForm)) {
+
+	    if (!(form instanceof SectorForm)) {
 	        throw new IllegalArgumentException("Form must implement SectorForm");
 	    }
 
-		this.currentForm = (SectorForm) form;
+	    this.currentForm = (SectorForm) form;
 
-		formContainer.removeAll();
+	    formContainer.removeAll();
 
-		JPanel centerWrapper = new JPanel(new GridBagLayout());
+	    // 🔥 ADICIONA DIRETO, SEM WRAPPER
+	    formContainer.add(form, BorderLayout.CENTER);
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
-		gbc.anchor = GridBagConstraints.CENTER;
-
-		centerWrapper.add(form, gbc);
-
-		formContainer.add(centerWrapper, BorderLayout.CENTER);
-
-		formContainer.revalidate();
-		formContainer.repaint();
+	    formContainer.revalidate();
+	    formContainer.repaint();
 	}
 
 	// =========================

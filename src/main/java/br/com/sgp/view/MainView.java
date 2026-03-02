@@ -1,7 +1,6 @@
 package br.com.sgp.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -15,10 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import br.com.sgp.controller.DefaultSectorController;
+import br.com.sgp.controller.PlasmaCuttingController;
 import br.com.sgp.controller.ThermalCuttingController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
 import br.com.sgp.view.sector.DefaultSectorView;
+import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 import br.com.sgp.view.sector.form.ThermalCuttingForm;
 
 public class MainView extends JFrame {
@@ -34,10 +35,7 @@ public class MainView extends JFrame {
         setTitle("SGP - Sistema de Gestão da Produção");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        setSize(1200, 800);
-        setMinimumSize(new Dimension(1024, 700));
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         setJMenuBar(createMenuBar());
         add(createDesktopPane(), BorderLayout.CENTER);
@@ -57,6 +55,7 @@ public class MainView extends JFrame {
         // ===== Fabricação de Peças
         JMenu menuFabricacaoPecas = new JMenu("Fabricação de Peças");
         JMenuItem itemCorteTermico = new JMenuItem("Corte Térmico");
+        JMenuItem itemCortePlasma = new JMenuItem("Corte a Plasma");
         JMenuItem itemCorteDobra = new JMenuItem("Corte e Dobra");
 
         // ===== Fabricação de Vigas
@@ -102,6 +101,30 @@ public class MainView extends JFrame {
 				ex.printStackTrace();
 			}
         });
+        
+        itemCortePlasma.addActionListener(e -> {
+
+            DefaultSectorView view = new DefaultSectorView("Corte a Plasma", "PLASMA_CUTTING");
+            
+            desktopPane.add(view);
+            view.setVisible(true);
+            centralizar(view);
+            
+            PlasmaCuttingForm form = new PlasmaCuttingForm();
+            view.setForm(form);
+            
+            // Controller genérico do setor (tabela, seleção, etc.)
+            new DefaultSectorController(view);
+            
+            // ✅ Controller específico do Corte a Plasma
+            new PlasmaCuttingController(form);
+
+            try {
+				view.setSelected(true);
+			} catch (java.beans.PropertyVetoException ex) {
+				ex.printStackTrace();
+			}
+        });
 
         itemCorteDobra.addActionListener(
                 e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra")
@@ -127,6 +150,7 @@ public class MainView extends JFrame {
 
         menuSector.add(menuFabricacaoPecas);
         menuFabricacaoPecas.add(itemCorteTermico);
+        menuFabricacaoPecas.add(itemCortePlasma);
         menuFabricacaoPecas.add(itemCorteDobra);
 
         menuSector.add(menuFabricacaoVigas);
