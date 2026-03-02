@@ -343,6 +343,10 @@ public class DefaultSectorView extends JInternalFrame {
 	    javax.swing.JOptionPane.showMessageDialog(this, message);
 	}
 	
+	public void addCreateListener(ActionListener listener) {
+	    btnCreate.addActionListener(listener);
+	}
+	
 	public void addClearListener(ActionListener listener) {
 	    btnClear.addActionListener(listener);
 	}
