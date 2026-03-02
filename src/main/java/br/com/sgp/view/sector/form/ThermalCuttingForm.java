@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -31,6 +32,8 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	private JTextArea txtObservation;
 	private JCheckBox chkDuplicada;
 	private JButton btnInfo;
+	private JButton btnReg;
+	private JButton btnClean;
 
 	public ThermalCuttingForm() {
 		setLayout(new GridBagLayout());
@@ -117,12 +120,33 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		add(chkDuplicada, g.c(0, y));
 
 		btnInfo = new JButton("INFO");
+		//btnInfo.setPreferredSize(new Dimension(20, 25));
 		btnInfo.setFocusPainted(false);
-		// btnInfo.setPreferredSize(new Dimension(30, 25));
-
+		
 		GridBagConstraints gbcInfo = g.c(3, y);
-		gbcInfo.anchor = GridBagConstraints.EAST;
+		gbcInfo.anchor = GridBagConstraints.WEST;
+		gbcInfo.insets = new Insets(5, 10, 5, 10);
+		gbcInfo.fill = GridBagConstraints.NONE;
 		add(btnInfo, gbcInfo);
+		
+		
+		btnReg = new JButton("REG");
+		btnReg.setFocusable(false);
+		
+		GridBagConstraints gbcReg = g.c(3, y);
+		gbcReg.anchor = GridBagConstraints.CENTER;
+		gbcReg.insets = new Insets(5, 10, 5, 10);
+		gbcReg.fill = GridBagConstraints.NONE;
+		add(btnReg, gbcReg);
+		
+		btnClean = new JButton("CLEAN");
+		btnClean.setFocusable(false);
+		
+		GridBagConstraints gbcClean = g.c(3, y);
+		gbcClean.anchor = GridBagConstraints.EAST;
+		gbcClean.insets = new Insets(5, 10, 5, 10);
+		gbcClean.fill = GridBagConstraints.NONE;
+		add(btnClean, gbcClean);
 
 	}
 
@@ -182,6 +206,14 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 
 	public JButton getBtnInfo() {
 		return btnInfo;
+	}
+	
+	public JButton getBtnReg() {
+		return btnReg;
+	}
+	
+	public JButton getBtnClean() {
+		return btnClean;
 	}
 
 	@Override
