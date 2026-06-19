@@ -304,6 +304,10 @@ public class DefaultSectorController {
 		case "THERMAL_CUTTING":
 			selectThermalCutting(order);
 			break;
+			
+		case "PLASMA_CUTTING":
+		    selectPlasmaCutting(order);
+		    break;
 
 //		case "BEAM_ASSEMBLY":
 //			selectBeamAssembly(order);
@@ -318,5 +322,20 @@ public class DefaultSectorController {
 //    private String format(java.util.Date date) {
 //        return date == null ? "" : sdf.format(date);
 //    }
+	}
+	
+	private void selectPlasmaCutting(Order order) {
+
+	    if (!(view.getCurrentForm() instanceof br.com.sgp.view.sector.form.PlasmaCuttingForm)) {
+	        return;
+	    }
+
+	    br.com.sgp.view.sector.form.PlasmaCuttingForm form =
+	            (br.com.sgp.view.sector.form.PlasmaCuttingForm) view.getCurrentForm();
+
+	    form.getTxtDate().setText(formatDate(order.getDataCorte()));
+	    form.getTxtShift().setText(order.getTurnoCorte() != null ? order.getTurnoCorte() : "");
+	    form.getTxtRack().setText(order.getRack() != null ? order.getRack() : "");
+	    form.getTxtObservation().setText(order.getObservacao() != null ? order.getObservacao() : "");
 	}
 }
