@@ -15,6 +15,7 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	private JButton btnGenerate = new JButton("Gerar");
 	private JButton btnRegister = new JButton("Cadastro");
 	private JButton btnCleanRack = new JButton("Limpar");
+	private JCheckBox chkPreviousDay = new JCheckBox("Dia anterior");
 
 	// 🔥 Agora usando ARRAY
 	private JButton[] rackButtons = new JButton[12];
@@ -69,6 +70,7 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		txtShift = new JTextField(5);
 		txtRack = new JTextField(10);
 		txtObservation = new JTextArea(3, 10);
+		txtObservation.setFocusTraversalKeysEnabled(true);
 
 		JScrollPane scroll = new JScrollPane(txtObservation);
 
@@ -123,6 +125,7 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 
 		buttonsPanel.add(btnRegister);
 		buttonsPanel.add(btnGenerate);
+		buttonsPanel.add(chkPreviousDay);
 		buttonsPanel.add(btnCleanRack);
 
 		bottomPanel.add(buttonsPanel, BorderLayout.CENTER);
@@ -204,6 +207,14 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	public JButton getBtnGenerate() {
 		return btnGenerate;
 	}
+	
+	public JTextField getTxtDate() {
+	    return txtDate;
+	}
+
+	public JCheckBox getChkPreviousDay() {
+	    return chkPreviousDay;
+	}
 
 	public JButton getBtnRegister() {
 		return btnRegister;
@@ -214,7 +225,11 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	}
 	
 	public void clearRackField() {
+		txtDate.setText("");
+		txtShift.setText("");
 	    txtRack.setText("");
+	    txtObservation.setText("");
+	    chkPreviousDay.setSelected(false);
 	}
 
 	public void addCleanRackListener(java.awt.event.ActionListener listener) {
@@ -225,5 +240,9 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	public void clearForm() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public JTextField getTxtShift() {
+		return txtShift;
 	}
 }
