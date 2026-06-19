@@ -18,6 +18,7 @@ import br.com.sgp.controller.PlasmaCuttingController;
 import br.com.sgp.controller.ThermalCuttingController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
+import br.com.sgp.util.AppRestarter;
 import br.com.sgp.view.sector.DefaultSectorView;
 import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 import br.com.sgp.view.sector.form.ThermalCuttingForm;
@@ -240,8 +241,7 @@ public class MainView extends JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             UserSession.getInstance().logout();
-            dispose();
-            new br.com.sgp.auth.LoginView().setVisible(true);
+            AppRestarter.restart(this);;
         }
     }
 }

@@ -26,18 +26,34 @@ public class LoginController {
 	}
 
 	private void checkDatabase() {
-		if (ConnectionFactory.testConnection()) {
-			view.setStatus("Conectado", Color.BLUE, "/images/icons/dbOn-40x40.png");
-		} else {
-			view.setStatus("Banco não encontrado", Color.RED, "/images/icons/dbOff-40x40.png");
+	    view.setStatus("Verificando conexão...", Color.GRAY, "/images/icons/dbOff-40x40.png");
 
-			JOptionPane.showMessageDialog(view,
-					"<html><b>Não foi possível conectar ao banco de dados.</b><br><br>"
-							+ "Verifique se o arquivo abaixo está na mesma pasta do programa:<br>" + "<tt>"
-							+ ConnectionFactory.getDbPath() + "</tt><br><br>"
-							+ "O sistema funcionará em modo limitado até que a conexão seja restabelecida.</html>",
-					"Erro de conexão", JOptionPane.ERROR_MESSAGE);
-		}
+	    new Thread(() -> {
+	        try {
+	            Thread.sleep(800);
+	        } catch (InterruptedException ex) {
+	            Thread.currentThread().interrupt();
+	        }
+
+	        boolean connected = ConnectionFactory.testConnection();
+
+	        javax.swing.SwingUtilities.invokeLater(() -> {
+	            if (connected) {
+	                view.setStatus("Conectado", Color.BLUE, "/images/icons/dbOn-40x40.png");
+	            } else {
+	                view.setStatus("Banco não encontrado", Color.RED, "/images/icons/dbOff-40x40.png");
+	                JOptionPane.showMessageDialog(
+	                    view,
+	                    "<html><b>Não foi possível conectar ao banco de dados.</b><br><br>"
+	                    + "Verifique se o arquivo abaixo está na mesma pasta do programa:<br>"
+	                    + "<tt>" + ConnectionFactory.getDbPath() + "</tt><br><br>"
+	                    + "O sistema funcionará em modo limitado até que a conexão seja restabelecida.</html>",
+	                    "Erro de conexão",
+	                    JOptionPane.ERROR_MESSAGE
+	                );
+	            }
+	        });
+	    }).start();
 	}
 
 	private void login() {
