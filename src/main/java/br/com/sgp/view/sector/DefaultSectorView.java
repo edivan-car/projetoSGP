@@ -341,6 +341,10 @@ public class DefaultSectorView extends JInternalFrame {
 	    btnClear.addActionListener(listener);
 	}
 	
+	public void addEditListener(ActionListener listener) {
+	    btnEdit.addActionListener(listener);
+	}
+	
 	public void clearFields() {
 		txtSearch.setText("");
 	    txtSearchProject.setText("");

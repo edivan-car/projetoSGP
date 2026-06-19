@@ -39,6 +39,7 @@ public class DefaultSectorController {
 		view.addClearListener(e -> view.clearFields());
 		view.addSearchListener(e -> search());
 		view.addCreateListener(e -> save());
+		view.addEditListener(e -> edit());
 	}
 
 	private void search() {
@@ -89,6 +90,73 @@ public class DefaultSectorController {
 		default:
 			view.showMessage("Setor não implementado.");
 		}
+	}
+	
+	private void edit() {
+
+	    String orderNumber = view.getOrderNumber();
+
+	    if (orderNumber.isEmpty()) {
+	        view.showMessage("Informe o número do pedido.");
+	        return;
+	    }
+
+	    Order existing = dao.findByOrder(orderNumber);
+
+	    if (existing == null) {
+	        view.showMessage("Pedido não encontrado. Realize a busca antes de editar.");
+	        return;
+	    }
+
+	    String sector = view.getSectorName();
+
+	    switch (sector) {
+	        case "THERMAL_CUTTING":
+	            editThermalCutting(orderNumber);
+	            break;
+	        default:
+	            view.showMessage("Setor não implementado.");
+	    }
+	}                                                        // <- fim
+
+	private void editThermalCutting(String orderNumber) {   // <- incluir (método inteiro)
+
+	    if (!(view.getCurrentForm() instanceof ThermalCuttingForm)) {
+	        view.showMessage("Formulário inválido.");
+	        return;
+	    }
+
+	    ThermalCuttingForm form = (ThermalCuttingForm) view.getCurrentForm();
+
+	    String linha      = form.getTxtLinhaMontagem().getText().trim();
+	    String dataPlano  = form.getTxtDataPlano().getText().trim();
+	    String dataEntrega = form.getTxtDataRecebimento().getText().trim();
+	    String progCorte  = form.getTxtProgCorte().getText().trim();
+	    String observacao = form.getTxtObservation().getText().trim();
+	    boolean duplicadaCheck = form.getChkDuplicada().isSelected();
+
+	    if (linha.isEmpty() || dataPlano.isEmpty() || dataEntrega.isEmpty() || progCorte.isEmpty()) {
+	        view.showMessage("Preencha todos os campos obrigatórios antes de editar.");
+	        return;
+	    }
+
+	    String duplicada = duplicadaCheck ? "S" : "";
+
+	    try {
+	        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+	        java.util.Date dtPlano   = sdf.parse(dataPlano);
+	        java.util.Date dtEntrega = sdf.parse(dataEntrega);
+
+	        dao.updateThermalCutting(orderNumber, linha, dtPlano, dtEntrega, progCorte, observacao, duplicada);
+
+	        view.showMessage("Pedido atualizado com sucesso.");
+	        form.clearForm();
+	        view.clearFields();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        view.showMessage("Erro ao atualizar dados.");
+	    }
 	}
 
 	private void saveThermalCutting(String orderNumber) {
