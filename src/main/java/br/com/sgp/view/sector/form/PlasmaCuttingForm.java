@@ -6,7 +6,8 @@ import javax.swing.*;
 import br.com.sgp.view.sector.SectorForm;
 
 public class PlasmaCuttingForm extends JPanel implements SectorForm {
-
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField txtDate;
 	private JTextField txtShift;
 	private JTextField txtRack;
@@ -211,6 +212,10 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	public JTextField getTxtDate() {
 	    return txtDate;
 	}
+	
+	public JTextArea getTxtObservation() {
+	    return txtObservation;
+	}
 
 	public JCheckBox getChkPreviousDay() {
 	    return chkPreviousDay;
@@ -238,8 +243,11 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	
 	@Override
 	public void clearForm() {
-		// TODO Auto-generated method stub
-
+		txtDate.setText("");
+	    txtShift.setText("");
+	    txtRack.setText("");
+	    txtObservation.setText("");
+	    chkPreviousDay.setSelected(false);
 	}
 
 	public JTextField getTxtShift() {

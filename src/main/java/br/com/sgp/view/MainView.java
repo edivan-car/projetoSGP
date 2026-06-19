@@ -118,7 +118,7 @@ public class MainView extends JFrame {
             new DefaultSectorController(view);
             
             // ✅ Controller específico do Corte a Plasma
-            new PlasmaCuttingController(form);
+            new PlasmaCuttingController(form, view);
 
             try {
 				view.setSelected(true);

@@ -18,6 +18,7 @@ public class Order {
     private String turnoSoldaPescoco;
     private String progCorte;
     private String duplicada;
+    private String rack;
     private String observacao;
     
     public Order(String pedido,
@@ -34,6 +35,7 @@ public class Order {
                  String turnoSoldaPescoco,
                  String progCorte,
                  String duplicada,
+                 String rack,
                  String observacao) {
 
         this.pedido = pedido;
@@ -50,6 +52,7 @@ public class Order {
         this.turnoSoldaPescoco = turnoSoldaPescoco;
         this.progCorte = progCorte;
         this.duplicada = duplicada;
+        this.rack = rack;
         this.observacao = observacao;
     }
 
@@ -67,5 +70,6 @@ public class Order {
     public String getTurnoSoldaPescoco() { return turnoSoldaPescoco; }
     public String getProgCorte() { return progCorte; }
     public String getDuplicada() { return duplicada; }
+    public String getRack() { return rack; }
     public String getObservacao() {return observacao;}
 }
