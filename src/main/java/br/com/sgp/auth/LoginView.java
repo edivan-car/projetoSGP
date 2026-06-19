@@ -58,7 +58,7 @@ public class LoginView extends JFrame {
         lblUser.setBounds(140, 226, 200, 20);
         lblBackground.add(lblUser);
 
-        txtUser = new JTextField("admin");
+        txtUser = new JTextField();
         txtUser.setHorizontalAlignment(SwingConstants.CENTER);
         txtUser.setBounds(140, 256, 200, 20);
         lblBackground.add(txtUser);
@@ -72,7 +72,7 @@ public class LoginView extends JFrame {
         lblPass.setBounds(140, 296, 200, 20);
         lblBackground.add(lblPass);
 
-        txtPass = new JPasswordField("admin@2486");
+        txtPass = new JPasswordField();
         txtPass.setHorizontalAlignment(SwingConstants.CENTER);
         txtPass.setBounds(140, 326, 200, 20);
         lblBackground.add(txtPass);

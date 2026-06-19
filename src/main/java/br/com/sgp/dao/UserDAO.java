@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import br.com.sgp.util.PasswordUtil;
 
 import br.com.sgp.model.User;
 import br.com.sgp.util.ConnectionFactory;
@@ -25,7 +26,7 @@ public class UserDAO {
              PreparedStatement ps = conn.prepareStatement(SQL_LOGIN)) {
 
             ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(2, PasswordUtil.hash(password));
 
             ResultSet rs = ps.executeQuery();
 
@@ -96,7 +97,7 @@ public class UserDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
+            ps.setString(2, PasswordUtil.hash(user.getPassword()));
             ps.setString(3, user.getName());
             ps.setString(4, user.getProfile());
             ps.setString(5, user.getSector());
