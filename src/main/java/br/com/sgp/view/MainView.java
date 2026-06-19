@@ -160,8 +160,13 @@ public class MainView extends JFrame {
 
         JMenuItem itemAbout = new JMenuItem("Sobre");
         itemAbout.addActionListener(e -> new AboutDialog(this).setVisible(true));
+        
+        JMenuItem itemLogout = new JMenuItem("Sair");
+        itemLogout.addActionListener(e -> logout());
+        
         menuHelp.add(itemAbout);
-
+        menuHelp.addSeparator();                                // <- incluir
+        menuHelp.add(itemLogout); 
         menuBar.add(menuStart);
         menuBar.add(menuSector);
         menuBar.add(menuReports);
@@ -223,5 +228,20 @@ public class MainView extends JFrame {
         int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
         int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
         frame.setLocation(x, y);
+    }
+    
+    private void logout() {
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Deseja sair e voltar à tela de login?",
+            "Confirmar saída",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            UserSession.getInstance().logout();
+            dispose();
+            new br.com.sgp.auth.LoginView().setVisible(true);
+        }
     }
 }
