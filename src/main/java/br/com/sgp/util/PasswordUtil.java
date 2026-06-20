@@ -7,11 +7,9 @@ public final class PasswordUtil {
     private PasswordUtil() {
         // evita instância
     }
+    
+    public static final String SENHA_GENERICA = "abc@123";
 
-    /**
-     * Converte uma senha em hash SHA-256.
-     * Exemplo: "admin123" -> "ecd71870d1963316a97e3ac3408c9835..."
-     */
     public static String hash(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -26,5 +24,9 @@ public final class PasswordUtil {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao gerar hash da senha", e);
         }
+    }
+    
+    public static boolean isPrimeiroAcesso(String hashArmazenado) {
+        return hash(SENHA_GENERICA).equals(hashArmazenado);
     }
 }

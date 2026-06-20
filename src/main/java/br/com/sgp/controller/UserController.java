@@ -2,6 +2,7 @@ package br.com.sgp.controller;
 
 import br.com.sgp.dao.UserDAO;
 import br.com.sgp.model.User;
+import br.com.sgp.util.PasswordUtil;
 import br.com.sgp.view.UserFormView;
 import br.com.sgp.view.UserView;
 
@@ -28,6 +29,7 @@ public class UserController {
 		view.getBtnNew().addActionListener(e -> newUser());
 		view.getBtnEdit().addActionListener(e -> editUser());
 		view.getBtnRefresh().addActionListener(e -> loadUsers());
+		view.getBtnResetPassword().addActionListener(e -> resetPassword());
 	}
 
 	// ======================
@@ -75,6 +77,8 @@ public class UserController {
 
 	    if (form.getUser() != null && password.isEmpty()) {
 	        password = form.getUser().getPassword();
+	    } else if (form.getUser() == null && password.isEmpty()) {
+	    	password = PasswordUtil.SENHA_GENERICA;
 	    }
 
 	    User user = new User(
@@ -135,5 +139,32 @@ public class UserController {
 				(String) table.getValueAt(row, 2), (String) table.getValueAt(row, 3), null // sector será carregado do
 																							// banco depois
 		);
+	}
+	
+	private void resetPassword() {
+	    User selected = getSelectedUser();
+
+	    if (selected == null) {
+	        JOptionPane.showMessageDialog(view, "Selecione um usuário.", "Atenção",
+	                JOptionPane.WARNING_MESSAGE);
+	        return;
+	    }
+
+	    int confirm = JOptionPane.showConfirmDialog(
+	        view,
+	        "Resetar a senha de \"" + selected.getName() + "\" para a senha genérica?",
+	        "Confirmar Reset",
+	        JOptionPane.YES_NO_OPTION
+	    );
+
+	    if (confirm == JOptionPane.YES_OPTION) {
+	        boolean ok = dao.resetPassword(selected.getId());
+	        if (ok) {
+	            JOptionPane.showMessageDialog(view, "Senha resetada com sucesso.");
+	        } else {
+	            JOptionPane.showMessageDialog(view, "Erro ao resetar senha.", "Erro",
+	                    JOptionPane.ERROR_MESSAGE);
+	        }
+	    }
 	}
 }

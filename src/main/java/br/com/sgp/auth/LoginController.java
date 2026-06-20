@@ -1,13 +1,20 @@
 package br.com.sgp.auth;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 
 import br.com.sgp.dao.UserDAO;
 import br.com.sgp.model.User;
 import br.com.sgp.session.UserSession;
 import br.com.sgp.util.ConnectionFactory;
+import br.com.sgp.util.PasswordUtil;
 import br.com.sgp.view.MainView;
 
 public class LoginController {
@@ -84,6 +91,15 @@ public class LoginController {
 			view.setStatusUser("Usuário ou senha inválidos", Color.RED);
 			return;
 		}
+		
+		// verifica primeiro acesso
+		String hashAtual = userDAO.getPasswordHash(loggedUser.getId());
+		if (PasswordUtil.isPrimeiroAcesso(hashAtual)) {
+		    boolean trocou = solicitarTrocaDeSenha(loggedUser);
+		    if (!trocou) {
+		        return; // usuário cancelou, bloqueia acesso
+		    }
+		}  
 
 		// 🔐 cria sessão
 		UserSession.getInstance().login(loggedUser);
@@ -91,5 +107,60 @@ public class LoginController {
 		// Login OK
 		view.dispose();
 		new MainView().setVisible(true);
+	}
+	
+	private boolean solicitarTrocaDeSenha(User user) {
+
+	    JPanel panel = new JPanel(new GridBagLayout());
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.insets = new Insets(5, 5, 5, 5);
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+
+	    gbc.gridx = 0; gbc.gridy = 0;
+	    panel.add(new JLabel("Nova senha (mínimo 6 caracteres):"), gbc);
+
+	    gbc.gridy = 1;
+	    JPasswordField txtNova = new JPasswordField(20);
+	    panel.add(txtNova, gbc);
+
+	    gbc.gridy = 2;
+	    panel.add(new JLabel("Confirmar nova senha:"), gbc);
+
+	    gbc.gridy = 3;
+	    JPasswordField txtConfirma = new JPasswordField(20);
+	    panel.add(txtConfirma, gbc);
+
+	    while (true) {
+	        int result = JOptionPane.showConfirmDialog(
+	            view,
+	            panel,
+	            "Primeiro acesso — troque sua senha",
+	            JOptionPane.OK_CANCEL_OPTION,
+	            JOptionPane.WARNING_MESSAGE
+	        );
+
+	        if (result != JOptionPane.OK_OPTION) {
+	            JOptionPane.showMessageDialog(view,
+	                "É necessário trocar a senha no primeiro acesso.");
+	            return false;
+	        }
+
+	        String nova     = new String(txtNova.getPassword()).trim();
+	        String confirma = new String(txtConfirma.getPassword()).trim();
+
+	        if (nova.length() < 6) {
+	            JOptionPane.showMessageDialog(view, "A senha deve ter no mínimo 6 caracteres.");
+	            continue;
+	        }
+
+	        if (!nova.equals(confirma)) {
+	            JOptionPane.showMessageDialog(view, "As senhas não coincidem.");
+	            continue;
+	        }
+
+	        new UserDAO().updatePassword(user.getId(), nova);
+	        JOptionPane.showMessageDialog(view, "Senha alterada com sucesso!");
+	        return true;
+	    }
 	}
 }

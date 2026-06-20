@@ -140,4 +140,59 @@ public class UserDAO {
             return false;
         }
     }
+    
+    public boolean resetPassword(int userId) {
+        String sql = "UPDATE tb_users SET password = ? WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, PasswordUtil.hash(PasswordUtil.SENHA_GENERICA));
+            ps.setInt(2, userId);
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao resetar senha: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updatePassword(int userId, String newPassword) {
+        String sql = "UPDATE tb_users SET password = ? WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, PasswordUtil.hash(newPassword));
+            ps.setInt(2, userId);
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Erro ao atualizar senha: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public String getPasswordHash(int userId) {
+        String sql = "SELECT password FROM tb_users WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar hash: " + e.getMessage());
+        }
+        return null;
+    }
 }

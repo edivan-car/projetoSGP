@@ -16,6 +16,7 @@ public class UserView extends JInternalFrame {
     private JButton btnEdit;
     private JButton btnRefresh;
     private JButton btnClose;
+    private JButton btnResetPassword;
 
     public UserView() {
         super("Usuários", true, true, true, true);
@@ -28,9 +29,12 @@ public class UserView extends JInternalFrame {
         add(createButtonPanel(), BorderLayout.SOUTH);
 
         btnEdit.setEnabled(false);
-        table.getSelectionModel().addListSelectionListener(e ->
-                btnEdit.setEnabled(table.getSelectedRow() != -1)
-        );
+        
+        table.getSelectionModel().addListSelectionListener(e -> {
+        	boolean selected = table.getSelectedRow() != -1;
+            btnEdit.setEnabled(selected);
+            btnResetPassword.setEnabled(selected);
+        });
     }
 
     private JScrollPane createTablePanel() {
@@ -71,8 +75,12 @@ public class UserView extends JInternalFrame {
             }
         });
 
+        btnResetPassword = new JButton("Resetar Senha");
+        btnResetPassword.setEnabled(false);
+        
         panel.add(btnNew);
         panel.add(btnEdit);
+        panel.add(btnResetPassword);
         panel.add(btnRefresh);
         panel.add(btnClose);
 
@@ -84,4 +92,5 @@ public class UserView extends JInternalFrame {
     public JButton getBtnNew() { return btnNew; }
     public JButton getBtnEdit() { return btnEdit; }
     public JButton getBtnRefresh() { return btnRefresh; }
+    public JButton getBtnResetPassword() { return btnResetPassword; }
 }
