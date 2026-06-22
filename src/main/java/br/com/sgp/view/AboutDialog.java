@@ -12,7 +12,7 @@ public class AboutDialog extends JDialog {
 	public AboutDialog(JFrame parent) {
         super(parent, "Sobre", true);
 
-        setSize(420, 420);
+        setSize(420, 260);
         setLocationRelativeTo(parent);
         setResizable(false);
         setLayout(new BorderLayout());
@@ -26,35 +26,23 @@ public class AboutDialog extends JDialog {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JLabel lblLogo = new JLabel(
-            new ImageIcon(
-                getClass().getResource("/images/icons/gnu_lisence-100x113.png")
-            )
-        );
-        lblLogo.setAlignmentX(CENTER_ALIGNMENT);
-
         JLabel lblTitle = new JLabel("SGP - Sistema de Gestão da Produção");
         lblTitle.setFont(new Font("Tahoma", Font.BOLD, 16));
         lblTitle.setAlignmentX(CENTER_ALIGNMENT);
 
-        JLabel lblVersion = new JLabel("Versão 1.0.0");
+        JLabel lblVersion = new JLabel("Versão 0.1.0");
         lblVersion.setAlignmentX(CENTER_ALIGNMENT);
 
         JLabel lblAuthor = new JLabel("Desenvolvido por: Edivan Cardoso");
         lblAuthor.setAlignmentX(CENTER_ALIGNMENT);
 
-        JLabel lblLicense = new JLabel("Licenciado sob a GPL");
+        JLabel lblLicense = new JLabel("Licenciado sob a MIT License");
         lblLicense.setAlignmentX(CENTER_ALIGNMENT);
         
-        JLabel lblGPL = new JLabel("https://www.gnu.org/licenses/gpl-3.0.html");
-        lblGPL.setAlignmentX(CENTER_ALIGNMENT);
-
         JLabel lblYear = new JLabel("© " + Year.now().getValue());
         lblYear.setFont(new Font("Tahoma", Font.PLAIN, 11));
         lblYear.setAlignmentX(CENTER_ALIGNMENT);
 
-        panel.add(Box.createVerticalStrut(20));
-        panel.add(lblLogo);
         panel.add(Box.createVerticalStrut(15));
         panel.add(lblTitle);
         panel.add(Box.createVerticalStrut(8));
@@ -63,8 +51,6 @@ public class AboutDialog extends JDialog {
         panel.add(lblAuthor);
         panel.add(Box.createVerticalStrut(10));
         panel.add(lblLicense);
-        panel.add(Box.createVerticalStrut(15));
-        panel.add(lblGPL);
         panel.add(Box.createVerticalStrut(15));
         panel.add(lblYear);
 
