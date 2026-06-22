@@ -1,46 +1,169 @@
-# SGP - Sistema de Gestão da Produção
+# SGP — Sistema de Gestão da Produção
 
-## 📌 Descrição
-O SGP (Sistema de Gestão da Produção) é uma aplicação desktop desenvolvida em Java,
-voltada ao cadastro, consulta e acompanhamento da produção por setor.
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Java](https://img.shields.io/badge/Java-8-orange.svg)](https://www.oracle.com/java/technologies/java8.html)
+[![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow.svg)]()
+[![Versão](https://img.shields.io/badge/Versão-0.1.0-green.svg)]()
 
-O sistema possui controle de acesso por usuário, com liberação de funcionalidades
-de acordo com o perfil do usuário.
+Sistema desktop desenvolvido em Java para apoio ao controle de produção industrial, com foco em apontamentos de setores como Corte Térmico e Corte a Plasma.
 
-## 🛠 Tecnologias Utilizadas
-- Java 8 (compatível com Java 21 em desenvolvimento)
-- Java Swing (interface gráfica)
-- Maven (gerenciamento de dependências)
-- Microsoft Access (banco de dados)
-- Git / GitHub (versionamento)
+> Projeto pessoal de estudo — unindo teoria e prática no desenvolvimento de software com Java Swing.
 
-## 📐 Padrões do Projeto
-- Código-fonte escrito em inglês
-- Interface gráfica em português
-- Separação por camadas:
-  - UI (Swing)
-  - Service (regras de negócio)
-  - DAO (acesso a dados)
+---
 
-## 📂 Estrutura de Pacotes (resumo)
-- auth → autenticação e login
-- ui → telas principais
-- production → controle de produção
-- product → cadastro de produtos
-- user → usuários e permissões
-- util → utilitários e conexão com banco
+## 📸 Screenshots
 
-## 🔐 Autenticação
-O sistema possui tela de login com validação de usuário e senha.
-O acesso às funcionalidades será controlado conforme o perfil do usuário.
+### Tela de Login
+![Tela de Login](docs/screenshots/login.png)
 
-## 🚀 Como Executar o Projeto
-1. Clonar o repositório
-2. Importar o projeto como Maven no Eclipse
-3. Executar a classe `Main`
+### Tela Principal
+![Tela Principal](docs/screenshots/main.png)
 
-## 📌 Status do Projeto
-🚧 Em desenvolvimento 🚧
+---
 
-## 📄 Documentação
-A documentação detalhada do projeto encontra-se na pasta `/docs`.
+## 🚀 Funcionalidades
+
+- 🔐 **Autenticação** com hash SHA-256 e troca obrigatória de senha no primeiro acesso
+- 👥 **Gestão de Usuários** — cadastro, edição, reset de senha
+- 🏭 **Controle de Acesso** por perfil (`ADMIN`, `GESTOR`, `USER`) e setor
+- ⚙️ **Corte Térmico** — busca de pedidos, cadastro e edição de apontamentos
+- ⚡ **Corte a Plasma** — busca, geração de data de corte, cadastro de apontamentos com rack
+- 🔄 **Logout com restart** — retorna à tela de login sem fechar o programa
+- 🕐 **Barra de status** com usuário logado, setor e relógio em tempo real
+
+---
+
+## 🛠️ Stack Tecnológica
+
+| Componente | Tecnologia |
+|------------|-----------|
+| Linguagem | Java 8 |
+| Interface | Java Swing (MDI) |
+| Build | Maven 3 |
+| Banco de Dados | Microsoft Access (`.accdb`) |
+| Driver JDBC | UCanAccess 5.0.1 |
+| IDE | Eclipse |
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+src/main/java/br/com/sgp/
+├── auth/           # Login e autenticação
+├── context/        # Estado temporário em memória (ThermalCuttingMemory)
+├── controller/     # Lógica de apresentação e eventos
+├── dao/            # Acesso ao banco de dados
+├── model/          # POJOs de domínio (User, Order)
+├── service/        # Lógica de negócio (ThermalCuttingRefGenerator)
+├── session/        # Sessão do usuário logado (Singleton)
+├── util/           # Utilitários (ConnectionFactory, PasswordUtil, AccessControl, AppRestarter)
+└── view/           # Telas Swing
+    ├── sector/     # Views dos setores de produção
+    └── ...
+```
+
+---
+
+## ▶️ Como Executar
+
+### Pré-requisitos
+
+- Java 8 instalado
+- Microsoft Access instalado (para abrir/editar o banco)
+- Eclipse IDE (para desenvolvimento)
+
+### Pelo Eclipse
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/edivan-car/projetoSGP.git
+```
+
+2. Importe o projeto no Eclipse:
+   - `File → Import → Existing Maven Projects`
+   - Selecione a pasta clonada
+
+3. Coloque o arquivo `db_production.accdb` em:
+```
+projetoSGP/target/db_production.accdb
+```
+
+4. Execute a classe `Main.java` como Java Application
+
+---
+
+### Gerando o JAR para produção
+
+```bash
+mvn clean package
+```
+
+O arquivo gerado estará em:
+```
+target/sgp-0.1.0-jar-with-dependencies.jar
+```
+
+### Estrutura de distribuição
+
+```
+📁 SGP/
+    sgp-0.1.0-jar-with-dependencies.jar
+    db_production.accdb     ← banco na mesma pasta do JAR
+```
+
+Execute com:
+```bash
+java -jar sgp-0.1.0-jar-with-dependencies.jar
+```
+
+---
+
+## 🔐 Controle de Acesso
+
+| Perfil | Acesso |
+|--------|--------|
+| `ADMIN` | Tudo — gestão de usuários e todos os setores |
+| `GESTOR` | Rotinas do setor + Relatórios |
+| `USER` | Apenas rotinas do setor cadastrado |
+
+| Setor | Valor no banco |
+|-------|---------------|
+| Fabricação de Peças | `FABRICACAO_PECAS` |
+| Fabricação de Vigas | `FABRICACAO_VIGAS` |
+| TI | `TI` |
+
+---
+
+## 🔒 Segurança
+
+- Senhas armazenadas com hash **SHA-256**
+- Troca obrigatória de senha no **primeiro acesso**
+- Senha genérica de reset: definida internamente pelo administrador
+- Menus ocultados conforme perfil e setor do usuário
+
+---
+
+## 📌 Roadmap
+
+- [ ] Módulo Corte e Dobra
+- [ ] Módulo Fabricação de Vigas
+- [ ] Relatórios por setor
+- [ ] Tabela de setores dinâmica
+- [ ] Logs centralizados
+- [ ] Configuração externa via `config.properties`
+- [ ] Testes unitários
+
+---
+
+## 📄 Licença
+
+Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais informações.
+
+---
+
+## 👨‍💻 Autor
+
+**Edivan Cardoso**
+
+Projeto desenvolvido para fins de estudo e aprendizado prático em desenvolvimento de software com Java.
