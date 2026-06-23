@@ -12,7 +12,7 @@ public class UserFormView extends JDialog {
     private JTextField txtName;
     private JPasswordField txtPassword;
     private JComboBox<String> cbProfile;
-    private JTextField txtSector;
+    private JComboBox<String> cbSector;
     private JCheckBox chkActive;
 
     private JButton btnSave;
@@ -77,7 +77,7 @@ public class UserFormView extends JDialog {
         panel.add(new JLabel("Perfil:"), gbc);
 
         gbc.gridx = 1;
-        cbProfile = new JComboBox<>(new String[]{"admin", "manager", "user"});
+        cbProfile = new JComboBox<>(new String[]{"ADMIN", "MANAGER", "USER"});
         panel.add(cbProfile, gbc);
 
         // Setor
@@ -85,8 +85,8 @@ public class UserFormView extends JDialog {
         panel.add(new JLabel("Setor / Área:"), gbc);
 
         gbc.gridx = 1;
-        txtSector = new JTextField();
-        panel.add(txtSector, gbc);
+        cbSector = new JComboBox<>(new String[]{"TI", "FABRICACAO_PECA"});
+        panel.add(cbSector, gbc);
 
         // Ativo
         gbc.gridx = 1; gbc.gridy = ++y;
@@ -118,7 +118,7 @@ public class UserFormView extends JDialog {
         txtUsername.setText(user.getUsername());
         txtName.setText(user.getName());
         cbProfile.setSelectedItem(user.getProfile());
-        txtSector.setText(user.getSector());
+        cbSector.setSelectedItem(user.getSector());
         chkActive.setSelected(user.isActive());
     }
 
@@ -144,7 +144,7 @@ public class UserFormView extends JDialog {
     }
 
     public String getSector() {
-        return txtSector.getText().trim();
+        return (String) cbSector.getSelectedItem();
     }
 
     public boolean isActive() {

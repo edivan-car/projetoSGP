@@ -21,7 +21,7 @@ public class UserView extends JInternalFrame {
     public UserView() {
         super("Usuários", true, true, true, true);
 
-        setSize(600, 400);
+        setSize(680, 400);
         setLayout(new BorderLayout());
         setLocation(50, 50);
 
@@ -40,7 +40,7 @@ public class UserView extends JInternalFrame {
     private JScrollPane createTablePanel() {
 
         model = new DefaultTableModel(
-                new Object[]{"ID", "Usuário", "Nome", "Perfil"}, 0
+                new Object[]{"ID", "Usuário", "Nome", "Perfil", "Setor"}, 0
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -50,6 +50,22 @@ public class UserView extends JInternalFrame {
 
         table = new JTable(model);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        // ID
+        table.getColumnModel().getColumn(0).setMinWidth(50);
+        table.getColumnModel().getColumn(0).setMaxWidth(70);
+
+        // Usuário
+        table.getColumnModel().getColumn(1).setPreferredWidth(120);
+
+        // Nome
+        table.getColumnModel().getColumn(2).setPreferredWidth(250);
+
+        // Perfil
+        table.getColumnModel().getColumn(3).setPreferredWidth(100);
+
+        // Setor
+        table.getColumnModel().getColumn(4).setPreferredWidth(150);
 
         return new JScrollPane(table);
     }

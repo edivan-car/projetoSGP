@@ -118,7 +118,7 @@ public class UserController {
 		List<User> users = dao.findAll();
 
 		for (User u : users) {
-			model.addRow(new Object[] { u.getId(), u.getUsername(), u.getName(), u.getProfile() });
+			model.addRow(new Object[] { u.getId(), u.getUsername(), u.getName(), u.getProfile(), u.getSector() });
 		}
 	}
 
