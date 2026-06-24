@@ -6,22 +6,20 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 import br.com.sgp.dao.OrderDAO;
-import br.com.sgp.view.sector.DefaultSectorView;
-
-
+import br.com.sgp.view.sector.FabricacaoPecasView;
+import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 
 public class PlasmaCuttingController {
 
 	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private final PlasmaCuttingForm form;
-	private final DefaultSectorView sectorView;
+	private final FabricacaoPecasView sectorView;
 
-	public PlasmaCuttingController(PlasmaCuttingForm form, DefaultSectorView sectorView) {
+	public PlasmaCuttingController(PlasmaCuttingForm form, FabricacaoPecasView view) {
 		this.form = form;
-		this.sectorView = sectorView;
+		this.sectorView = view;
 		initActions();
 	}
 
@@ -38,7 +36,7 @@ public class PlasmaCuttingController {
 	        form.clearRackField();
 	    });
 	    
-	    form.getBtnGenerate().addActionListener(e -> {           // <- incluir (bloco inteiro)
+	    form.getBtnGenerate().addActionListener(e -> {
 	        LocalDate date = LocalDate.now();
 
 	        if (form.getChkPreviousDay().isSelected()) {

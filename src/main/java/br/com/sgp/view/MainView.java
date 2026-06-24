@@ -13,16 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import br.com.sgp.controller.DefaultSectorController;
-import br.com.sgp.controller.PlasmaCuttingController;
-import br.com.sgp.controller.ThermalCuttingController;
+import br.com.sgp.controller.FabricacaoPecasController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
-import br.com.sgp.util.AppRestarter;
-import br.com.sgp.view.sector.DefaultSectorView;
-import br.com.sgp.view.sector.form.PlasmaCuttingForm;
-import br.com.sgp.view.sector.form.ThermalCuttingForm;
 import br.com.sgp.util.AccessControl;
+import br.com.sgp.util.AppRestarter;
+import br.com.sgp.view.sector.FabricacaoPecasView;
 
 public class MainView extends JFrame {
 
@@ -56,8 +52,7 @@ public class MainView extends JFrame {
 
 		// ===== Fabricação de Peças
 		JMenu menuFabricacaoPecas = new JMenu("Fabricação de Peças");
-		JMenuItem itemCorteTermico = new JMenuItem("Corte Térmico");
-		JMenuItem itemCortePlasma = new JMenuItem("Corte a Plasma");
+		JMenuItem itemFabricacaoPecas = new JMenuItem("Fabricação de Peças");
 		JMenuItem itemCorteDobra = new JMenuItem("Corte e Dobra");
 
 		// ===== Fabricação de Vigas
@@ -80,52 +75,17 @@ public class MainView extends JFrame {
 			view.setVisible(true);
 		});
 
-		itemCorteTermico.addActionListener(e -> {
-
-			DefaultSectorView view = new DefaultSectorView("Corte Térmico", "THERMAL_CUTTING");
-
-			desktopPane.add(view);
-			view.setVisible(true);
-			centralizar(view);
-
-			ThermalCuttingForm form = new ThermalCuttingForm();
-			view.setForm(form);
-
-			// Controller genérico do setor (tabela, seleção, etc.)
-			new DefaultSectorController(view);
-
-			// ✅ Controller específico do Corte Térmico
-			new ThermalCuttingController(form);
-
-			try {
-				view.setSelected(true);
-			} catch (java.beans.PropertyVetoException ex) {
-				ex.printStackTrace();
-			}
-		});
-
-		itemCortePlasma.addActionListener(e -> {
-
-			DefaultSectorView view = new DefaultSectorView("Corte a Plasma", "PLASMA_CUTTING");
-
-			desktopPane.add(view);
-			view.setVisible(true);
-			centralizar(view);
-
-			PlasmaCuttingForm form = new PlasmaCuttingForm();
-			view.setForm(form);
-
-			// Controller genérico do setor (tabela, seleção, etc.)
-			new DefaultSectorController(view);
-
-			// ✅ Controller específico do Corte a Plasma
-			new PlasmaCuttingController(form, view);
-
-			try {
-				view.setSelected(true);
-			} catch (java.beans.PropertyVetoException ex) {
-				ex.printStackTrace();
-			}
+		itemFabricacaoPecas.addActionListener(e -> {
+		    FabricacaoPecasView view = new FabricacaoPecasView();
+		    new FabricacaoPecasController(view);
+		    desktopPane.add(view);
+		    view.setVisible(true);
+		    centralizar(view);
+		    try {
+		        view.setSelected(true);
+		    } catch (java.beans.PropertyVetoException ex) {
+		        ex.printStackTrace();
+		    }
 		});
 
 		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
@@ -143,8 +103,7 @@ public class MainView extends JFrame {
 		menuSector.addSeparator();
 
 		menuSector.add(menuFabricacaoPecas);
-		menuFabricacaoPecas.add(itemCorteTermico);
-		menuFabricacaoPecas.add(itemCortePlasma);
+		menuFabricacaoPecas.add(itemFabricacaoPecas);
 		menuFabricacaoPecas.add(itemCorteDobra);
 
 		menuSector.add(menuFabricacaoVigas);
