@@ -53,6 +53,7 @@ public class PlasmaCuttingController {
 	private void configurarRack(JButton button) {
         button.addActionListener(e -> {
             form.getTxtRack().setText(button.getText());
+            form.selectRackButton(button);
         });
     }
 	
@@ -70,9 +71,9 @@ public class PlasmaCuttingController {
 	    String rack     = form.getTxtRack().getText().trim();
 	    String obs      = form.getTxtObservation().getText().trim();
 
-	    if (date.isEmpty() || shift.isEmpty() || rack.isEmpty()) {
+	    if (date.isEmpty() || shift.isEmpty()) {
 	        JOptionPane.showMessageDialog(form,
-	            "Preencha Data do Corte, Turno e Rack antes de cadastrar.");
+	            "Preencha Data do Corte e Turno antes de cadastrar.");
 	        return;
 	    }
 
@@ -83,7 +84,7 @@ public class PlasmaCuttingController {
 	        new OrderDAO().updatePlasmaCutting(orderNumber, dataCorte, shift, rack, obs);
 
 	        JOptionPane.showMessageDialog(form, "Apontamento registrado com sucesso.");
-	        form.clearForm();
+	        sectorView.clearAllFields();
 
 	    } catch (Exception e) {
 	        e.printStackTrace();

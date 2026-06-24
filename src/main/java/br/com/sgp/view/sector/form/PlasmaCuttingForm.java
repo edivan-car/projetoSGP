@@ -7,14 +7,19 @@ import br.com.sgp.view.sector.SectorForm;
 
 public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	private static final long serialVersionUID = 1L;
+	private static final Color RACK_SELECTED_BG = new Color(230, 241, 251);
+	private static final Color RACK_SELECTED_FG = new Color(24, 95, 165);
+	private static final Color RACK_DEFAULT_BG = UIManager.getColor("Button.background");
+	private static final Color RACK_DEFAULT_FG = UIManager.getColor("Button.foreground");
 	
 	private JTextField txtDate;
 	private JTextField txtShift;
 	private JTextField txtRack;
 	private JTextArea txtObservation;
+	private JCheckBox chkDuplicada = new JCheckBox("Duplicada");
 
 	private JButton btnGenerate = new JButton("Gerar");
-	private JButton btnRegister = new JButton("Cadastro");
+	private JButton btnRegister = new JButton("Cadastrar");
 	private JButton btnCleanRack = new JButton("Limpar");
 	private JCheckBox chkPreviousDay = new JCheckBox("Dia anterior");
 
@@ -25,6 +30,7 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 
 	public PlasmaCuttingForm() {
 		setLayout(new GridBagLayout());
+		setPreferredSize(new Dimension(760, 190));
 //		setPreferredSize(new Dimension(760, 210));
 //		setMinimumSize(new Dimension(760, 210));
 //		setMaximumSize(new Dimension(760, 210));
@@ -41,7 +47,7 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		JPanel rightPanel = criarPainelRacks();
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.insets = new Insets(3, 5, 3, 5);
 
 		// LEFT
 		gbc.gridx = 0;
@@ -64,13 +70,15 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.insets = new Insets(3, 5, 3, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		txtDate = new JTextField(10);
 		txtShift = new JTextField(5);
 		txtRack = new JTextField(10);
-		txtObservation = new JTextArea(3, 10);
+		txtRack.setEditable(false);
+		txtRack.setBackground(new Color(245, 245, 245));
+		txtObservation = new JTextArea(2, 10);
 		txtObservation.setFocusTraversalKeysEnabled(true);
 
 		JScrollPane scroll = new JScrollPane(txtObservation);
@@ -118,16 +126,15 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		// 🔹 Checkbox
-		JCheckBox chkDuplicada = new JCheckBox("Duplicada");
 		bottomPanel.add(chkDuplicada, BorderLayout.WEST);
 
 		// 🔹 Painel de botões centralizados
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
 
-		buttonsPanel.add(btnRegister);
 		buttonsPanel.add(btnGenerate);
 		buttonsPanel.add(chkPreviousDay);
 		buttonsPanel.add(btnCleanRack);
+		buttonsPanel.add(btnRegister);
 
 		bottomPanel.add(buttonsPanel, BorderLayout.CENTER);
 
@@ -140,10 +147,10 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Unidade de Transporte"),
-				BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+				BorderFactory.createEmptyBorder(3, 5, 3, 5)));
 
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(3, 3, 3, 3);
+		gbc.insets = new Insets(2, 2, 2, 2);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.weightx = 1;
 		gbc.weighty = 1;
@@ -157,7 +164,8 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 
 			rackButtons[i].setMargin(new Insets(2, 4, 2, 4));
 			rackButtons[i].setFont(new Font("Arial", Font.BOLD, 11));
-			rackButtons[i].setPreferredSize(new Dimension(80, 25));
+			rackButtons[i].setPreferredSize(new Dimension(78, 23));
+			configureRackButton(rackButtons[i]);
 
 			gbc.gridx = coluna;
 			gbc.gridy = linha;
@@ -183,6 +191,29 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		panel.add(btnMobileSupport, gbc);
 
 		return panel;
+	}
+
+	private void configureRackButton(JButton button) {
+		button.setFocusPainted(false);
+		button.setOpaque(true);
+		button.setBackground(RACK_DEFAULT_BG);
+		button.setForeground(RACK_DEFAULT_FG);
+	}
+
+	public void selectRackButton(JButton selectedButton) {
+		for (JButton button : rackButtons) {
+			if (button != null) {
+				setRackButtonSelected(button, button == selectedButton);
+			}
+		}
+		setRackButtonSelected(btnFixedSupport, btnFixedSupport == selectedButton);
+		setRackButtonSelected(btnMobileSupport, btnMobileSupport == selectedButton);
+	}
+
+	private void setRackButtonSelected(JButton button, boolean selected) {
+		button.setBackground(selected ? RACK_SELECTED_BG : RACK_DEFAULT_BG);
+		button.setForeground(selected ? RACK_SELECTED_FG : RACK_DEFAULT_FG);
+		button.setFont(button.getFont().deriveFont(selected ? Font.BOLD : Font.PLAIN));
 	}
 
 	// ======================
@@ -221,6 +252,10 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	    return chkPreviousDay;
 	}
 
+	public JCheckBox getChkDuplicada() {
+	    return chkDuplicada;
+	}
+
 	public JButton getBtnRegister() {
 		return btnRegister;
 	}
@@ -234,7 +269,9 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		txtShift.setText("");
 	    txtRack.setText("");
 	    txtObservation.setText("");
+	    chkDuplicada.setSelected(false);
 	    chkPreviousDay.setSelected(false);
+	    clearRackSelection();
 	}
 
 	public void addCleanRackListener(java.awt.event.ActionListener listener) {
@@ -247,10 +284,22 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	    txtShift.setText("");
 	    txtRack.setText("");
 	    txtObservation.setText("");
+	    chkDuplicada.setSelected(false);
 	    chkPreviousDay.setSelected(false);
+	    clearRackSelection();
 	}
 
 	public JTextField getTxtShift() {
 		return txtShift;
+	}
+
+	private void clearRackSelection() {
+		for (JButton button : rackButtons) {
+			if (button != null) {
+				setRackButtonSelected(button, false);
+			}
+		}
+		setRackButtonSelected(btnFixedSupport, false);
+		setRackButtonSelected(btnMobileSupport, false);
 	}
 }

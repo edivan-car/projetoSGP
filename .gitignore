@@ -1,5 +1,26 @@
+# Maven
 /target/
-/.settings/
-/.classpath
+
+# Eclipse
 .project
+.classpath
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Logs
 *.log
+
+# Java
+*.class
+
+# Access Lock File
+*.laccdb
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+
+.agents

@@ -26,7 +26,6 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 
 	private JTextField txtLinhaMontagem;
 	private JTextField txtDataPlano;
-	private JTextField txtDuplicada;
 	private JTextField txtDataRecebimento;
 	private JTextField txtProgCorte;
 	private JTextArea txtObservation;
@@ -37,12 +36,12 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 
 	public ThermalCuttingForm() {
 		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(760, 210));
-		setMinimumSize(new Dimension(760, 210));
-		setMaximumSize(new Dimension(760, 210));
+		setPreferredSize(new Dimension(760, 175));
+		setMinimumSize(new Dimension(760, 175));
+		setMaximumSize(new Dimension(760, 175));
 
 		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)),
-				BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+				BorderFactory.createEmptyBorder(6, 10, 6, 10)));
 
 		initComponents();
 	}
@@ -68,17 +67,10 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 
 		txtDataPlano = new JTextField();
 		GridBagConstraints gbcDataPlano = g.c(1, y);
-		g.weight(gbcDataPlano, 0.5, 0);
+		g.span(gbcDataPlano, 3);
+		g.weight(gbcDataPlano, 1, 0);
 		g.fill(gbcDataPlano, GridBagConstraints.HORIZONTAL);
 		add(txtDataPlano, gbcDataPlano);
-
-		add(new JLabel("Duplicada:"), g.c(2, y));
-
-		txtDuplicada = new JTextField();
-		GridBagConstraints gbcDuplicata = g.c(3, y);
-		g.weight(gbcDuplicata, 0.5, 0);
-		g.fill(gbcDuplicata, GridBagConstraints.HORIZONTAL);
-		add(txtDuplicada, gbcDuplicata);
 
 		// Data Receb. + Prog. Corte
 		y++;
@@ -102,7 +94,7 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		y++;
 		add(new JLabel("Observação:"), g.c(0, y));
 
-		txtObservation = new JTextArea(3, 20);
+		txtObservation = new JTextArea(2, 20);
 		txtObservation.setLineWrap(true);
 		txtObservation.setWrapStyleWord(true);
 
@@ -114,12 +106,13 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		g.fill(gbcObs, GridBagConstraints.BOTH);
 		add(scrollObs, gbcObs);
 
-		// Checkbox + botão INFO
+		// Checkbox + botões de apoio
 		y++;
 		chkDuplicada = new JCheckBox("Duplicada");
 		add(chkDuplicada, g.c(0, y));
 
-		btnInfo = new JButton("INFO");
+		btnInfo = new JButton("Info");
+		btnInfo.setMargin(new Insets(2, 12, 2, 12));
 		//btnInfo.setPreferredSize(new Dimension(20, 25));
 		btnInfo.setFocusPainted(false);
 		
@@ -130,7 +123,8 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		add(btnInfo, gbcInfo);
 		
 		
-		btnReg = new JButton("REG");
+		btnReg = new JButton("Registrar");
+		btnReg.setMargin(new Insets(2, 12, 2, 12));
 		btnReg.setFocusable(false);
 		
 		GridBagConstraints gbcReg = g.c(3, y);
@@ -139,7 +133,8 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		gbcReg.fill = GridBagConstraints.NONE;
 		add(btnReg, gbcReg);
 		
-		btnClean = new JButton("CLEAN");
+		btnClean = new JButton("Limpar");
+		btnClean.setMargin(new Insets(2, 12, 2, 12));
 		btnClean.setFocusable(false);
 		
 		GridBagConstraints gbcClean = g.c(3, y);
@@ -158,10 +153,6 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 
 	public JTextField getTxtDataPlano() {
 		return txtDataPlano;
-	}
-
-	public JTextField getTxtDuplicada() {
-		return txtDuplicada;
 	}
 
 	public JTextField getTxtDataRecebimento() {
@@ -220,11 +211,10 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	public void clearForm() {
 		txtLinhaMontagem.setText("");
 		txtDataPlano.setText("");
-		txtDuplicada.setText("");
 		txtDataRecebimento.setText("");
 		txtProgCorte.setText("");
 		txtObservation.setText("");
-		chkDuplicada.setSelected(false);;
+		chkDuplicada.setSelected(false);
 	}
 
 }
