@@ -206,6 +206,16 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	public JButton getBtnClean() {
 		return btnClean;
 	}
+	
+	public void setFieldsEditable(boolean editable) { // <- incluir
+	    txtLinhaMontagem.setEditable(editable);
+	    txtDataPlano.setEditable(editable);
+	    txtDataRecebimento.setEditable(editable);
+	    txtProgCorte.setEditable(editable);
+	    txtObservation.setEditable(editable);
+	    chkDuplicada.setEnabled(editable);
+	    btnInfo.setEnabled(editable);
+	}
 
 	@Override
 	public void clearForm() {

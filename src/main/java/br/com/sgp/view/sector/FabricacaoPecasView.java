@@ -116,7 +116,6 @@ public class FabricacaoPecasView extends JInternalFrame {
 
     public void clearCard() {
         orderSummaryCard.clear();
-        txtSearch.setText("");
         txtSearch.requestFocusInWindow();
     }
 
@@ -128,6 +127,16 @@ public class FabricacaoPecasView extends JInternalFrame {
 
     public void showMessage(String msg) {
         javax.swing.JOptionPane.showMessageDialog(this, msg);
+    }
+    
+    public void setFormsEditable(boolean editable) {
+        thermalForm.setFieldsEditable(editable);
+        plasmaForm.setFieldsEditable(editable);
+    }
+
+    public void setRegisterEnabled(boolean enabled) {
+        thermalForm.getBtnReg().setEnabled(enabled);
+        plasmaForm.getBtnRegister().setEnabled(enabled);
     }
 
     public ThermalCuttingForm getThermalForm()  { return thermalForm; }

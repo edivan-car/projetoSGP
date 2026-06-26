@@ -28,7 +28,7 @@ public class FabricacaoPecasController {
         new PlasmaCuttingController(view.getPlasmaForm(), view);
     }
 
-    private void search() {
+    private void search() { // <- modificar
         String orderNumber = view.getOrderNumber();
 
         if (orderNumber.isEmpty()) {
@@ -39,12 +39,15 @@ public class FabricacaoPecasController {
         Order order = dao.findByOrder(orderNumber);
 
         if (order == null) {
-            view.showMessage("Pedido não encontrado: " + orderNumber);
-            view.clearCard();
+            view.clearCard();          // <- limpa tabela mas NÃO limpa o campo pedido
+            view.setFormsEditable(true);  // <- pedido novo: formulários liberados
+            view.setRegisterEnabled(true); // <- botão registrar habilitado
             return;
         }
 
         view.setOrder(order);
+        view.setFormsEditable(false);  // <- pedido encontrado: bloqueia edição
+        view.setRegisterEnabled(false); // <- botão registrar desabilitado
         populateActiveTab(order);
     }
 

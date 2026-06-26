@@ -62,6 +62,9 @@ public class ThermalCuttingController {
 		form.getBtnClean().addActionListener(e -> {
 			ThermalCuttingMemory.clear();
 			form.clearForm();
+			sectorView.clearCard(); // <- incluir: limpa tabela e campo pedido
+		    sectorView.setFormsEditable(true);   // <- incluir: reabilita campos
+		    sectorView.setRegisterEnabled(true); // <- incluir: reabilita botão
 		});
 	}
 

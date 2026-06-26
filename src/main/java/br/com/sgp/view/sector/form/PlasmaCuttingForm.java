@@ -302,4 +302,15 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		setRackButtonSelected(btnFixedSupport, false);
 		setRackButtonSelected(btnMobileSupport, false);
 	}
+	
+	public void setFieldsEditable(boolean editable) { // <- incluir
+	    txtDate.setEditable(editable);
+	    txtShift.setEditable(editable);
+	    txtObservation.setEditable(editable);
+	    chkPreviousDay.setEnabled(editable);
+	    btnGenerate.setEnabled(editable);
+	    for (JButton btn : getRackButtons()) btn.setEnabled(editable);
+	    btnFixedSupport.setEnabled(editable);
+	    btnMobileSupport.setEnabled(editable);
+	}
 }
