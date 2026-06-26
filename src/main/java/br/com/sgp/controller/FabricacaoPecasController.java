@@ -47,9 +47,8 @@ public class FabricacaoPecasController {
         }
 
         view.setOrder(order);
-        view.setFormsEditable(false);
-        view.setRegisterEnabled(false);
         populateActiveTab(order);
+        applyEditableByTab(order);
     }
 
     private void populateActiveTab(Order order) {
@@ -58,6 +57,19 @@ public class FabricacaoPecasController {
             case 1: populatePlasma(order);   break;
             default: break;
         }
+    }
+    
+    private void applyEditableByTab(Order order) {
+        boolean thermalHasData = order.getProgCorte() != null 
+                              && !order.getProgCorte().trim().isEmpty();
+
+        boolean plasmaHasData  = order.getDataCorte() != null;
+
+        view.getThermalForm().setFieldsEditable(!thermalHasData);
+        view.getThermalForm().getBtnReg().setEnabled(!thermalHasData);
+
+        view.getPlasmaForm().setFieldsEditable(!plasmaHasData);
+        view.getPlasmaForm().getBtnRegister().setEnabled(!plasmaHasData);
     }
 
     private void populateThermal(Order order) {
