@@ -30,27 +30,20 @@ public class ThermalCuttingController {
 	private void initActions() {
 
 		// =========================
-		// BOTÃO INFO
+		// BOTÃO INFO - Lógica condicional por memória
 		// =========================
 		form.getBtnInfo().addActionListener(e -> {
+	        if (ThermalCuttingMemory.hasData()) {
+	            fillFromMemory();
+	        } else {
+	            openInfoDialog();
+	        }
+	    });
 
-			ThermalCuttingInfoDialog dialog = new ThermalCuttingInfoDialog(SwingUtilities.getWindowAncestor(form));
-
-			dialog.setVisible(true);
-
-			if (dialog.isConfirmed()) {
-
-				String linha = dialog.getLinhaMontagem();
-				LocalDate dataReceb = dialog.getDataRecebimento();
-				LocalDate dataProg = LocalDate.parse(dialog.getDataProgramacao(), FORMAT);
-
-				String ref = ThermalCuttingRefGenerator.gerar(dataProg, dataReceb, linha);
-
-				// Salva na memória
-				ThermalCuttingMemory.save(linha, dataReceb, dataProg, ref);
-				fillFromMemory();
-			}
-		});
+	    // BOTÃO LIMPAR INFO  //
+	    form.getBtnCleanMemory().addActionListener(e -> {
+	        ThermalCuttingMemory.clear();
+	    });
 
 		// =========================
 		// BOTÃO REGISTRAR
@@ -60,12 +53,29 @@ public class ThermalCuttingController {
 		});
 
 		form.getBtnClean().addActionListener(e -> {
-			ThermalCuttingMemory.clear();
-			form.clearForm();
-			sectorView.clearCard(); // <- incluir: limpa tabela e campo pedido
-		    sectorView.setFormsEditable(true);   // <- incluir: reabilita campos
-		    sectorView.setRegisterEnabled(true); // <- incluir: reabilita botão
+//			form.clearForm();
+			sectorView.clearAllFields()
+;			sectorView.clearCard();
+		    sectorView.setFormsEditable(true);
+		    sectorView.setRegisterEnabled(true);
 		});
+	}
+	
+	private void openInfoDialog() {
+	    ThermalCuttingInfoDialog dialog =
+	        new ThermalCuttingInfoDialog(SwingUtilities.getWindowAncestor(form));
+	    dialog.setVisible(true);
+
+	    if (dialog.isConfirmed()) {
+	        String linha = dialog.getLinhaMontagem();
+	        LocalDate dataReceb = dialog.getDataRecebimento();
+	        LocalDate dataProg = LocalDate.parse(dialog.getDataProgramacao(), FORMAT);
+
+	        String ref = ThermalCuttingRefGenerator.gerar(dataProg, dataReceb, linha);
+
+	        ThermalCuttingMemory.save(linha, dataReceb, dataProg, ref);
+	        fillFromMemory();
+	    }
 	}
 
 	private void fillFromMemory() {
@@ -118,7 +128,7 @@ public class ThermalCuttingController {
 			}
 
 			sectorView.clearAllFields();
-			ThermalCuttingMemory.clear();
+			//ThermalCuttingMemory.clear();
 
 		} catch (Exception e) {
 			e.printStackTrace();

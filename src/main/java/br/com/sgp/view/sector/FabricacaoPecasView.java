@@ -120,7 +120,9 @@ public class FabricacaoPecasView extends JInternalFrame {
     }
 
     public void clearAllFields() {
-        clearCard();
+    	orderSummaryCard.clear();
+        txtSearch.setText("");
+        txtSearch.requestFocusInWindow();
         thermalForm.clearForm();
         plasmaForm.clearForm();
     }

@@ -33,7 +33,8 @@ public class PlasmaCuttingController {
 	    configurarRack(form.getBtnMobileSupport());
 	    
 	    form.addCleanRackListener(e -> {
-	        form.clearRackField();
+//	        form.clearRackField();
+	    	sectorView.clearAllFields();
 	        sectorView.clearCard(); // <- incluir: limpa tabela e campo pedido
 	        sectorView.setFormsEditable(true);   // <- incluir: reabilita campos
 	        sectorView.setRegisterEnabled(true); // <- incluir: reabilita botão

@@ -33,6 +33,7 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	private JButton btnInfo;
 	private JButton btnReg;
 	private JButton btnClean;
+	private JButton btnCleanMemory = new JButton("Limpar Info");
 
 	public ThermalCuttingForm() {
 		setLayout(new GridBagLayout());
@@ -122,6 +123,12 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		gbcInfo.fill = GridBagConstraints.NONE;
 		add(btnInfo, gbcInfo);
 		
+		GridBagConstraints gbcCleanMem = g.c(3, y);
+		gbcCleanMem.anchor = GridBagConstraints.WEST;
+		gbcCleanMem.insets = new Insets(5, 80, 5, 10);
+		gbcCleanMem.fill = GridBagConstraints.NONE;
+		add(btnCleanMemory, gbcCleanMem);
+		
 		
 		btnReg = new JButton("Registrar");
 		btnReg.setMargin(new Insets(2, 12, 2, 12));
@@ -207,7 +214,9 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		return btnClean;
 	}
 	
-	public void setFieldsEditable(boolean editable) { // <- incluir
+	public JButton getBtnCleanMemory() { return btnCleanMemory; }
+	
+	public void setFieldsEditable(boolean editable) {
 	    txtLinhaMontagem.setEditable(editable);
 	    txtDataPlano.setEditable(editable);
 	    txtDataRecebimento.setEditable(editable);
@@ -215,6 +224,7 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	    txtObservation.setEditable(editable);
 	    chkDuplicada.setEnabled(editable);
 	    btnInfo.setEnabled(editable);
+	    btnCleanMemory.setEnabled(editable);
 	}
 
 	@Override
