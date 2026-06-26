@@ -51,16 +51,19 @@ public class FabricacaoPecasView extends JInternalFrame {
     // PAINEL DE BUSCA
     // ═══════════════════════════════════════════════════
     private JPanel createSearchPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JPanel panel = new JPanel(new BorderLayout(5, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(8, 10, 4, 10));
 
         txtSearch = new JTextField();
-        btnSearch = new JButton("🔍");
-        btnSearch.setPreferredSize(new Dimension(40, 28));
+        btnSearch = new JButton("...");
+        btnSearch.setPreferredSize(new Dimension(55, 28));
+
+        JPanel right = new JPanel(new BorderLayout(5, 0));
+        right.add(txtSearch, BorderLayout.CENTER);
+        right.add(btnSearch, BorderLayout.EAST);
 
         panel.add(new JLabel("Pedido:"), BorderLayout.WEST);
-        panel.add(txtSearch,             BorderLayout.CENTER);
-        panel.add(btnSearch,             BorderLayout.EAST);
+        panel.add(right,                 BorderLayout.CENTER);
 
         return panel;
     }
