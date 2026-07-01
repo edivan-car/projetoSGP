@@ -2,6 +2,7 @@ package br.com.sgp.view.sector.form;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -112,43 +113,29 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		chkDuplicada = new JCheckBox("Duplicada");
 		add(chkDuplicada, g.c(0, y));
 
-		btnInfo = new JButton("Info");
+		btnInfo        = new JButton("Info");
+		btnCleanMemory = new JButton("Limpar Info");
+		btnReg         = new JButton("Registrar");
+		btnClean       = new JButton("Limpar");
+
 		btnInfo.setMargin(new Insets(2, 12, 2, 12));
-		//btnInfo.setPreferredSize(new Dimension(20, 25));
 		btnInfo.setFocusPainted(false);
-		
-		GridBagConstraints gbcInfo = g.c(3, y);
-		gbcInfo.anchor = GridBagConstraints.WEST;
-		gbcInfo.insets = new Insets(5, 10, 5, 10);
-		gbcInfo.fill = GridBagConstraints.NONE;
-		add(btnInfo, gbcInfo);
-		
-		GridBagConstraints gbcCleanMem = g.c(3, y);
-		gbcCleanMem.anchor = GridBagConstraints.WEST;
-		gbcCleanMem.insets = new Insets(5, 80, 5, 10);
-		gbcCleanMem.fill = GridBagConstraints.NONE;
-		add(btnCleanMemory, gbcCleanMem);
-		
-		
-		btnReg = new JButton("Registrar");
+		btnCleanMemory.setMargin(new Insets(2, 12, 2, 12));
 		btnReg.setMargin(new Insets(2, 12, 2, 12));
-		btnReg.setFocusable(false);
-		
-		GridBagConstraints gbcReg = g.c(3, y);
-		gbcReg.anchor = GridBagConstraints.CENTER;
-		gbcReg.insets = new Insets(5, 10, 5, 10);
-		gbcReg.fill = GridBagConstraints.NONE;
-		add(btnReg, gbcReg);
-		
-		btnClean = new JButton("Limpar");
+		btnReg.setFocusable(true);   // <- modificar: precisa receber foco para ENTER funcionar
 		btnClean.setMargin(new Insets(2, 12, 2, 12));
-		btnClean.setFocusable(false);
-		
-		GridBagConstraints gbcClean = g.c(3, y);
-		gbcClean.anchor = GridBagConstraints.EAST;
-		gbcClean.insets = new Insets(5, 10, 5, 10);
-		gbcClean.fill = GridBagConstraints.NONE;
-		add(btnClean, gbcClean);
+
+		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+		btnPanel.add(btnInfo);
+		btnPanel.add(btnCleanMemory);
+		btnPanel.add(btnReg);
+		btnPanel.add(btnClean);
+
+		GridBagConstraints gbcBtns = g.c(1, y);
+		g.span(gbcBtns, 3);
+		g.weight(gbcBtns, 1, 0);
+		g.fill(gbcBtns, GridBagConstraints.HORIZONTAL);
+		add(btnPanel, gbcBtns);
 
 	}
 

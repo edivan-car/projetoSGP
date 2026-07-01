@@ -52,12 +52,17 @@ public class PlasmaCuttingController {
 	    });
 	    
 	    form.getBtnRegister().addActionListener(e -> save());
+	    
+	    form.getTxtShift().addActionListener(e -> {
+	        form.getBtnRegister().requestFocusInWindow();
+	    });
 	}
 	
 	private void configurarRack(JButton button) {
         button.addActionListener(e -> {
             form.getTxtRack().setText(button.getText());
             form.selectRackButton(button);
+            form.getBtnRegister().requestFocusInWindow();
         });
     }
 	

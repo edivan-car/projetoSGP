@@ -89,6 +89,7 @@ public class ThermalCuttingController {
 		form.setTextDataPlano(ThermalCuttingMemory.getDataProgramacao());
 		form.setTextDataRecebimento(ThermalCuttingMemory.getDataRecebimento());
 		form.setProgCorte(ThermalCuttingMemory.getReferencia());
+		form.getBtnReg().requestFocusInWindow();
 	}
 
 	private void save() {
