@@ -135,6 +135,7 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		buttonsPanel.add(chkPreviousDay);
 		buttonsPanel.add(btnCleanRack);
 		buttonsPanel.add(btnRegister);
+		bindEnterKey(btnRegister);
 
 		bottomPanel.add(buttonsPanel, BorderLayout.CENTER);
 
@@ -312,5 +313,16 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	    for (JButton btn : getRackButtons()) btn.setEnabled(editable);
 	    btnFixedSupport.setEnabled(editable);
 	    btnMobileSupport.setEnabled(editable);
+	}
+	
+	private void bindEnterKey(JButton button) {
+	    button.getInputMap(JComponent.WHEN_FOCUSED).put(
+	        KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "press");
+	    button.getActionMap().put("press", new javax.swing.AbstractAction() {
+	        @Override
+	        public void actionPerformed(java.awt.event.ActionEvent e) {
+	            button.doClick();
+	        }
+	    });
 	}
 }

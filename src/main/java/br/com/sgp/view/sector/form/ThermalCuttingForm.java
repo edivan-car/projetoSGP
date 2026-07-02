@@ -12,11 +12,13 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import br.com.sgp.view.sector.SectorForm;
 import br.com.sgp.view.util.GridBagHelper;
@@ -122,7 +124,8 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		btnInfo.setFocusPainted(false);
 		btnCleanMemory.setMargin(new Insets(2, 12, 2, 12));
 		btnReg.setMargin(new Insets(2, 12, 2, 12));
-		btnReg.setFocusable(true);   // <- modificar: precisa receber foco para ENTER funcionar
+		btnReg.setFocusable(true);
+		bindEnterKey(btnReg);
 		btnClean.setMargin(new Insets(2, 12, 2, 12));
 
 		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
@@ -212,6 +215,17 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	    chkDuplicada.setEnabled(editable);
 	    btnInfo.setEnabled(editable);
 	    btnCleanMemory.setEnabled(editable);
+	}
+	
+	private void bindEnterKey(JButton button) {
+	    button.getInputMap(JComponent.WHEN_FOCUSED).put(
+	        KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "press");
+	    button.getActionMap().put("press", new javax.swing.AbstractAction() {
+	        @Override
+	        public void actionPerformed(java.awt.event.ActionEvent e) {
+	            button.doClick();
+	        }
+	    });
 	}
 
 	@Override
