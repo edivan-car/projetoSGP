@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import br.com.sgp.view.component.SidebarPanel;
 import br.com.sgp.controller.FabricacaoPecasController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
@@ -25,19 +26,22 @@ public class MainView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private JDesktopPane desktopPane;
-	private JLabel lblUser;
-	private JLabel lblSector;
-	private JLabel lblDateTime;
 
 	public MainView() {
 		setTitle("SGP - Sistema de Gestão da Produção");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		addWindowStateListener(e -> {
+			if ((e.getNewState() & JFrame.MAXIMIZED_BOTH) != JFrame.MAXIMIZED_BOTH
+					&& (e.getNewState() & JFrame.ICONIFIED) == 0) {
+				setExtendedState(JFrame.MAXIMIZED_BOTH);
+			}
+		});
 
 		setJMenuBar(createMenuBar());
 		add(createDesktopPane(), BorderLayout.CENTER);
-		add(createStatusBar(), BorderLayout.SOUTH);
+		add(new SidebarPanel(), BorderLayout.EAST);
 	}
 
 	// ================= MENU =================
@@ -150,42 +154,6 @@ public class MainView extends JFrame {
 	private JDesktopPane createDesktopPane() {
 		desktopPane = new JDesktopPane();
 		return desktopPane;
-	}
-
-	// ================= STATUS BAR =================
-	private JPanel createStatusBar() {
-
-		JPanel statusBar = new JPanel(new BorderLayout());
-
-		UserSession session = UserSession.getInstance();
-
-		lblUser = new JLabel("Usuário: " + session.getName());
-		lblSector = new JLabel("Setor: " + session.getSector());
-		lblDateTime = new JLabel();
-
-		JPanel left = new JPanel();
-		left.add(lblUser);
-		left.add(new JLabel("|"));
-		left.add(lblSector);
-
-		JPanel right = new JPanel();
-		right.add(lblDateTime);
-
-		statusBar.add(left, BorderLayout.WEST);
-		statusBar.add(right, BorderLayout.EAST);
-
-		startClock();
-
-		return statusBar;
-	}
-
-	// ================= RELÓGIO =================
-	private void startClock() {
-		Timer timer = new Timer(1000, e -> {
-			lblDateTime.setText(java.time.LocalDateTime.now()
-					.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-		});
-		timer.start();
 	}
 
 	// ================= GETTER =================
