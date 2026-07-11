@@ -16,6 +16,7 @@ import br.com.sgp.model.Order;
 import br.com.sgp.view.sector.component.OrderSummaryCard;
 import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 import br.com.sgp.view.sector.form.ThermalCuttingForm;
+import br.com.sgp.view.util.AppColors;
 
 public class FabricacaoPecasView extends JInternalFrame {
 
@@ -42,7 +43,7 @@ public class FabricacaoPecasView extends JInternalFrame {
 
         add(createContentPanel(), BorderLayout.CENTER);
 
-        setSize(920, 540);
+        setSize(920, 480);
         setResizable(false);
         setMaximizable(false);
     }
@@ -55,6 +56,10 @@ public class FabricacaoPecasView extends JInternalFrame {
         panel.setBorder(BorderFactory.createEmptyBorder(8, 10, 4, 10));
 
         txtSearch = new JTextField();
+        txtSearch.setBorder(BorderFactory.createCompoundBorder(
+        		BorderFactory.createLineBorder(AppColors.ACCENT, 2),
+        		BorderFactory.createEmptyBorder(4, 8, 4, 8)));
+        txtSearch.setFont(txtSearch.getFont().deriveFont(java.awt.Font.PLAIN, 14f));
         btnSearch = new JButton("...");
         btnSearch.setPreferredSize(new Dimension(55, 28));
 
@@ -62,8 +67,11 @@ public class FabricacaoPecasView extends JInternalFrame {
         right.add(txtSearch, BorderLayout.CENTER);
         right.add(btnSearch, BorderLayout.EAST);
 
-        panel.add(new JLabel("Pedido:"), BorderLayout.WEST);
-        panel.add(right,                 BorderLayout.CENTER);
+        JLabel lblPedido = new JLabel("Pedido:");
+        lblPedido.setFont(lblPedido.getFont().deriveFont(java.awt.Font.BOLD, 14f));
+        panel.add(lblPedido, BorderLayout.WEST);
+        
+        panel.add(right, BorderLayout.CENTER);
 
         return panel;
     }

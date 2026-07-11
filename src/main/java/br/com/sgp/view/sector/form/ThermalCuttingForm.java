@@ -1,11 +1,11 @@
 package br.com.sgp.view.sector.form;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -21,9 +21,10 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 import br.com.sgp.view.sector.SectorForm;
+import br.com.sgp.view.util.AppColors;
 import br.com.sgp.view.util.GridBagHelper;
 
-public class ThermalCuttingForm extends JPanel implements SectorForm{
+public class ThermalCuttingForm extends JPanel implements SectorForm {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,16 +37,14 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	private JButton btnInfo;
 	private JButton btnReg;
 	private JButton btnClean;
-	private JButton btnCleanMemory = new JButton("Limpar Info");
+	private JButton btnCleanMemory;
 
 	public ThermalCuttingForm() {
 		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(760, 175));
-		setMinimumSize(new Dimension(760, 175));
-		setMaximumSize(new Dimension(760, 175));
+		setPreferredSize(new Dimension(600, 250));
+		setMinimumSize(new Dimension(600, 250));
 
-		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)),
-				BorderFactory.createEmptyBorder(6, 10, 6, 10)));
+		setBorder(BorderFactory.createEmptyBorder(8, 4, 4, 4));
 
 		initComponents();
 	}
@@ -55,91 +54,86 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		GridBagHelper g = new GridBagHelper();
 		int y = 0;
 
-		// Linha Montagem
-		add(new JLabel("Linha de Montagem:"), g.c(0, y));
-
+		// Linha de montagem | Ref. de corte (lado a lado)
 		txtLinhaMontagem = new JTextField();
-		GridBagConstraints gbcLinha = g.c(1, y);
-		g.span(gbcLinha, 3);
-		g.weight(gbcLinha, 1, 0);
-		g.fill(gbcLinha, GridBagConstraints.HORIZONTAL);
-		add(txtLinhaMontagem, gbcLinha);
+		GridBagConstraints gbcLinha = g.c(0, y);
+		g.weight(gbcLinha, 0.5, 0);
+		add(campo("Linha de montagem:", txtLinhaMontagem), gbcLinha);
 
-		// Data / Plano + Duplicata
+		txtProgCorte = new JTextField();
+		GridBagConstraints gbcProgCorte = g.c(1, y);
+		g.weight(gbcProgCorte, 0.5, 0);
+		add(campo("Ref. de corte:", txtProgCorte), gbcProgCorte);
+
+		// Data programação | Data recebimento (lado a lado)
 		y++;
-		add(new JLabel("Data de programação:"), g.c(0, y));
-
 		txtDataPlano = new JTextField();
-		GridBagConstraints gbcDataPlano = g.c(1, y);
-		g.span(gbcDataPlano, 3);
-		g.weight(gbcDataPlano, 1, 0);
-		g.fill(gbcDataPlano, GridBagConstraints.HORIZONTAL);
-		add(txtDataPlano, gbcDataPlano);
-
-		// Data Receb. + Prog. Corte
-		y++;
-		add(new JLabel("Data de recebimento:"), g.c(0, y));
+		GridBagConstraints gbcDataPlano = g.c(0, y);
+		g.weight(gbcDataPlano, 0.5, 0);
+		add(campo("Data de programação:", txtDataPlano), gbcDataPlano);
 
 		txtDataRecebimento = new JTextField();
 		GridBagConstraints gbcDataRec = g.c(1, y);
 		g.weight(gbcDataRec, 0.5, 0);
-		g.fill(gbcDataRec, GridBagConstraints.HORIZONTAL);
-		add(txtDataRecebimento, gbcDataRec);
+		add(campo("Data de recebimento:", txtDataRecebimento), gbcDataRec);
 
-		add(new JLabel("Ref. de corte:"), g.c(2, y));
-
-		txtProgCorte = new JTextField();
-		GridBagConstraints gbcProgCorte = g.c(3, y);
-		g.weight(gbcProgCorte, 0.5, 0);
-		g.fill(gbcProgCorte, GridBagConstraints.HORIZONTAL);
-		add(txtProgCorte, gbcProgCorte);
-
-		// Observações
+		// Observação (linha inteira, expande verticalmente)
 		y++;
-		add(new JLabel("Observação:"), g.c(0, y));
-
 		txtObservation = new JTextArea(2, 20);
 		txtObservation.setLineWrap(true);
 		txtObservation.setWrapStyleWord(true);
-
 		JScrollPane scrollObs = new JScrollPane(txtObservation);
 
-		GridBagConstraints gbcObs = g.c(1, y);
-		g.span(gbcObs, 3);
+		GridBagConstraints gbcObs = g.c(0, y);
+		g.span(gbcObs, 2);
 		g.weight(gbcObs, 1, 1);
 		g.fill(gbcObs, GridBagConstraints.BOTH);
-		add(scrollObs, gbcObs);
+		add(campo("Observação:", scrollObs), gbcObs);
 
-		// Checkbox + botões de apoio
+		// Checkbox + botões
 		y++;
 		chkDuplicada = new JCheckBox("Duplicada");
-		add(chkDuplicada, g.c(0, y));
 
 		btnInfo        = new JButton("Info");
 		btnCleanMemory = new JButton("Limpar Info");
 		btnReg         = new JButton("Registrar");
 		btnClean       = new JButton("Limpar");
 
-		btnInfo.setMargin(new Insets(2, 12, 2, 12));
-		btnInfo.setFocusPainted(false);
-		btnCleanMemory.setMargin(new Insets(2, 12, 2, 12));
-		btnReg.setMargin(new Insets(2, 12, 2, 12));
+		AppColors.style(btnInfo, AppColors.ACCENT);
+		AppColors.style(btnCleanMemory, AppColors.NEUTRAL);
+		AppColors.style(btnReg, AppColors.SUCCESS);
+		AppColors.style(btnClean, AppColors.WARNING);
+
 		btnReg.setFocusable(true);
 		bindEnterKey(btnReg);
-		btnClean.setMargin(new Insets(2, 12, 2, 12));
 
-		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		bottomPanel.add(chkDuplicada, BorderLayout.WEST);
+
+		JPanel btnPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 0));
 		btnPanel.add(btnInfo);
 		btnPanel.add(btnCleanMemory);
 		btnPanel.add(btnReg);
 		btnPanel.add(btnClean);
+		bottomPanel.add(btnPanel, BorderLayout.CENTER);
 
-		GridBagConstraints gbcBtns = g.c(1, y);
-		g.span(gbcBtns, 3);
+		GridBagConstraints gbcBtns = g.c(0, y);
+		g.span(gbcBtns, 2);
 		g.weight(gbcBtns, 1, 0);
-		g.fill(gbcBtns, GridBagConstraints.HORIZONTAL);
-		add(btnPanel, gbcBtns);
+		add(bottomPanel, gbcBtns);
+	}
 
+	/** Monta um bloco com o rótulo em negrito acima do campo. */
+	private JPanel campo(String rotulo, JComponent field) {
+		JPanel panel = new JPanel(new BorderLayout(0, 3));
+
+		JLabel lbl = new JLabel(rotulo);
+		lbl.setFont(lbl.getFont().deriveFont(Font.BOLD, 11f));
+		lbl.setForeground(new Color(90, 90, 90));
+
+		panel.add(lbl, BorderLayout.NORTH);
+		panel.add(field, BorderLayout.CENTER);
+		return panel;
 	}
 
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -173,19 +167,11 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	}
 
 	public void setTextDataPlano(LocalDate value) {
-		if (value != null) {
-			txtDataPlano.setText(value.format(formatter));
-		} else {
-			txtDataPlano.setText("");
-		}
+		txtDataPlano.setText(value != null ? value.format(formatter) : "");
 	}
 
 	public void setTextDataRecebimento(LocalDate value) {
-		if (value != null) {
-			txtDataRecebimento.setText(value.format(formatter));
-		} else {
-			txtDataRecebimento.setText("");
-		}
+		txtDataRecebimento.setText(value != null ? value.format(formatter) : "");
 	}
 
 	public void setProgCorte(String value) {
@@ -195,37 +181,39 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 	public JButton getBtnInfo() {
 		return btnInfo;
 	}
-	
+
 	public JButton getBtnReg() {
 		return btnReg;
 	}
-	
+
 	public JButton getBtnClean() {
 		return btnClean;
 	}
-	
-	public JButton getBtnCleanMemory() { return btnCleanMemory; }
-	
-	public void setFieldsEditable(boolean editable) {
-	    txtLinhaMontagem.setEditable(editable);
-	    txtDataPlano.setEditable(editable);
-	    txtDataRecebimento.setEditable(editable);
-	    txtProgCorte.setEditable(editable);
-	    txtObservation.setEditable(editable);
-	    chkDuplicada.setEnabled(editable);
-	    btnInfo.setEnabled(editable);
-	    btnCleanMemory.setEnabled(editable);
+
+	public JButton getBtnCleanMemory() {
+		return btnCleanMemory;
 	}
-	
+
+	public void setFieldsEditable(boolean editable) {
+		txtLinhaMontagem.setEditable(editable);
+		txtDataPlano.setEditable(editable);
+		txtDataRecebimento.setEditable(editable);
+		txtProgCorte.setEditable(editable);
+		txtObservation.setEditable(editable);
+		chkDuplicada.setEnabled(editable);
+		btnInfo.setEnabled(editable);
+		btnCleanMemory.setEnabled(editable);
+	}
+
 	private void bindEnterKey(JButton button) {
-	    button.getInputMap(JComponent.WHEN_FOCUSED).put(
-	        KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "press");
-	    button.getActionMap().put("press", new javax.swing.AbstractAction() {
-	        @Override
-	        public void actionPerformed(java.awt.event.ActionEvent e) {
-	            button.doClick();
-	        }
-	    });
+		button.getInputMap(JComponent.WHEN_FOCUSED).put(
+				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "press");
+		button.getActionMap().put("press", new javax.swing.AbstractAction() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				button.doClick();
+			}
+		});
 	}
 
 	@Override
@@ -237,5 +225,4 @@ public class ThermalCuttingForm extends JPanel implements SectorForm{
 		txtObservation.setText("");
 		chkDuplicada.setSelected(false);
 	}
-
 }
