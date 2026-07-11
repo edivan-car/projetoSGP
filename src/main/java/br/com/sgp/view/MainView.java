@@ -20,6 +20,7 @@ import br.com.sgp.session.UserSession;
 import br.com.sgp.util.AccessControl;
 import br.com.sgp.util.AppRestarter;
 import br.com.sgp.view.sector.FabricacaoPecasView;
+import br.com.sgp.view.util.AppColors;
 
 public class MainView extends JFrame {
 
@@ -41,7 +42,18 @@ public class MainView extends JFrame {
 
 		setJMenuBar(createMenuBar());
 		add(createDesktopPane(), BorderLayout.CENTER);
-		add(new SidebarPanel(), BorderLayout.EAST);
+
+		setJMenuBar(createMenuBar());
+		add(createDesktopPane(), BorderLayout.CENTER);
+
+		SidebarPanel sidebar = new SidebarPanel();
+		sidebar.getBtnFabricacaoPecas().addActionListener(e -> abrirFabricacaoPecas());
+		sidebar.getBtnUsuarios().addActionListener(e -> abrirUsuarios());
+		sidebar.getBtnFabricacaoVigas().addActionListener(e ->
+				JOptionPane.showMessageDialog(this, "Módulo Fabricação de Vigas"));
+		sidebar.getBtnRelatorios().addActionListener(e ->
+				JOptionPane.showMessageDialog(this, "Módulo Relatórios"));
+		add(sidebar, BorderLayout.EAST);
 	}
 
 	// ================= MENU =================
@@ -72,25 +84,9 @@ public class MainView extends JFrame {
 		// AÇÕES
 		// =====================
 
-		itemUsers.addActionListener(e -> {
-			UserView view = new UserView();
-			new UserController(view);
-			desktopPane.add(view);
-			view.setVisible(true);
-		});
+		itemUsers.addActionListener(e -> abrirUsuarios());
 
-		itemFabricacaoPecas.addActionListener(e -> {
-		    FabricacaoPecasView view = new FabricacaoPecasView();
-		    new FabricacaoPecasController(view);
-		    desktopPane.add(view);
-		    view.setVisible(true);
-		    centralizar(view);
-		    try {
-		        view.setSelected(true);
-		    } catch (java.beans.PropertyVetoException ex) {
-		        ex.printStackTrace();
-		    }
-		});
+		itemFabricacaoPecas.addActionListener(e -> abrirFabricacaoPecas());
 
 		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
 
@@ -153,6 +149,7 @@ public class MainView extends JFrame {
 	// ================= ÁREA CENTRAL =================
 	private JDesktopPane createDesktopPane() {
 		desktopPane = new JDesktopPane();
+		desktopPane.setBackground(new java.awt.Color(245, 247, 250));
 		return desktopPane;
 	}
 
@@ -165,6 +162,26 @@ public class MainView extends JFrame {
 		int x = (desktopPane.getWidth() - frame.getWidth()) / 2;
 		int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
 		frame.setLocation(x, y);
+	}
+	
+	private void abrirUsuarios() {
+		UserView view = new UserView();
+		new UserController(view);
+		desktopPane.add(view);
+		view.setVisible(true);
+	}
+
+	private void abrirFabricacaoPecas() {
+		FabricacaoPecasView view = new FabricacaoPecasView();
+		new FabricacaoPecasController(view);
+		desktopPane.add(view);
+		view.setVisible(true);
+		centralizar(view);
+		try {
+			view.setSelected(true);
+		} catch (java.beans.PropertyVetoException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	private void logout() {

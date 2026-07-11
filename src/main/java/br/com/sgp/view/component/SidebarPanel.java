@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -14,22 +17,29 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import br.com.sgp.session.UserSession;
+import br.com.sgp.util.AccessControl;
+import br.com.sgp.view.util.AppColors;
 
 /**
  * Painel lateral fixo (EAST) do MainView.
- * Exibe logo, área reservada para atalhos futuros e informações da sessão.
+ * Exibe logo, atalhos de navegação e informações da sessão.
  */
 public class SidebarPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static final int SIDEBAR_WIDTH = 240;
+	private static final int SIDEBAR_WIDTH = 260;
 
 	private JLabel lblDateTime;
+
+	private JButton btnFabricacaoPecas;
+	private JButton btnFabricacaoVigas;
+	private JButton btnUsuarios;
+	private JButton btnRelatorios;
 
 	public SidebarPanel() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(SIDEBAR_WIDTH, 0));
-		setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.LIGHT_GRAY));
+		setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, AppColors.ACCENT));
 
 		add(createLogoPanel(), BorderLayout.NORTH);
 		add(createShortcutsPanel(), BorderLayout.CENTER);
@@ -51,28 +61,60 @@ public class SidebarPanel extends JPanel {
 		return panel;
 	}
 
-	// ================= ATALHOS (reservado) =================
+	// ================= ATALHOS =================
 	private JPanel createShortcutsPanel() {
 		JPanel panel = new JPanel();
-		// TODO: futuros botões de atalho serão adicionados aqui
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBorder(new EmptyBorder(10, 14, 10, 14));
+
+		btnFabricacaoPecas = criarBotaoAtalho("Fabricação de Peças");
+		btnFabricacaoVigas = criarBotaoAtalho("Fabricação de Vigas");
+		btnUsuarios        = criarBotaoAtalho("Usuários");
+		btnRelatorios      = criarBotaoAtalho("Relatórios");
+
+		panel.add(btnFabricacaoPecas);
+		panel.add(Box.createVerticalStrut(8));
+		panel.add(btnFabricacaoVigas);
+		panel.add(Box.createVerticalStrut(8));
+		panel.add(btnUsuarios);
+		panel.add(Box.createVerticalStrut(8));
+		panel.add(btnRelatorios);
+
+		applyAccessControl();
+
 		return panel;
+	}
+
+	private JButton criarBotaoAtalho(String texto) {
+		JButton button = new JButton(texto);
+		AppColors.style(button, AppColors.ACCENT);
+		button.setAlignmentX(LEFT_ALIGNMENT);
+		button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 34));
+		return button;
+	}
+
+	private void applyAccessControl() {
+		btnUsuarios.setVisible(AccessControl.isAdmin());
+		btnFabricacaoPecas.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_PECAS));
+		btnFabricacaoVigas.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_VIGAS));
+		btnRelatorios.setVisible(AccessControl.isGestor());
 	}
 
 	// ================= INFO DO USUÁRIO =================
 	private JPanel createInfoCard() {
 		JPanel card = new JPanel();
-		card.setLayout(new javax.swing.BoxLayout(card, javax.swing.BoxLayout.Y_AXIS));
+		card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 		card.setBorder(new EmptyBorder(10, 12, 14, 12));
 
 		UserSession session = UserSession.getInstance();
 
 		card.add(sectionLabel("Usuário"));
 		card.add(valueLabel(session.getName()));
-		card.add(javax.swing.Box.createVerticalStrut(8));
+		card.add(Box.createVerticalStrut(8));
 
 		card.add(sectionLabel("Setor"));
 		card.add(valueLabel(String.valueOf(session.getSector())));
-		card.add(javax.swing.Box.createVerticalStrut(8));
+		card.add(Box.createVerticalStrut(8));
 
 		card.add(sectionLabel("Data"));
 		lblDateTime = valueLabel(formatarDataHora());
@@ -92,16 +134,17 @@ public class SidebarPanel extends JPanel {
 	private JLabel valueLabel(String text) {
 		JLabel lbl = new JLabel(text);
 		lbl.setFont(lbl.getFont().deriveFont(java.awt.Font.BOLD, 12f));
+		lbl.setForeground(AppColors.ACCENT);
 		return lbl;
 	}
 
 	// ================= RELÓGIO =================
 	private void startClock() {
 		Timer timer = new Timer(1000, e -> lblDateTime.setText(
-				"<html><div style='width:140px'>" + formatarDataHora() + "</div></html>"));
+				"<html><div style='width:210px'>" + formatarDataHora() + "</div></html>"));
 		timer.start();
 	}
-	
+
 	private String formatarDataHora() {
 		java.time.LocalDateTime now = java.time.LocalDateTime.now();
 
@@ -117,5 +160,22 @@ public class SidebarPanel extends JPanel {
 			return text;
 		}
 		return Character.toUpperCase(text.charAt(0)) + text.substring(1);
+	}
+
+	// ================= GETTERS (usados pelo MainView) =================
+	public JButton getBtnFabricacaoPecas() {
+		return btnFabricacaoPecas;
+	}
+
+	public JButton getBtnFabricacaoVigas() {
+		return btnFabricacaoVigas;
+	}
+
+	public JButton getBtnUsuarios() {
+		return btnUsuarios;
+	}
+
+	public JButton getBtnRelatorios() {
+		return btnRelatorios;
 	}
 }
