@@ -1,17 +1,36 @@
 package br.com.sgp.view.sector.form;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 import br.com.sgp.view.sector.SectorForm;
+import br.com.sgp.view.util.AppColors;
 
 public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	private static final long serialVersionUID = 1L;
-	private static final Color RACK_SELECTED_BG = new Color(230, 241, 251);
-	private static final Color RACK_SELECTED_FG = new Color(24, 95, 165);
+	private static final Color RACK_SELECTED_BG = new Color(220, 231, 253); // tom claro do AppColors.ACCENT
+	private static final Color RACK_SELECTED_FG = AppColors.ACCENT;
 	private static final Color RACK_DEFAULT_BG = UIManager.getColor("Button.background");
 	private static final Color RACK_DEFAULT_FG = UIManager.getColor("Button.foreground");
-	
+
 	private JTextField txtDate;
 	private JTextField txtShift;
 	private JTextField txtRack;
@@ -23,20 +42,14 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	private JButton btnCleanRack = new JButton("Limpar");
 	private JCheckBox chkPreviousDay = new JCheckBox("Dia anterior");
 
-	// 🔥 Agora usando ARRAY
 	private JButton[] rackButtons = new JButton[12];
 	private JButton btnFixedSupport = new JButton("Suporte Fixo");
 	private JButton btnMobileSupport = new JButton("Suporte Móvel");
 
 	public PlasmaCuttingForm() {
 		setLayout(new GridBagLayout());
-		setPreferredSize(new Dimension(760, 190));
-//		setPreferredSize(new Dimension(760, 210));
-//		setMinimumSize(new Dimension(760, 210));
-//		setMaximumSize(new Dimension(760, 210));
-//
-//		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)),
-//				BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+		setPreferredSize(new Dimension(600, 250));
+		setMinimumSize(new Dimension(600, 250));
 
 		initComponents();
 	}
@@ -49,7 +62,6 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.insets = new Insets(3, 5, 3, 5);
 
-		// LEFT
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
@@ -57,7 +69,6 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		gbc.fill = GridBagConstraints.BOTH;
 		add(leftPanel, gbc);
 
-		// RIGHT
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.weightx = 0;
@@ -73,74 +84,80 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		gbc.insets = new Insets(3, 5, 3, 5);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		txtDate = new JTextField(10);
-		txtShift = new JTextField(5);
-		txtRack = new JTextField(10);
+		txtDate = new JTextField();
+		txtShift = new JTextField();
+		txtRack = new JTextField();
 		txtRack.setEditable(false);
-		txtRack.setBackground(new Color(245, 245, 245));
-		txtObservation = new JTextArea(2, 10);
-		txtObservation.setFocusTraversalKeysEnabled(true);
+		txtRack.setBackground(AppColors.FIELD_BG);
 
+		// Data do Corte | Turno | Rack (lado a lado)
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0.4;
+		panel.add(campo("Data do Corte:", txtDate), gbc);
+
+		gbc.gridx = 1;
+		gbc.weightx = 0.3;
+		panel.add(campo("Turno:", txtShift), gbc);
+
+		gbc.gridx = 2;
+		gbc.weightx = 0.3;
+		panel.add(campo("Rack:", txtRack), gbc);
+
+		// Observação (linha inteira, expande verticalmente)
+		txtObservation = new JTextArea(2, 10);
+		txtObservation.setLineWrap(true);
+		txtObservation.setWrapStyleWord(true);
 		JScrollPane scroll = new JScrollPane(txtObservation);
 
 		gbc.gridx = 0;
-		gbc.gridy = 0;
-		panel.add(new JLabel("Data do Corte:"), gbc);
-
-		gbc.gridx = 1;
-		panel.add(txtDate, gbc);
-
-		gbc.gridx = 2;
-		panel.add(new JLabel("Turno:"), gbc);
-
-		gbc.gridx = 3;
-		panel.add(txtShift, gbc);
-
-		gbc.gridx = 4;
-		panel.add(new JLabel("Rack:"), gbc);
-
-		gbc.gridx = 5;
-		panel.add(txtRack, gbc);
-
-		gbc.gridx = 0;
 		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.NORTH;
-		panel.add(new JLabel("Observação:"), gbc);
-
-		gbc.gridx = 1;
-		gbc.gridwidth = 5;
-		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridwidth = 3;
+		gbc.weightx = 1;
 		gbc.weighty = 1;
-		panel.add(scroll, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		panel.add(campo("Observação:", scroll), gbc);
 
-		// ===============================
-		// LINHA INFERIOR (CHECK + BOTÕES)
-		// ===============================
-
+		// Checkboxes + botões
 		gbc.gridy = 2;
 		gbc.gridx = 0;
-		gbc.gridwidth = 6;
+		gbc.gridwidth = 3;
+		gbc.weighty = 0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1;
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
-		// 🔹 Checkbox
-		bottomPanel.add(chkDuplicada, BorderLayout.WEST);
+		JPanel checkboxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+		checkboxPanel.add(chkDuplicada);
+		checkboxPanel.add(chkPreviousDay);
+		bottomPanel.add(checkboxPanel, BorderLayout.WEST);
 
-		// 🔹 Painel de botões centralizados
-		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-
-		buttonsPanel.add(btnGenerate);
-		buttonsPanel.add(chkPreviousDay);
-		buttonsPanel.add(btnCleanRack);
-		buttonsPanel.add(btnRegister);
+		AppColors.style(btnGenerate, AppColors.ACCENT);
+		AppColors.style(btnCleanRack, AppColors.WARNING);
+		AppColors.style(btnRegister, AppColors.SUCCESS);
 		bindEnterKey(btnRegister);
 
+		JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+		buttonsPanel.add(btnGenerate);
+		buttonsPanel.add(btnCleanRack);
+		buttonsPanel.add(btnRegister);
 		bottomPanel.add(buttonsPanel, BorderLayout.CENTER);
 
 		panel.add(bottomPanel, gbc);
 
+		return panel;
+	}
+
+	/** Monta um bloco com o rótulo em negrito acima do campo (mesmo padrão do Corte Térmico). */
+	private JPanel campo(String rotulo, JComponent field) {
+		JPanel panel = new JPanel(new BorderLayout(0, 3));
+
+		JLabel lbl = new JLabel(rotulo);
+		lbl.setFont(lbl.getFont().deriveFont(Font.BOLD, 11f));
+		lbl.setForeground(new Color(90, 90, 90));
+
+		panel.add(lbl, BorderLayout.NORTH);
+		panel.add(field, BorderLayout.CENTER);
 		return panel;
 	}
 
@@ -179,14 +196,12 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 			}
 		}
 
-		// 🔹 SUPORTE FIXO
 		linha++;
 		gbc.gridx = 0;
 		gbc.gridy = linha;
 		gbc.gridwidth = 3;
 		panel.add(btnFixedSupport, gbc);
 
-		// 🔹 SUPORTE MÓVEL
 		linha++;
 		gbc.gridy = linha;
 		panel.add(btnMobileSupport, gbc);
@@ -240,21 +255,21 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	public JButton getBtnGenerate() {
 		return btnGenerate;
 	}
-	
+
 	public JTextField getTxtDate() {
-	    return txtDate;
+		return txtDate;
 	}
-	
+
 	public JTextArea getTxtObservation() {
-	    return txtObservation;
+		return txtObservation;
 	}
 
 	public JCheckBox getChkPreviousDay() {
-	    return chkPreviousDay;
+		return chkPreviousDay;
 	}
 
 	public JCheckBox getChkDuplicada() {
-	    return chkDuplicada;
+		return chkDuplicada;
 	}
 
 	public JButton getBtnRegister() {
@@ -264,30 +279,30 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 	public JButton getBtnCleanRack() {
 		return btnCleanRack;
 	}
-	
+
 	public void clearRackField() {
 		txtDate.setText("");
 		txtShift.setText("");
-	    txtRack.setText("");
-	    txtObservation.setText("");
-	    chkDuplicada.setSelected(false);
-	    chkPreviousDay.setSelected(false);
-	    clearRackSelection();
+		txtRack.setText("");
+		txtObservation.setText("");
+		chkDuplicada.setSelected(false);
+		chkPreviousDay.setSelected(false);
+		clearRackSelection();
 	}
 
 	public void addCleanRackListener(java.awt.event.ActionListener listener) {
-	    btnCleanRack.addActionListener(listener);
+		btnCleanRack.addActionListener(listener);
 	}
-	
+
 	@Override
 	public void clearForm() {
 		txtDate.setText("");
-	    txtShift.setText("");
-	    txtRack.setText("");
-	    txtObservation.setText("");
-	    chkDuplicada.setSelected(false);
-	    chkPreviousDay.setSelected(false);
-	    clearRackSelection();
+		txtShift.setText("");
+		txtRack.setText("");
+		txtObservation.setText("");
+		chkDuplicada.setSelected(false);
+		chkPreviousDay.setSelected(false);
+		clearRackSelection();
 	}
 
 	public JTextField getTxtShift() {
@@ -303,26 +318,26 @@ public class PlasmaCuttingForm extends JPanel implements SectorForm {
 		setRackButtonSelected(btnFixedSupport, false);
 		setRackButtonSelected(btnMobileSupport, false);
 	}
-	
-	public void setFieldsEditable(boolean editable) { // <- incluir
-	    txtDate.setEditable(editable);
-	    txtShift.setEditable(editable);
-	    txtObservation.setEditable(editable);
-	    chkPreviousDay.setEnabled(editable);
-	    btnGenerate.setEnabled(editable);
-	    for (JButton btn : getRackButtons()) btn.setEnabled(editable);
-	    btnFixedSupport.setEnabled(editable);
-	    btnMobileSupport.setEnabled(editable);
+
+	public void setFieldsEditable(boolean editable) {
+		txtDate.setEditable(editable);
+		txtShift.setEditable(editable);
+		txtObservation.setEditable(editable);
+		chkPreviousDay.setEnabled(editable);
+		btnGenerate.setEnabled(editable);
+		for (JButton btn : getRackButtons()) btn.setEnabled(editable);
+		btnFixedSupport.setEnabled(editable);
+		btnMobileSupport.setEnabled(editable);
 	}
-	
+
 	private void bindEnterKey(JButton button) {
-	    button.getInputMap(JComponent.WHEN_FOCUSED).put(
-	        KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "press");
-	    button.getActionMap().put("press", new javax.swing.AbstractAction() {
-	        @Override
-	        public void actionPerformed(java.awt.event.ActionEvent e) {
-	            button.doClick();
-	        }
-	    });
+		button.getInputMap(JComponent.WHEN_FOCUSED).put(
+				KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_ENTER, 0), "press");
+		button.getActionMap().put("press", new javax.swing.AbstractAction() {
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				button.doClick();
+			}
+		});
 	}
 }

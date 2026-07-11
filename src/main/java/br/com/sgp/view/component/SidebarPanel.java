@@ -44,7 +44,7 @@ public class SidebarPanel extends JPanel {
 		panel.setBorder(new EmptyBorder(16, 10, 16, 10));
 
 		ImageIcon icon = new ImageIcon(
-				getClass().getResource("/images/logos/lea3_logo-218x98.png"));
+				getClass().getResource("/images/logos/logo_sgp.png"));
 		Image scaled = icon.getImage().getScaledInstance(120, -1, Image.SCALE_SMOOTH);
 
 		panel.add(new JLabel(new ImageIcon(scaled)));
