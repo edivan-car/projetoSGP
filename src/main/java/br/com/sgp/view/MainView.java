@@ -5,14 +5,10 @@ import java.awt.BorderLayout;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-
 import br.com.sgp.view.component.SidebarPanel;
 import br.com.sgp.controller.FabricacaoPecasController;
 import br.com.sgp.controller.UserController;
@@ -20,7 +16,6 @@ import br.com.sgp.session.UserSession;
 import br.com.sgp.util.AccessControl;
 import br.com.sgp.util.AppRestarter;
 import br.com.sgp.view.sector.FabricacaoPecasView;
-import br.com.sgp.view.util.AppColors;
 
 public class MainView extends JFrame {
 
@@ -40,7 +35,11 @@ public class MainView extends JFrame {
 			}
 		});
 
+		setIconImage(new javax.swing.ImageIcon(
+				getClass().getResource("/images/icons/sgp_icon.png")).getImage());
+		
 		setJMenuBar(createMenuBar());
+		
 		add(createDesktopPane(), BorderLayout.CENTER);
 
 		setJMenuBar(createMenuBar());

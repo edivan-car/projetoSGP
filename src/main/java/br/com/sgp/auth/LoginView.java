@@ -30,6 +30,8 @@ public class LoginView extends JFrame {
 
     private void setupFrame() {
         setTitle("SGP - Login");
+        setIconImage(new ImageIcon(
+        		getClass().getResource("/images/icons/sgp_icon.png")).getImage());
         setSize(480, 520);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
