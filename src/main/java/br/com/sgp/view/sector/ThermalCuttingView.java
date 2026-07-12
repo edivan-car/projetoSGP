@@ -18,7 +18,7 @@ import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 import br.com.sgp.view.sector.form.ThermalCuttingForm;
 import br.com.sgp.view.util.AppColors;
 
-public class FabricacaoPecasView extends JInternalFrame {
+public class ThermalCuttingView extends JInternalFrame {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,8 +34,8 @@ public class FabricacaoPecasView extends JInternalFrame {
     private ThermalCuttingForm  thermalForm;
     private PlasmaCuttingForm   plasmaForm;
 
-    public FabricacaoPecasView() {
-        super("Fabricação de Peças", false, true, false, false);
+    public ThermalCuttingView() {
+        super("Corte Térmico", false, true, false, false);
         setLayout(new BorderLayout(0, 4));
 
         add(createSearchPanel(),  BorderLayout.NORTH);
@@ -93,10 +93,10 @@ public class FabricacaoPecasView extends JInternalFrame {
         thermalForm = new ThermalCuttingForm();
         plasmaForm  = new PlasmaCuttingForm();
 
-        tabbedPane.addTab("Corte Térmico",  thermalForm);
+        tabbedPane.addTab("Programação Corte a Plasma",  thermalForm);
         tabbedPane.addTab("Corte a Plasma", plasmaForm);
-        tabbedPane.addTab("Corte e Dobra",  new JPanel()); // <- aba desabilitada
-        tabbedPane.setEnabledAt(2, false);
+        //tabbedPane.addTab("Corte e Dobra",  new JPanel()); // <- aba desabilitada
+        //tabbedPane.setEnabledAt(2, false);
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 8, 8, 8));

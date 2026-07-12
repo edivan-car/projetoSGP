@@ -2,15 +2,15 @@ package br.com.sgp.controller;
 
 import br.com.sgp.dao.OrderDAO;
 import br.com.sgp.model.Order;
-import br.com.sgp.view.sector.FabricacaoPecasView;
+import br.com.sgp.view.sector.ThermalCuttingView;
 
 public class FabricacaoPecasController {
 
-    private final FabricacaoPecasView view;
+    private final ThermalCuttingView view;
     private final OrderDAO dao = new OrderDAO();
     private final java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy");
 
-    public FabricacaoPecasController(FabricacaoPecasView view) {
+    public FabricacaoPecasController(ThermalCuttingView view) {
         this.view = view;
         initController();
         initSectorControllers();

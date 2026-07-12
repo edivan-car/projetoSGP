@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import br.com.sgp.dao.OrderDAO;
-import br.com.sgp.view.sector.FabricacaoPecasView;
+import br.com.sgp.view.sector.ThermalCuttingView;
 import br.com.sgp.view.sector.form.PlasmaCuttingForm;
 
 public class PlasmaCuttingController {
@@ -15,9 +15,9 @@ public class PlasmaCuttingController {
 	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private final PlasmaCuttingForm form;
-	private final FabricacaoPecasView sectorView;
+	private final ThermalCuttingView sectorView;
 
-	public PlasmaCuttingController(PlasmaCuttingForm form, FabricacaoPecasView view) {
+	public PlasmaCuttingController(PlasmaCuttingForm form, ThermalCuttingView view) {
 		this.form = form;
 		this.sectorView = view;
 		initActions();

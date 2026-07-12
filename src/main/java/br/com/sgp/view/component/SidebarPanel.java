@@ -31,7 +31,8 @@ public class SidebarPanel extends JPanel {
 
 	private JLabel lblDateTime;
 
-	private JButton btnFabricacaoPecas;
+	private JButton btnCorteTermico;
+	private JButton btnCorteDobra;
 	private JButton btnFabricacaoVigas;
 	private JButton btnUsuarios;
 	private JButton btnRelatorios;
@@ -67,12 +68,15 @@ public class SidebarPanel extends JPanel {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(new EmptyBorder(10, 14, 10, 14));
 
-		btnFabricacaoPecas = criarBotaoAtalho("Fabricação de Peças");
+		btnCorteTermico = criarBotaoAtalho("Corte Térmico");
+		btnCorteDobra = criarBotaoAtalho("Corte e Dobra");
 		btnFabricacaoVigas = criarBotaoAtalho("Fabricação de Vigas");
 		btnUsuarios        = criarBotaoAtalho("Usuários");
 		btnRelatorios      = criarBotaoAtalho("Relatórios");
 
-		panel.add(btnFabricacaoPecas);
+		panel.add(btnCorteTermico);
+		panel.add(Box.createVerticalStrut(8));
+		panel.add(btnCorteDobra);
 		panel.add(Box.createVerticalStrut(8));
 		panel.add(btnFabricacaoVigas);
 		panel.add(Box.createVerticalStrut(8));
@@ -95,7 +99,7 @@ public class SidebarPanel extends JPanel {
 
 	private void applyAccessControl() {
 		btnUsuarios.setVisible(AccessControl.isAdmin());
-		btnFabricacaoPecas.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_PECAS));
+		btnCorteTermico.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_PECAS));
 		btnFabricacaoVigas.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_VIGAS));
 		btnRelatorios.setVisible(AccessControl.isGestor());
 	}
@@ -163,8 +167,8 @@ public class SidebarPanel extends JPanel {
 	}
 
 	// ================= GETTERS (usados pelo MainView) =================
-	public JButton getBtnFabricacaoPecas() {
-		return btnFabricacaoPecas;
+	public JButton getBtnCorteTermico() {
+		return btnCorteTermico;
 	}
 
 	public JButton getBtnFabricacaoVigas() {

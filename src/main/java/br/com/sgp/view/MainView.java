@@ -15,7 +15,7 @@ import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
 import br.com.sgp.util.AccessControl;
 import br.com.sgp.util.AppRestarter;
-import br.com.sgp.view.sector.FabricacaoPecasView;
+import br.com.sgp.view.sector.ThermalCuttingView;
 
 public class MainView extends JFrame {
 
@@ -46,7 +46,7 @@ public class MainView extends JFrame {
 		add(createDesktopPane(), BorderLayout.CENTER);
 
 		SidebarPanel sidebar = new SidebarPanel();
-		sidebar.getBtnFabricacaoPecas().addActionListener(e -> abrirFabricacaoPecas());
+		sidebar.getBtnCorteTermico().addActionListener(e -> abrirCorteTermico());
 		sidebar.getBtnUsuarios().addActionListener(e -> abrirUsuarios());
 		sidebar.getBtnFabricacaoVigas().addActionListener(e ->
 				JOptionPane.showMessageDialog(this, "Módulo Fabricação de Vigas"));
@@ -67,7 +67,7 @@ public class MainView extends JFrame {
 
 		// ===== Fabricação de Peças
 		JMenu menuFabricacaoPecas = new JMenu("Fabricação de Peças");
-		JMenuItem itemFabricacaoPecas = new JMenuItem("Fabricação de Peças");
+		JMenuItem itemCorteTermico = new JMenuItem("Corte Térmico");
 		JMenuItem itemCorteDobra = new JMenuItem("Corte e Dobra");
 
 		// ===== Fabricação de Vigas
@@ -85,7 +85,7 @@ public class MainView extends JFrame {
 
 		itemUsers.addActionListener(e -> abrirUsuarios());
 
-		itemFabricacaoPecas.addActionListener(e -> abrirFabricacaoPecas());
+		itemCorteTermico.addActionListener(e -> abrirCorteTermico());
 
 		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
 
@@ -102,7 +102,7 @@ public class MainView extends JFrame {
 		menuSector.addSeparator();
 
 		menuSector.add(menuFabricacaoPecas);
-		menuFabricacaoPecas.add(itemFabricacaoPecas);
+		menuFabricacaoPecas.add(itemCorteTermico);
 		menuFabricacaoPecas.add(itemCorteDobra);
 
 		menuSector.add(menuFabricacaoVigas);
@@ -170,8 +170,8 @@ public class MainView extends JFrame {
 		view.setVisible(true);
 	}
 
-	private void abrirFabricacaoPecas() {
-		FabricacaoPecasView view = new FabricacaoPecasView();
+	private void abrirCorteTermico() {
+		ThermalCuttingView view = new ThermalCuttingView();
 		new FabricacaoPecasController(view);
 		desktopPane.add(view);
 		view.setVisible(true);

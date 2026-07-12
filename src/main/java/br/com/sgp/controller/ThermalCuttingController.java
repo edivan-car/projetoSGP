@@ -9,7 +9,7 @@ import br.com.sgp.context.ThermalCuttingMemory;
 import br.com.sgp.dao.OrderDAO;
 import br.com.sgp.model.Order;
 import br.com.sgp.service.ThermalCuttingRefGenerator;
-import br.com.sgp.view.sector.FabricacaoPecasView;
+import br.com.sgp.view.sector.ThermalCuttingView;
 import br.com.sgp.view.sector.dialog.ThermalCuttingInfoDialog;
 import br.com.sgp.view.sector.form.ThermalCuttingForm;
 
@@ -18,10 +18,10 @@ public class ThermalCuttingController {
 	private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	private final ThermalCuttingForm form;
-	private final FabricacaoPecasView sectorView;
+	private final ThermalCuttingView sectorView;
 	private final OrderDAO dao = new OrderDAO();
 
-	public ThermalCuttingController(ThermalCuttingForm form, FabricacaoPecasView sectorView) {
+	public ThermalCuttingController(ThermalCuttingForm form, ThermalCuttingView sectorView) {
 		this.form = form;
 		this.sectorView = sectorView;
 		initActions();
