@@ -1,7 +1,7 @@
 package br.com.sgp.view;
 
 import br.com.sgp.model.User;
-
+import br.com.sgp.view.util.AppColors;
 import javax.swing.*;
 import java.awt.*;
 
@@ -100,11 +100,14 @@ public class UserFormView extends JDialog {
     // ================= BUTTONS =================
     private JPanel createButtonPanel() {
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 6));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 8, 8, 8));
 
         btnSave = new JButton("Salvar");
+        AppColors.style(btnSave, AppColors.SUCCESS);
+        
         btnCancel = new JButton("Cancelar");
-
+        AppColors.style(btnCancel, AppColors.NEUTRAL);
         btnCancel.addActionListener(e -> dispose());
 
         panel.add(btnSave);

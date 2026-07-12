@@ -2,9 +2,13 @@ package br.com.sgp.view;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import br.com.sgp.view.util.AppColors;
 
 public class UserView extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
@@ -66,18 +70,38 @@ public class UserView extends JInternalFrame {
 
         // Setor
         table.getColumnModel().getColumn(4).setPreferredWidth(150);
+        
+        table.setRowHeight(24);
+        table.setSelectionBackground(new Color(220, 231, 253));
+        table.setSelectionForeground(Color.BLACK);
+        table.setGridColor(new Color(230, 230, 230));
 
-        return new JScrollPane(table);
+        table.getTableHeader().setBackground(AppColors.ACCENT);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+        table.getTableHeader().setOpaque(true); 
+
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setBorder(BorderFactory.createEmptyBorder(8, 8, 4, 8));
+        return scroll;
     }
 
     private JPanel createButtonPanel() {
 
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 6));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 8, 8, 8));
 
         btnNew = new JButton("Novo");
+        AppColors.style(btnNew, AppColors.ACCENT);
+        
         btnEdit = new JButton("Editar");
+        AppColors.style(btnEdit, AppColors.ACCENT);
+        
         btnRefresh = new JButton("Atualizar");
+        AppColors.style(btnRefresh, AppColors.NEUTRAL);
+        
         btnClose = new JButton("Fechar");
+        AppColors.style(btnClose, AppColors.NEUTRAL);
 
         btnClose.addActionListener(e -> {
             int opt = JOptionPane.showConfirmDialog(
@@ -92,6 +116,7 @@ public class UserView extends JInternalFrame {
         });
 
         btnResetPassword = new JButton("Resetar Senha");
+        AppColors.style(btnResetPassword, AppColors.WARNING);
         btnResetPassword.setEnabled(false);
         
         panel.add(btnNew);
