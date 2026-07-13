@@ -19,6 +19,12 @@
 # Access Lock File
 *.laccdb
 
+# Configuracao local
+/config.properties
+
+# Bancos Microsoft Access
+*.accdb
+
 # Sistema Operacional
 .DS_Store
 Thumbs.db

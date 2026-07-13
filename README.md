@@ -84,12 +84,21 @@ git clone https://github.com/edivan-car/projetoSGP.git
    - `File → Import → Existing Maven Projects`
    - Selecione a pasta clonada
 
-3. Coloque o arquivo `db_production.accdb` em:
-```
-projetoSGP/target/db_production.accdb
+3. Copie o arquivo de exemplo para criar sua configuração local:
+
+```text
+config.properties.example → config.properties
 ```
 
-4. Execute a classe `Main.java` como Java Application
+4. Configure em `config.properties` o caminho do banco de dados:
+
+```properties
+db.path=C:/caminho/para/db_production.accdb
+```
+
+Também são aceitos caminhos de rede e caminhos relativos ao diretório da aplicação.
+
+5. Execute a classe `Main.java` como Java Application
 
 ---
 
@@ -101,20 +110,28 @@ mvn clean package
 
 O arquivo gerado estará em:
 ```
-target/sgp-0.1.0-jar-with-dependencies.jar
+target/sgp-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 ### Estrutura de distribuição
 
+```text
+SGP/
+├── sgp-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+└── config.properties
 ```
-📁 SGP/
-    sgp-0.1.0-jar-with-dependencies.jar
-    db_production.accdb     ← banco na mesma pasta do JAR
+
+Exemplo de `config.properties` apontando para um banco em rede:
+
+```properties
+db.path=//SERVIDOR/Producao/db_production.accdb
 ```
+
+O caminho do banco pode ser alterado sem recompilar o sistema.
 
 Execute com:
 ```bash
-java -jar sgp-0.1.0-jar-with-dependencies.jar
+java -jar sgp-1.0.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 ---

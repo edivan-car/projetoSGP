@@ -1,0 +1,10 @@
+# Copie este arquivo para config.properties e ajuste o caminho do banco.
+
+# Caminho absoluto local:
+db.path=C:/SGP/dados/db_production.accdb
+
+# Exemplo em rede:
+# db.path=//SERVIDOR/Producao/db_production.accdb
+
+# Exemplo com o banco ao lado do JAR:
+# db.path=db_production.accdb
