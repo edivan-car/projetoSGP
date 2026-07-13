@@ -158,8 +158,22 @@ public class LoginController {
 	            continue;
 	        }
 
-	        new UserDAO().updatePassword(user.getId(), nova);
-	        JOptionPane.showMessageDialog(view, "Senha alterada com sucesso!");
+	        boolean updated = userDAO.updatePassword(user.getId(), nova);
+
+	        if (!updated) {
+	            JOptionPane.showMessageDialog(
+	                view,
+	                "Não foi possível alterar a senha.",
+	                "Erro",
+	                JOptionPane.ERROR_MESSAGE
+	            );
+	            return false;
+	        }
+
+	        JOptionPane.showMessageDialog(
+	            view,
+	            "Senha alterada com sucesso!"
+	        );
 	        return true;
 	    }
 	}

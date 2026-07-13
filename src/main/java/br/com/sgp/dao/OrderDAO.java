@@ -61,7 +61,8 @@ public class OrderDAO {
 			ps.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(
+					"Erro ao cadastrar apontamento térmico", e);
 		}
 
 	}
@@ -85,7 +86,8 @@ public class OrderDAO {
 			ps.executeUpdate();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException(
+			        "Erro ao atualizar apontamento térmico", e);
 		}
 	}
 	
@@ -128,7 +130,7 @@ public class OrderDAO {
 	        ps.executeUpdate();
 
 	    } catch (Exception e) {
-	        e.printStackTrace();
+	        throw new RuntimeException("Erro ao atualizar apontamento de corte a plasma", e);
 	    }
 	}                                               
 }

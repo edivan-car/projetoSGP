@@ -63,47 +63,44 @@ public class UserController {
 
 	private void saveUser(UserFormView form) {
 
-	    if (form.getUsername().isEmpty() || form.getName().isEmpty()) {
-	        JOptionPane.showMessageDialog(
-	                form,
-	                "Usuário e Nome são obrigatórios",
-	                "Validação",
-	                JOptionPane.WARNING_MESSAGE
-	        );
-	        return;
-	    }
+		if (form.getUsername().isEmpty() || form.getName().isEmpty()) {
+			JOptionPane.showMessageDialog(form, "Usuário e Nome são obrigatórios", "Validação",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-	    String password = form.getPassword();
+		String password = form.getPassword();
 
-	    if (form.getUser() != null && password.isEmpty()) {
-	        password = form.getUser().getPassword();
-	    } else if (form.getUser() == null && password.isEmpty()) {
-	    	password = PasswordUtil.SENHA_GENERICA;
-	    }
+		if (form.getUser() != null && password.isEmpty()) {
+			password = form.getUser().getPassword();
+		} else if (form.getUser() == null && password.isEmpty()) {
+			password = PasswordUtil.SENHA_GENERICA;
+		}
 
-	    User user = new User(
-	            form.getUser() == null ? 0 : form.getUser().getId(),
-	            form.getUsername(),
-	            password,
-	            form.getFullName(),
-	            form.getProfile(),
-	            form.getSector(),
-	            form.isActive()
-	    );
+		User user = new User(form.getUser() == null ? 0 : form.getUser().getId(), form.getUsername(), password,
+				form.getFullName(), form.getProfile(), form.getSector(), form.isActive());
 
-	    try {
-	        if (form.getUser() == null) {
-	            dao.insert(user);
-	        } else {
-	            dao.update(user);
-	        }
+		try {
+			boolean saved;
 
-	        form.dispose();
-	        loadUsers();
+			if (form.getUser() == null) {
+				saved = dao.insert(user);
+			} else {
+				saved = dao.update(user);
+			}
 
-	    } catch (Exception ex) {
-	        JOptionPane.showMessageDialog(form, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-	    }
+			if (!saved) {
+				JOptionPane.showMessageDialog(form, "Não foi possível salvar o usuário.", "Erro",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			form.dispose();
+			loadUsers();
+
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(form, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	// ======================
