@@ -9,12 +9,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import br.com.sgp.view.component.SidebarPanel;
+
+import br.com.sgp.dao.OrderDAO;
 import br.com.sgp.controller.FabricacaoPecasController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
 import br.com.sgp.util.AccessControl;
 import br.com.sgp.util.AppRestarter;
+import br.com.sgp.view.component.SidebarPanel;
 import br.com.sgp.view.sector.ThermalCuttingView;
 
 public class MainView extends JFrame {
@@ -168,7 +170,7 @@ public class MainView extends JFrame {
 
 	private void abrirCorteTermico() {
 		ThermalCuttingView view = new ThermalCuttingView();
-		new FabricacaoPecasController(view);
+		new FabricacaoPecasController(view, new OrderDAO());
 		desktopPane.add(view);
 		view.setVisible(true);
 		centralizar(view);

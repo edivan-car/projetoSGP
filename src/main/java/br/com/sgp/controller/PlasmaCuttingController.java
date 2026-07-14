@@ -16,10 +16,12 @@ public class PlasmaCuttingController {
 
 	private final PlasmaCuttingForm form;
 	private final ThermalCuttingView sectorView;
+	private final OrderDAO dao;
 
-	public PlasmaCuttingController(PlasmaCuttingForm form, ThermalCuttingView view) {
+	public PlasmaCuttingController(PlasmaCuttingForm form, ThermalCuttingView view, OrderDAO dao) {
 		this.form = form;
 		this.sectorView = view;
+		this.dao = dao;
 		initActions();
 	}
 
@@ -35,9 +37,9 @@ public class PlasmaCuttingController {
 	    form.addCleanRackListener(e -> {
 //	        form.clearRackField();
 	    	sectorView.clearAllFields();
-	        sectorView.clearCard(); // <- incluir: limpa tabela e campo pedido
-	        sectorView.setFormsEditable(true);   // <- incluir: reabilita campos
-	        sectorView.setRegisterEnabled(true); // <- incluir: reabilita botão
+	        sectorView.clearCard();
+	        sectorView.setFormsEditable(true);
+	        sectorView.setRegisterEnabled(true);
 	    });
 	    
 	    form.getBtnGenerate().addActionListener(e -> {
@@ -90,7 +92,7 @@ public class PlasmaCuttingController {
 	        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
 	        java.util.Date dataCorte = sdf.parse(date);
 
-	        new OrderDAO().updatePlasmaCutting(orderNumber, dataCorte, shift, rack, obs);
+	        dao.updatePlasmaCutting(orderNumber, dataCorte, shift, rack, obs);
 
 	        JOptionPane.showMessageDialog(form, "Apontamento registrado com sucesso.");
 	        sectorView.clearAllFields();

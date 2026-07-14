@@ -19,11 +19,12 @@ public class ThermalCuttingController {
 
 	private final ThermalCuttingForm form;
 	private final ThermalCuttingView sectorView;
-	private final OrderDAO dao = new OrderDAO();
+	private final OrderDAO dao;
 
-	public ThermalCuttingController(ThermalCuttingForm form, ThermalCuttingView sectorView) {
+	public ThermalCuttingController(ThermalCuttingForm form, ThermalCuttingView sectorView, OrderDAO dao) {
 		this.form = form;
 		this.sectorView = sectorView;
+		this.dao = dao;
 		initActions();
 	}
 

@@ -7,11 +7,12 @@ import br.com.sgp.view.sector.ThermalCuttingView;
 public class FabricacaoPecasController {
 
     private final ThermalCuttingView view;
-    private final OrderDAO dao = new OrderDAO();
+    private final OrderDAO dao;
     private final java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy");
 
-    public FabricacaoPecasController(ThermalCuttingView view) {
+    public FabricacaoPecasController(ThermalCuttingView view, OrderDAO dao) {
         this.view = view;
+        this.dao = dao;
         initController();
         initSectorControllers();
     }
@@ -22,10 +23,10 @@ public class FabricacaoPecasController {
 
     private void initSectorControllers() {
         // Corte Térmico
-        new ThermalCuttingController(view.getThermalForm(), view);
+        new ThermalCuttingController(view.getThermalForm(), view, dao);
 
         // Corte a Plasma — passa a view para acessar getOrderNumber()
-        new PlasmaCuttingController(view.getPlasmaForm(), view);
+        new PlasmaCuttingController(view.getPlasmaForm(), view, dao);
     }
 
     private void search() {
