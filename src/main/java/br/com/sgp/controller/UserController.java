@@ -133,35 +133,29 @@ public class UserController {
 		}
 
 		return new User((int) table.getValueAt(row, 0), (String) table.getValueAt(row, 1),
-				(String) table.getValueAt(row, 2), (String) table.getValueAt(row, 3), null // sector será carregado do
-																							// banco depois
-		);
+				(String) table.getValueAt(row, 2), (String) table.getValueAt(row, 3),
+				(String) table.getValueAt(row, 4));
 	}
-	
+
 	private void resetPassword() {
-	    User selected = getSelectedUser();
+		User selected = getSelectedUser();
 
-	    if (selected == null) {
-	        JOptionPane.showMessageDialog(view, "Selecione um usuário.", "Atenção",
-	                JOptionPane.WARNING_MESSAGE);
-	        return;
-	    }
+		if (selected == null) {
+			JOptionPane.showMessageDialog(view, "Selecione um usuário.", "Atenção", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-	    int confirm = JOptionPane.showConfirmDialog(
-	        view,
-	        "Resetar a senha de \"" + selected.getName() + "\" para a senha genérica?",
-	        "Confirmar Reset",
-	        JOptionPane.YES_NO_OPTION
-	    );
+		int confirm = JOptionPane.showConfirmDialog(view,
+				"Resetar a senha de \"" + selected.getName() + "\" para a senha genérica?", "Confirmar Reset",
+				JOptionPane.YES_NO_OPTION);
 
-	    if (confirm == JOptionPane.YES_OPTION) {
-	        boolean ok = dao.resetPassword(selected.getId());
-	        if (ok) {
-	            JOptionPane.showMessageDialog(view, "Senha resetada com sucesso.");
-	        } else {
-	            JOptionPane.showMessageDialog(view, "Erro ao resetar senha.", "Erro",
-	                    JOptionPane.ERROR_MESSAGE);
-	        }
-	    }
+		if (confirm == JOptionPane.YES_OPTION) {
+			boolean ok = dao.resetPassword(selected.getId());
+			if (ok) {
+				JOptionPane.showMessageDialog(view, "Senha resetada com sucesso.");
+			} else {
+				JOptionPane.showMessageDialog(view, "Erro ao resetar senha.", "Erro", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 }

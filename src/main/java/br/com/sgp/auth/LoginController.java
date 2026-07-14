@@ -89,6 +89,7 @@ public class LoginController {
 
 		if (loggedUser == null) {
 			view.setStatusUser("Usuário ou senha inválidos", Color.RED);
+			view.clearCredentials();
 			return;
 		}
 		

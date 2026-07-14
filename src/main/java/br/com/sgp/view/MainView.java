@@ -37,10 +37,6 @@ public class MainView extends JFrame {
 
 		setIconImage(new javax.swing.ImageIcon(
 				getClass().getResource("/images/icons/sgp_icon.png")).getImage());
-		
-		setJMenuBar(createMenuBar());
-		
-		add(createDesktopPane(), BorderLayout.CENTER);
 
 		setJMenuBar(createMenuBar());
 		add(createDesktopPane(), BorderLayout.CENTER);
