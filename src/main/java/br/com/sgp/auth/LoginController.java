@@ -20,10 +20,11 @@ import br.com.sgp.view.MainView;
 public class LoginController {
 
 	private LoginView view;
-	private UserDAO userDAO = new UserDAO();
+	private UserDAO userDAO;
 
-	public LoginController(LoginView view) {
+	public LoginController(LoginView view, UserDAO userDAO) {
 		this.view = view;
+		this.userDAO = userDAO;
 		initController();
 		checkDatabase();
 	}

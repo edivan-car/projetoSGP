@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.SwingUtilities;
 
+import br.com.sgp.dao.UserDAO;
 import br.com.sgp.auth.LoginController;
 import br.com.sgp.auth.LoginView;
 
@@ -40,7 +41,7 @@ public final class AppRestarter {
                 SwingUtilities.invokeLater(() -> {
                 	mainFrame.dispose();
                     LoginView view = new LoginView();
-                    new LoginController(view);
+                    new LoginController(view, new UserDAO());
                     view.setVisible(true);
                 });
             }

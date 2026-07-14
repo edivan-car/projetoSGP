@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import br.com.sgp.dao.OrderDAO;
+import br.com.sgp.dao.UserDAO;
 import br.com.sgp.controller.FabricacaoPecasController;
 import br.com.sgp.controller.UserController;
 import br.com.sgp.session.UserSession;
@@ -163,7 +164,7 @@ public class MainView extends JFrame {
 	
 	private void abrirUsuarios() {
 		UserView view = new UserView();
-		new UserController(view);
+		new UserController(view, new UserDAO());
 		desktopPane.add(view);
 		view.setVisible(true);
 	}

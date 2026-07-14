@@ -13,13 +13,12 @@ import java.util.List;
 
 public class UserController {
 
-	private UserView view;
-	private UserDAO dao;
+	private final UserView view;
+	private final UserDAO dao;
 
-	public UserController(UserView view) {
+	public UserController(UserView view, UserDAO dao) {
 		this.view = view;
-		this.dao = new UserDAO();
-
+		this.dao = dao;
 		initController();
 		loadUsers();
 	}
