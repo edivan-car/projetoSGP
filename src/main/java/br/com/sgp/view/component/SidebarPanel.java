@@ -100,6 +100,7 @@ public class SidebarPanel extends JPanel {
 	private void applyAccessControl() {
 		btnUsuarios.setVisible(AccessControl.isAdmin());
 		btnCorteTermico.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_PECAS));
+		btnCorteDobra.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_PECAS));
 		btnFabricacaoVigas.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_VIGAS));
 		btnRelatorios.setVisible(AccessControl.isGestor());
 	}
@@ -169,6 +170,10 @@ public class SidebarPanel extends JPanel {
 	// ================= GETTERS (usados pelo MainView) =================
 	public JButton getBtnCorteTermico() {
 		return btnCorteTermico;
+	}
+	
+	public JButton getBtnCorteDobra() {
+		return btnCorteDobra;
 	}
 
 	public JButton getBtnFabricacaoVigas() {

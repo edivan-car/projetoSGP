@@ -18,6 +18,7 @@ import br.com.sgp.session.UserSession;
 import br.com.sgp.util.AccessControl;
 import br.com.sgp.util.AppRestarter;
 import br.com.sgp.view.component.SidebarPanel;
+import br.com.sgp.view.production.ProductionRecordView;
 import br.com.sgp.view.sector.ThermalCuttingView;
 
 public class MainView extends JFrame {
@@ -46,6 +47,7 @@ public class MainView extends JFrame {
 
 		SidebarPanel sidebar = new SidebarPanel();
 		sidebar.getBtnCorteTermico().addActionListener(e -> abrirCorteTermico());
+		sidebar.getBtnCorteDobra().addActionListener(e -> abrirRegistroProducao());
 		sidebar.getBtnUsuarios().addActionListener(e -> abrirUsuarios());
 		sidebar.getBtnFabricacaoVigas().addActionListener(e ->
 				JOptionPane.showMessageDialog(this, "Módulo Fabricação de Vigas"));
@@ -86,7 +88,7 @@ public class MainView extends JFrame {
 
 		itemCorteTermico.addActionListener(e -> abrirCorteTermico());
 
-		itemCorteDobra.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Corte e Dobra"));
+		itemCorteDobra.addActionListener(e -> abrirRegistroProducao());
 
 		itemMontagemVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Montagem de Vigas"));
 
@@ -180,6 +182,20 @@ public class MainView extends JFrame {
 		} catch (java.beans.PropertyVetoException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	private void abrirRegistroProducao() {
+	    ProductionRecordView view = new ProductionRecordView();
+
+	    desktopPane.add(view);
+	    view.setVisible(true);
+	    centralizar(view);
+
+	    try {
+	        view.setSelected(true);
+	    } catch (java.beans.PropertyVetoException ex) {
+	        ex.printStackTrace();
+	    }
 	}
 
 	private void logout() {
