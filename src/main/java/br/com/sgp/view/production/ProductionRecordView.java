@@ -66,8 +66,7 @@ public class ProductionRecordView extends JInternalFrame {
     private ProductionOrderTableModel orderTableModel;
 
     private JComboBox<String> cmbStopReason;
-    private JFormattedTextField txtStopStart;
-    private JFormattedTextField txtStopEnd;
+    private JSpinner spnStopDuration;
     private JTextField txtStopObservation;
     private JButton btnAddStop;
     private JButton btnRemoveStop;
@@ -218,17 +217,16 @@ public class ProductionRecordView extends JInternalFrame {
                 "Falta de material (não prevista)", "Quebra / manutenção corretiva (não prevista)",
                 "Falta de operador (não prevista)"
         });
-        txtStopStart = timeField();
-        txtStopEnd = timeField();
+        spnStopDuration = new JSpinner(
+                new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
         txtStopObservation = new JTextField();
         btnAddStop = new JButton("Adicionar parada");
         AppColors.style(btnAddStop, AppColors.WARNING);
 
-        addField(input, gbc, 0, 0, 1, 0.34, "Motivo", cmbStopReason);
-        addField(input, gbc, 1, 0, 1, 0.13, "Início", txtStopStart);
-        addField(input, gbc, 2, 0, 1, 0.13, "Fim", txtStopEnd);
-        addField(input, gbc, 3, 0, 1, 0.28, "Observação", txtStopObservation);
-        gbc.gridx = 4;
+        addField(input, gbc, 0, 0, 1, 0.38, "Motivo", cmbStopReason);
+        addField(input, gbc, 1, 0, 1, 0.18, "Tempo (min.)", spnStopDuration);
+        addField(input, gbc, 2, 0, 1, 0.34, "Observação", txtStopObservation);
+        gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 0.12;
         gbc.anchor = GridBagConstraints.SOUTH;
@@ -406,17 +404,15 @@ public class ProductionRecordView extends JInternalFrame {
     }
 
     private void addStopFromForm() {
-        try {
-            LocalTime start = LocalTime.parse(txtStopStart.getText().trim(), TIME_FORMAT);
-            LocalTime end = LocalTime.parse(txtStopEnd.getText().trim(), TIME_FORMAT);
-            stopTableModel.add(new StopRow(String.valueOf(cmbStopReason.getSelectedItem()), start, end,
-                    txtStopObservation.getText().trim()));
-            txtStopStart.setText("");
-            txtStopEnd.setText("");
-            txtStopObservation.setText("");
-        } catch (DateTimeParseException ex) {
-            showMessage("Informe início e fim da parada no formato HH:mm.");
-        }
+        int durationMinutes = spinnerValue(spnStopDuration);
+
+        stopTableModel.add(new StopRow(
+                String.valueOf(cmbStopReason.getSelectedItem()),
+                durationMinutes,
+                txtStopObservation.getText().trim()));
+
+        spnStopDuration.setValue(1);
+        txtStopObservation.setText("");
     }
 
     private void removeSelectedOrder() {
@@ -472,8 +468,7 @@ public class ProductionRecordView extends JInternalFrame {
         clearOrderInput();
         orderTableModel.clear();
         stopTableModel.clear();
-        txtStopStart.setText("");
-        txtStopEnd.setText("");
+        spnStopDuration.setValue(1);
         txtStopObservation.setText("");
         cmbResource.requestFocusInWindow();
     }
@@ -525,20 +520,17 @@ public class ProductionRecordView extends JInternalFrame {
 
     public static final class StopRow {
         private final String reason;
-        private final LocalTime start;
-        private final LocalTime end;
+        private final int durationMinutes;
         private final String observation;
 
-        public StopRow(String reason, LocalTime start, LocalTime end, String observation) {
+        public StopRow(String reason, int durationMinutes, String observation) {
             this.reason = reason;
-            this.start = start;
-            this.end = end;
+            this.durationMinutes = durationMinutes;
             this.observation = observation;
         }
 
         public String getReason() { return reason; }
-        public LocalTime getStart() { return start; }
-        public LocalTime getEnd() { return end; }
+        public int getDurationMinutes() { return durationMinutes; }
         public String getObservation() { return observation; }
     }
 
@@ -581,7 +573,7 @@ public class ProductionRecordView extends JInternalFrame {
 
     private static final class StopTableModel extends AbstractTableModel {
         private static final long serialVersionUID = 1L;
-        private final String[] columns = { "Motivo", "Início", "Fim", "Observação" };
+        private final String[] columns = { "Motivo", "Tempo (min)", "Observação" };
         private final List<StopRow> rows = new ArrayList<StopRow>();
         public int getRowCount() { return rows.size(); }
         public int getColumnCount() { return columns.length; }
@@ -590,8 +582,7 @@ public class ProductionRecordView extends JInternalFrame {
             StopRow value = rows.get(row);
             switch (column) {
             case 0: return value.getReason();
-            case 1: return value.getStart().format(TIME_FORMAT);
-            case 2: return value.getEnd().format(TIME_FORMAT);
+            case 1: return value.getDurationMinutes();
             default: return value.getObservation();
             }
         }
