@@ -56,10 +56,8 @@ public class ProductionRecordView extends JInternalFrame {
     private JLabel lblDuration;
 
     private JTextField txtOrderNumber;
-    private JSpinner spnFirstQuality;
-    private JSpinner spnSecondQuality;
-    private JSpinner spnThirdQuality;
-    private JSpinner spnScrap;
+    private JSpinner spnApprovedQuantity;
+    private JSpinner spnRejectedQuantity;
     private JButton btnAddOrder;
     private JButton btnRemoveOrder;
     private JTable tblOrders;
@@ -75,6 +73,7 @@ public class ProductionRecordView extends JInternalFrame {
 
     private JButton btnRegister;
     private JButton btnClear;
+    private ActionListener registerListener;
 
     public ProductionRecordView() {
         super("Registro de Produção — Corte e Dobra", false, true, false, false);
@@ -166,19 +165,15 @@ public class ProductionRecordView extends JInternalFrame {
         GridBagConstraints gbc = constraints();
 
         txtOrderNumber = new JTextField();
-        spnFirstQuality = quantitySpinner();
-        spnSecondQuality = quantitySpinner();
-        spnThirdQuality = quantitySpinner();
-        spnScrap = quantitySpinner();
+        spnApprovedQuantity = quantitySpinner();
+        spnRejectedQuantity = quantitySpinner();
         btnAddOrder = new JButton("Adicionar OP");
         AppColors.style(btnAddOrder, AppColors.ACCENT);
 
-        addField(input, gbc, 0, 0, 1, 0.32, "Nº da OP", txtOrderNumber);
-        addField(input, gbc, 1, 0, 1, 0.14, "1ª qualidade", spnFirstQuality);
-        addField(input, gbc, 2, 0, 1, 0.14, "2ª qualidade", spnSecondQuality);
-        addField(input, gbc, 3, 0, 1, 0.14, "3ª qualidade", spnThirdQuality);
-        addField(input, gbc, 4, 0, 1, 0.14, "Refugo", spnScrap);
-        gbc.gridx = 5;
+        addField(input, gbc, 0, 0, 1, 0.36, "Nº da OP", txtOrderNumber);
+        addField(input, gbc, 1, 0, 1, 0.22, "Qtd. aprovada", spnApprovedQuantity);
+        addField(input, gbc, 2, 0, 1, 0.22, "Qtd. reprovada", spnRejectedQuantity);
+        gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weightx = 0.12;
         gbc.anchor = GridBagConstraints.SOUTH;
@@ -203,8 +198,26 @@ public class ProductionRecordView extends JInternalFrame {
 
         btnAddOrder.addActionListener(e -> addOrderFromForm());
         btnRemoveOrder.addActionListener(e -> removeSelectedOrder());
-        txtOrderNumber.addActionListener(e -> addOrderFromForm());
+        txtOrderNumber.addActionListener(e -> focusSpinner(spnApprovedQuantity));
+        JSpinner.DefaultEditor approvedEditor =
+                (JSpinner.DefaultEditor) spnApprovedQuantity.getEditor();
+
+        approvedEditor.getTextField().addActionListener(
+                e -> focusSpinner(spnRejectedQuantity));
+
+        JSpinner.DefaultEditor rejectedEditor =
+                (JSpinner.DefaultEditor) spnRejectedQuantity.getEditor();
+
+        rejectedEditor.getTextField().addActionListener(
+                e -> addOrderFromForm());
         return wrapper;
+    }
+
+    private void focusSpinner(JSpinner spinner) {
+        JSpinner.DefaultEditor editor =
+                (JSpinner.DefaultEditor) spinner.getEditor();
+
+        editor.getTextField().requestFocusInWindow();
     }
 
     private JPanel createStopPanel() {
@@ -213,12 +226,15 @@ public class ProductionRecordView extends JInternalFrame {
         GridBagConstraints gbc = constraints();
 
         cmbStopReason = new JComboBox<String>(new String[] {
-                "Troca de ferramenta (prevista)", "Setup / ajuste de máquina (prevista)",
-                "Falta de material (não prevista)", "Quebra / manutenção corretiva (não prevista)",
+                "Selecione...",
+                "Troca de ferramenta (prevista)",
+                "Setup / ajuste de máquina (prevista)",
+                "Falta de material (não prevista)",
+                "Quebra / manutenção corretiva (não prevista)",
                 "Falta de operador (não prevista)"
         });
         spnStopDuration = new JSpinner(
-                new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+                new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
         txtStopObservation = new JTextField();
         btnAddStop = new JButton("Adicionar parada");
         AppColors.style(btnAddStop, AppColors.WARNING);
@@ -263,6 +279,11 @@ public class ProductionRecordView extends JInternalFrame {
         footer.add(btnClear);
         footer.add(btnRegister);
         btnClear.addActionListener(e -> clearForm());
+        btnRegister.addActionListener(e -> {
+            if (validateRecord() && registerListener != null) {
+                registerListener.actionPerformed(e);
+            }
+        });
         return footer;
     }
 
@@ -386,33 +407,52 @@ public class ProductionRecordView extends JInternalFrame {
 
     private void addOrderFromForm() {
         String orderNumber = txtOrderNumber.getText().trim().toUpperCase();
-        int q1 = spinnerValue(spnFirstQuality);
-        int q2 = spinnerValue(spnSecondQuality);
-        int q3 = spinnerValue(spnThirdQuality);
-        int scrap = spinnerValue(spnScrap);
+        int approvedQuantity = spinnerValue(spnApprovedQuantity);
+        int rejectedQuantity = spinnerValue(spnRejectedQuantity);
+
         if (orderNumber.isEmpty()) {
             showMessage("Informe o número da OP.");
             txtOrderNumber.requestFocusInWindow();
             return;
         }
-        if (q1 + q2 + q3 + scrap == 0) {
-            showMessage("Informe ao menos uma quantidade para a OP.");
+
+        if (approvedQuantity == 0 && rejectedQuantity == 0) {
+            showMessage("Informe a quantidade aprovada ou reprovada.");
             return;
         }
-        orderTableModel.add(new ProductionOrderRow(orderNumber, q1, q2, q3, scrap));
+
+        orderTableModel.add(new ProductionOrderRow(
+                orderNumber,
+                approvedQuantity,
+                rejectedQuantity));
+
         clearOrderInput();
     }
 
     private void addStopFromForm() {
+        if (cmbStopReason.getSelectedIndex() <= 0) {
+            showMessage("Selecione o motivo da parada.");
+            cmbStopReason.requestFocusInWindow();
+            return;
+        }
+
         int durationMinutes = spinnerValue(spnStopDuration);
+
+        if (durationMinutes <= 0) {
+            showMessage("Informe o tempo da parada em minutos.");
+            focusSpinner(spnStopDuration);
+            return;
+        }
 
         stopTableModel.add(new StopRow(
                 String.valueOf(cmbStopReason.getSelectedItem()),
                 durationMinutes,
                 txtStopObservation.getText().trim()));
 
-        spnStopDuration.setValue(1);
+        cmbStopReason.setSelectedIndex(0);
+        spnStopDuration.setValue(0);
         txtStopObservation.setText("");
+        cmbStopReason.requestFocusInWindow();
     }
 
     private void removeSelectedOrder() {
@@ -431,10 +471,8 @@ public class ProductionRecordView extends JInternalFrame {
 
     private void clearOrderInput() {
         txtOrderNumber.setText("");
-        spnFirstQuality.setValue(0);
-        spnSecondQuality.setValue(0);
-        spnThirdQuality.setValue(0);
-        spnScrap.setValue(0);
+        spnApprovedQuantity.setValue(0);
+        spnRejectedQuantity.setValue(0);
         txtOrderNumber.requestFocusInWindow();
     }
 
@@ -455,6 +493,25 @@ public class ProductionRecordView extends JInternalFrame {
             showMessage("Adicione ao menos uma OP ao apontamento.");
             return false;
         }
+
+        if (stopTableModel.getRows().isEmpty()) {
+            int answer = JOptionPane.showConfirmDialog(
+                    this,
+                    "Há paradas a registrar?",
+                    "Registro de paradas",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (answer == JOptionPane.YES_OPTION) {
+                cmbStopReason.requestFocusInWindow();
+                return false;
+            }
+
+            if (answer != JOptionPane.NO_OPTION) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -468,7 +525,8 @@ public class ProductionRecordView extends JInternalFrame {
         clearOrderInput();
         orderTableModel.clear();
         stopTableModel.clear();
-        spnStopDuration.setValue(1);
+        cmbStopReason.setSelectedIndex(0);
+        spnStopDuration.setValue(0);
         txtStopObservation.setText("");
         cmbResource.requestFocusInWindow();
     }
@@ -482,7 +540,7 @@ public class ProductionRecordView extends JInternalFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    public void addRegisterListener(ActionListener listener) { btnRegister.addActionListener(listener); }
+    public void addRegisterListener(ActionListener listener) { this.registerListener = listener; }
     public JComboBox<String> getCmbResource() { return cmbResource; }
     public JTextField getTxtProduct() { return txtProduct; }
     public JComboBox<String> getCmbShift() { return cmbShift; }
@@ -496,26 +554,19 @@ public class ProductionRecordView extends JInternalFrame {
 
     public static final class ProductionOrderRow {
         private final String orderNumber;
-        private final int firstQuality;
-        private final int secondQuality;
-        private final int thirdQuality;
-        private final int scrap;
+        private final int approvedQuantity;
+        private final int rejectedQuantity;
 
-        public ProductionOrderRow(String orderNumber, int firstQuality, int secondQuality,
-                int thirdQuality, int scrap) {
+        public ProductionOrderRow(String orderNumber, int approvedQuantity, int rejectedQuantity) {
             this.orderNumber = orderNumber;
-            this.firstQuality = firstQuality;
-            this.secondQuality = secondQuality;
-            this.thirdQuality = thirdQuality;
-            this.scrap = scrap;
+            this.approvedQuantity = approvedQuantity;
+            this.rejectedQuantity = rejectedQuantity;
         }
 
         public String getOrderNumber() { return orderNumber; }
-        public int getFirstQuality() { return firstQuality; }
-        public int getSecondQuality() { return secondQuality; }
-        public int getThirdQuality() { return thirdQuality; }
-        public int getScrap() { return scrap; }
-        public int getTotal() { return firstQuality + secondQuality + thirdQuality + scrap; }
+        public int getApprovedQuantity() { return approvedQuantity; }
+        public int getRejectedQuantity() { return rejectedQuantity; }
+        public int getTotal() { return approvedQuantity + rejectedQuantity; }
     }
 
     public static final class StopRow {
@@ -536,7 +587,7 @@ public class ProductionRecordView extends JInternalFrame {
 
     private static final class ProductionOrderTableModel extends AbstractTableModel {
         private static final long serialVersionUID = 1L;
-        private final String[] columns = { "Nº OP", "1ª", "2ª", "3ª", "Refugo", "Total" };
+        private final String[] columns = { "Nº OP", "Qtd. aprovada", "Qtd. reprovada", "Total" };
         private final List<ProductionOrderRow> rows = new ArrayList<ProductionOrderRow>();
         public int getRowCount() { return rows.size() + 1; }
         public int getColumnCount() { return columns.length; }
@@ -546,10 +597,8 @@ public class ProductionRecordView extends JInternalFrame {
             ProductionOrderRow value = rows.get(row);
             switch (column) {
             case 0: return value.getOrderNumber();
-            case 1: return value.getFirstQuality();
-            case 2: return value.getSecondQuality();
-            case 3: return value.getThirdQuality();
-            case 4: return value.getScrap();
+            case 1: return value.getApprovedQuantity();
+            case 2: return value.getRejectedQuantity();
             default: return value.getTotal();
             }
         }
@@ -557,10 +606,8 @@ public class ProductionRecordView extends JInternalFrame {
             if (column == 0) return "Total do apontamento";
             int total = 0;
             for (ProductionOrderRow row : rows) {
-                if (column == 1) total += row.getFirstQuality();
-                else if (column == 2) total += row.getSecondQuality();
-                else if (column == 3) total += row.getThirdQuality();
-                else if (column == 4) total += row.getScrap();
+                if (column == 1) total += row.getApprovedQuantity();
+                else if (column == 2) total += row.getRejectedQuantity();
                 else total += row.getTotal();
             }
             return total;
