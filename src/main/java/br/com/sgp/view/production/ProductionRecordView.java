@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.awt.Component;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,9 +37,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.MaskFormatter;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 
 import br.com.sgp.session.UserSession;
 import br.com.sgp.view.util.AppColors;
+import br.com.sgp.model.Resource;
 
 public class ProductionRecordView extends JInternalFrame {
 
@@ -46,7 +50,7 @@ public class ProductionRecordView extends JInternalFrame {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
-    private JComboBox<String> cmbResource;
+    private JComboBox<Resource> cmbResource;
     private JTextField txtProduct;
     private JComboBox<String> cmbShift;
     private JFormattedTextField txtDate;
@@ -112,10 +116,35 @@ public class ProductionRecordView extends JInternalFrame {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = constraints();
 
-        cmbResource = new JComboBox<String>(new String[] {
-                "Selecione...", "Guilhotina 01", "Guilhotina 02",
-                "Prensa Excêntrica 40T", "Prensa Hidráulica 80T", "Dobradeira CNC 01"
+        cmbResource = new JComboBox<Resource>();
+        cmbResource.addItem(null);
+
+        cmbResource.setRenderer(new DefaultListCellRenderer() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Component getListCellRendererComponent(
+                    JList<?> list,
+                    Object value,
+                    int index,
+                    boolean isSelected,
+                    boolean cellHasFocus) {
+
+                super.getListCellRendererComponent(
+                        list,
+                        value,
+                        index,
+                        isSelected,
+                        cellHasFocus);
+
+                setText(value == null
+                        ? "Selecione..."
+                        : value.toString());
+
+                return this;
+            }
         });
+
         txtProduct = new JTextField();
         cmbShift = new JComboBox<String>(new String[] { "1º Turno", "2º Turno", "3º Turno" });
 
@@ -477,7 +506,8 @@ public class ProductionRecordView extends JInternalFrame {
     }
 
     public boolean validateRecord() {
-        if (cmbResource.getSelectedIndex() <= 0 || txtProduct.getText().trim().isEmpty()) {
+        if (getSelectedResource() == null
+                || txtProduct.getText().trim().isEmpty()) {
             showMessage("Selecione o recurso e informe o código do produto.");
             return false;
         }
@@ -540,8 +570,23 @@ public class ProductionRecordView extends JInternalFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 
+    public void setResources(List<Resource> resources) {
+        cmbResource.removeAllItems();
+        cmbResource.addItem(null);
+
+        for (Resource resource : resources) {
+            cmbResource.addItem(resource);
+        }
+
+        cmbResource.setSelectedIndex(0);
+    }
+
+    public Resource getSelectedResource() {
+        return (Resource) cmbResource.getSelectedItem();
+    }
+
     public void addRegisterListener(ActionListener listener) { this.registerListener = listener; }
-    public JComboBox<String> getCmbResource() { return cmbResource; }
+    public JComboBox<Resource> getCmbResource() { return cmbResource; }
     public JTextField getTxtProduct() { return txtProduct; }
     public JComboBox<String> getCmbShift() { return cmbShift; }
     public JFormattedTextField getTxtDate() { return txtDate; }

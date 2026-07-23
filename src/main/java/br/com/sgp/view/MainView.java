@@ -20,6 +20,8 @@ import br.com.sgp.util.AppRestarter;
 import br.com.sgp.view.component.SidebarPanel;
 import br.com.sgp.view.production.ProductionRecordView;
 import br.com.sgp.view.sector.ThermalCuttingView;
+import br.com.sgp.controller.ProductionRecordController;
+import br.com.sgp.dao.ResourceDAO;
 
 public class MainView extends JFrame {
 
@@ -186,6 +188,7 @@ public class MainView extends JFrame {
 	
 	private void abrirRegistroProducao() {
 	    ProductionRecordView view = new ProductionRecordView();
+	    new ProductionRecordController(view, new ResourceDAO());
 
 	    desktopPane.add(view);
 	    view.setVisible(true);
