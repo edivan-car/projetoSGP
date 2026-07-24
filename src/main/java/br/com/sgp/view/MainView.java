@@ -22,6 +22,8 @@ import br.com.sgp.view.production.ProductionRecordView;
 import br.com.sgp.view.sector.ThermalCuttingView;
 import br.com.sgp.controller.ProductionRecordController;
 import br.com.sgp.dao.ResourceDAO;
+import br.com.sgp.controller.ResourceController;
+import br.com.sgp.view.resource.ResourceView;
 
 public class MainView extends JFrame {
 
@@ -65,6 +67,10 @@ public class MainView extends JFrame {
 
 		JMenu menuStart = new JMenu("Início");
 
+		JMenu menuRegistrations = new JMenu("Cadastros");
+
+		JMenuItem itemResources = new JMenuItem("Equipamentos e recursos");
+
 		JMenu menuSector = new JMenu("Setor / Área");
 		JMenuItem itemUsers = new JMenuItem("Usuários");
 
@@ -92,6 +98,8 @@ public class MainView extends JFrame {
 
 		itemCorteDobra.addActionListener(e -> abrirRegistroProducao());
 
+		itemResources.addActionListener(event -> openResources());
+
 		itemMontagemVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Montagem de Vigas"));
 
 		itemSoldaVigas.addActionListener(e -> JOptionPane.showMessageDialog(this, "Módulo Solda de Vigas"));
@@ -108,6 +116,8 @@ public class MainView extends JFrame {
 		menuFabricacaoPecas.add(itemCorteTermico);
 		menuFabricacaoPecas.add(itemCorteDobra);
 
+		menuRegistrations.add(itemResources);
+
 		menuSector.add(menuFabricacaoVigas);
 		menuFabricacaoVigas.add(itemMontagemVigas);
 		menuFabricacaoVigas.add(itemSoldaVigas);
@@ -123,16 +133,17 @@ public class MainView extends JFrame {
 		menuHelp.addSeparator();
 		menuHelp.add(itemLogout);
 		menuBar.add(menuStart);
+		menuBar.add(menuRegistrations);
 		menuBar.add(menuSector);
 		menuBar.add(menuReports);
 		menuBar.add(menuHelp);
 
-		applyAccessControl(itemUsers, menuFabricacaoPecas, menuFabricacaoVigas, menuReports);
+		applyAccessControl(itemUsers, menuRegistrations, menuFabricacaoPecas, menuFabricacaoVigas, menuReports);
 
 		return menuBar;
 	}
 
-	private void applyAccessControl(JMenuItem itemUsers, JMenu menuFabricacaoPecas, JMenu menuFabricacaoVigas,
+	private void applyAccessControl(JMenuItem itemUsers, JMenu menuRegistrations, JMenu menuFabricacaoPecas, JMenu menuFabricacaoVigas,
 			JMenu menuReports) {
 
 		// Usuários — apenas ADMIN
@@ -143,6 +154,8 @@ public class MainView extends JFrame {
 
 		// Fabricação de Vigas — ADMIN ou setor FABRICACAO_VIGAS
 		menuFabricacaoVigas.setVisible(AccessControl.hasSectorAccess(AccessControl.FABRICACAO_VIGAS));
+
+		menuRegistrations.setVisible(AccessControl.isGestor());
 
 		// Relatórios — ADMIN ou GESTOR
 		menuReports.setVisible(AccessControl.isGestor());
@@ -165,7 +178,7 @@ public class MainView extends JFrame {
 		int y = (desktopPane.getHeight() - frame.getHeight()) / 2;
 		frame.setLocation(x, y);
 	}
-	
+
 	private void abrirUsuarios() {
 		UserView view = new UserView();
 		new UserController(view, new UserDAO());
@@ -185,7 +198,7 @@ public class MainView extends JFrame {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private void abrirRegistroProducao() {
 	    ProductionRecordView view = new ProductionRecordView();
 	    new ProductionRecordController(view, new ResourceDAO());
@@ -198,6 +211,24 @@ public class MainView extends JFrame {
 	        view.setSelected(true);
 	    } catch (java.beans.PropertyVetoException ex) {
 	        ex.printStackTrace();
+	    }
+	}
+
+	private void openResources() {
+	    ResourceView view = new ResourceView();
+
+	    new ResourceController(
+	            view,
+	            new ResourceDAO());
+
+	    desktopPane.add(view);
+	    view.setVisible(true);
+	    centralizar(view);
+
+	    try {
+	        view.setSelected(true);
+	    } catch (java.beans.PropertyVetoException exception) {
+	        exception.printStackTrace();
 	    }
 	}
 
